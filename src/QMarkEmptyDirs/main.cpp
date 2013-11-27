@@ -39,36 +39,31 @@ using namespace MarkEmptyDirs::Api;
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    QCoreApplication app(argc, argv);
 
-    Config config;
-    config.setRootDir(QDir("/Users/jonnydee/Projekte/QMarkEmptyDirs/"));
-    config.setDryRun(true);
-    config.setLogLevel(LogLevel::DEBUG);
-    config.setShortMessages(true);
+    auto config = Config::parseFromCommandLineArguments(app.arguments());
+
+    std::unique_ptr<ADirCommand> pCmd;
+    if (app.arguments().contains("--stat"))
+    {
+        pCmd.reset(new StatCommand(config));
+    }
+    else if (app.arguments().contains("--clean"))
+    {
+        pCmd.reset(new CleanCommand(config));
+    }
+    else
+    {
+        pCmd.reset(new SyncCommand(config));
+    }
 
     FileSystemCrawler crawler;
     crawler.setConfig(config);
     crawler.run();
 
-    {
-        StatCommand cmd(config);
-        cmd.setPathMap(crawler.pathMap());
-        cmd.run();
-    }
-
-    {
-        SyncCommand cmd(config);
-        cmd.setPathMap(crawler.pathMap());
-        cmd.run();
-    }
-
-    {
-        CleanCommand cmd(config);
-        cmd.setPathMap(crawler.pathMap());
-        cmd.run();
-    }
+    pCmd->setPathMap(crawler.pathMap());
+    pCmd->run();
 
     return 0;
-//    return a.exec();
+//    return app.exec();
 }

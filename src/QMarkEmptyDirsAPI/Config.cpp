@@ -37,11 +37,40 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
+Config Config::parseFromCommandLineArguments(const QStringList& args)
+{
+    Config config;
+
+    if (args.contains("--dry-run"))
+    {
+        config.setDryRun(true);
+    }
+    if (args.contains("--short"))
+    {
+        config.setShortMessages(true);
+    }
+    if (args.contains("-v"))
+    {
+        config.setLogLevel(LogLevel::INFO);
+    }
+    if (args.contains("-vv"))
+    {
+        config.setLogLevel(LogLevel::DEBUG);
+    }
+    if (args.size() > 0 && !args.last().startsWith("-"))
+    {
+        config.setRootDir(QDir(args.last()));
+    }
+
+    return config;
+}
+
 Config::Config()
     : m_dryRun(false)
     , m_logLevel(LogLevel::NONE)
     , m_markerFileName(DEFAULT_MARKER_FILENAME)
     , m_resolveSymLinks(false)
+    , m_rootDir(".")
     , m_shortMessages(false)
 {
 }
