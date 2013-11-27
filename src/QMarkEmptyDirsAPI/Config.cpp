@@ -37,7 +37,7 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-Config Config::parseFromCommandLineArguments(const QStringList& args)
+Config Config::createFromCommandLineArguments(const QStringList& args)
 {
     Config config;
 

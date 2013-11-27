@@ -43,7 +43,7 @@ namespace Api
 class QMARKEMPTYDIRSAPISHARED_EXPORT Config
 {
 public:
-    static Config parseFromCommandLineArguments(const QStringList& args);
+    static Config createFromCommandLineArguments(const QStringList& args);
 
     Config();
     ~Config();

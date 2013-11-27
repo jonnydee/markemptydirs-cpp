@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
-    auto config = Config::parseFromCommandLineArguments(app.arguments());
+    auto config = Config::createFromCommandLineArguments(app.arguments());
 
     std::unique_ptr<ADirCommand> pCmd;
     if (app.arguments().contains("--stat"))
