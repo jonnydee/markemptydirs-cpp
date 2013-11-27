@@ -46,7 +46,7 @@ void StatCommand::run()
     auto paths = pathMap().keys();
     qSort(paths);
     foreach (auto path, paths)
-        logger().log(QObject::tr("'%1' [children: %2, hasMarker: %3, subDirs: %4]")
+        logger().log(QObject::tr("'%1' [children: %2, placeholder: %3, subDirs: %4]")
                      .arg(path)
                      .arg(pathMap()[path].childCount())
                      .arg(pathMap()[path].hasMarker() ? QObject::tr("yes") : QObject::tr("no"))
