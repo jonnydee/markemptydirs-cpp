@@ -245,6 +245,7 @@ QString Config::toString() const
 {
     return QString("[%1]").arg(
         (QStringList()
+            << nameValueStr("command", command())
             << nameValueStr("dryRun", dryRun())
             << nameValueStr("logLevel", logLevel())
             << nameValueStr("markerFileName", markerFileName())
