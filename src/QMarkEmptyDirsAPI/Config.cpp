@@ -25,10 +25,13 @@
 // or implied, of Johann Duscher.
 
 #include "Config.hpp"
+#include "OptionParser.hpp"
 
 #include <QDebug>
 
-#define DEFAULT_MARKER_FILENAME     ".emptyDir"
+#define DEFAULT_FILE_FILENAME       "placeholder.txt"
+#define DEFAULT_MARKER_FILENAME     ".emptydir"
+#define DEFAULT_TEXT_CONTENT        ""
 
 
 namespace MarkEmptyDirs
@@ -39,27 +42,77 @@ namespace Api
 
 Config Config::createFromCommandLineArguments(const QStringList& args)
 {
+    Option dryRunOpt(QStringList() << "d" << "dry-run", "simulate command execution without any side effects");
+    Option shortOpt(QStringList() << "s" << "short", "output short verbose messages");
+    Option verboseOpt(QStringList() << "v" << "verbose", "output verbose messages", "level", "1");
+    Option cleanOpt(QStringList() << "c" << "clean", "delete all placeholder files");
+    Option helpOpt(QStringList() << "h" << "help", "print help information");
+    Option createHookOpt(QStringList() << "a" << "create-hook", "invoke command after placeholder creation (use template variables)");
+    Option deleteHookOpt(QStringList() << "r" << "delete-hook", "invoke command before placeholder deletion (use template variables)");
+    Option listOpt(QStringList() << "l" << "list", "list all placeholder files");
+    Option purgeOpt(QStringList() << "g" << "purge", "delete everything within directories containing placeholders");
+    Option excludeOpt(QStringList() << "x" << "exclude", "skip excluded dirs", "dirs", ".bzr:CVS:.git:.hg:.svn");
+    Option placeHolderOpt(QStringList() << "p" << "place-holder", "use another name for placeholder files", "name", DEFAULT_MARKER_FILENAME);
+    Option textOpt(QStringList() << "t" << "text", "create placeholder files with the specified text as content", "content", DEFAULT_TEXT_CONTENT);
+    Option fileOpt(QStringList() << "f" << "file", "create placeholder files using the specified template file as content", "name", DEFAULT_FILE_FILENAME);
+    Option substOpt(QStringList() << "b" << "subst", "use variable subsitution");
+    Option followSymLinksOpt(QStringList() << "m" << "follow-symlinks", "follow symbolic links");
+
+    OptionParser parser;
+    parser.addOption(dryRunOpt);
+    parser.addOption(shortOpt);
+    parser.addOption(verboseOpt);
+    parser.addOption(cleanOpt);
+    parser.addOption(helpOpt);
+    parser.addOption(createHookOpt);
+    parser.addOption(deleteHookOpt);
+    parser.addOption(listOpt);
+    parser.addOption(purgeOpt);
+    parser.addOption(excludeOpt);
+    parser.addOption(placeHolderOpt);
+    parser.addOption(fileOpt);
+    parser.addOption(substOpt);
+    parser.addOption(textOpt);
+    parser.addOption(followSymLinksOpt);
+
+    parser.parse(args);
+
     Config config;
 
-    if (args.contains("--dry-run"))
+    if (!parser.findArgument(dryRunOpt).isNull())
     {
         config.setDryRun(true);
     }
-    if (args.contains("--short"))
+
+    if (!parser.findArgument(shortOpt).isNull())
     {
         config.setShortMessages(true);
     }
-    if (args.contains("-v"))
+
     {
-        config.setLogLevel(LogLevel::INFO);
+        auto verboseArgs = parser.findArguments(verboseOpt);
+        int level = verboseArgs.size();
+        if (1 == level)
+            config.setLogLevel(LogLevel::INFO);
+        else if (2 <= level)
+            config.setLogLevel(LogLevel::DEBUG);
     }
-    if (args.contains("-vv"))
+
     {
-        config.setLogLevel(LogLevel::DEBUG);
+        auto arg = parser.findArgument(placeHolderOpt);
+        if (!arg.isNull())
+            config.setMarkerFileName(arg.value);
     }
-    if (args.size() > 0 && !args.last().startsWith("-"))
+
+    if (!parser.findArgument(followSymLinksOpt).isNull())
     {
-        config.setRootDir(QDir(args.last()));
+        config.setResolveSymLinks(true);
+    }
+
+    {
+        auto args = parser.findUnknownArguments();
+        if (args.size() > 1)
+            config.setRootDir(QDir(args.last().value));
     }
 
     return config;
