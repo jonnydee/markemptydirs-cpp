@@ -26,7 +26,7 @@
 
 #include <QMarkEmptyDirsAPI/Config.hpp>
 #include <QMarkEmptyDirsAPI/CleanCommand.hpp>
-#include <QMarkEmptyDirsAPI/StatCommand.hpp>
+#include <QMarkEmptyDirsAPI/OverviewCommand.hpp>
 #include <QMarkEmptyDirsAPI/UpdateCommand.hpp>
 
 #include <QCoreApplication>
@@ -41,9 +41,9 @@ int main(int argc, char *argv[])
     auto config = Config::createFromCommandLineArguments(app.arguments());
 
     std::unique_ptr<ICommand> pCmd;
-    if (app.arguments().contains("--stat"))
+    if (app.arguments().contains("--overview"))
     {
-        pCmd.reset(new StatCommand);
+        pCmd.reset(new OverviewCommand);
     }
     else if (app.arguments().contains("--clean"))
     {

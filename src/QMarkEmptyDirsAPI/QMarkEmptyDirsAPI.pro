@@ -19,7 +19,7 @@ SOURCES += QMarkEmptyDirsAPI.cpp \
     ADirCommand.cpp \
     Config.cpp \
     UpdateCommand.cpp \
-    StatCommand.cpp \
+    OverviewCommand.cpp \
     CleanCommand.cpp \
     Logger.cpp \
     OptionParser.cpp \
@@ -32,7 +32,7 @@ HEADERS += QMarkEmptyDirsAPI.hpp\
     DirDescriptor.hpp \
     Config.hpp \
     UpdateCommand.hpp \
-    StatCommand.hpp \
+    OverviewCommand.hpp \
     CleanCommand.hpp \
     Logger.hpp \
     LogLevel.hpp \

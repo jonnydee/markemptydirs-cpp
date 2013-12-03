@@ -24,8 +24,8 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef STATCOMMAND_HPP
-#define STATCOMMAND_HPP
+#ifndef OVERVIEWCOMMAND_HPP
+#define OVERVIEWCOMMAND_HPP
 
 #include "ADirCommand.hpp"
 
@@ -36,12 +36,12 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class StatCommand : public ADirCommand
+class OverviewCommand : public ADirCommand
 {
     typedef ADirCommand super;
 
 public:
-    StatCommand();
+    OverviewCommand();
 
 protected:
     void run(const PathMap& pathMap);
@@ -51,4 +51,4 @@ protected:
 
 }
 
-#endif // STATCOMMAND_HPP
+#endif // OVERVIEWCOMMAND_HPP

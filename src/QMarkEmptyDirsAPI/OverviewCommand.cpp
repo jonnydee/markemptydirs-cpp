@@ -24,7 +24,7 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "StatCommand.hpp"
+#include "OverviewCommand.hpp"
 #include "DirDescriptor.hpp"
 
 
@@ -34,11 +34,11 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-StatCommand::StatCommand()
+OverviewCommand::OverviewCommand()
 {
 }
 
-void StatCommand::run(const PathMap& pathMap)
+void OverviewCommand::run(const PathMap& pathMap)
 {
     auto paths = pathMap.keys();
     qSort(paths);
