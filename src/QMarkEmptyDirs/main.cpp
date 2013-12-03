@@ -25,15 +25,12 @@
 // or implied, of Johann Duscher.
 
 #include <QMarkEmptyDirsAPI/Config.hpp>
-#include <QMarkEmptyDirsAPI/DirDescriptor.hpp>
-#include <QMarkEmptyDirsAPI/FileSystemCrawler.hpp>
 #include <QMarkEmptyDirsAPI/CleanCommand.hpp>
 #include <QMarkEmptyDirsAPI/StatCommand.hpp>
 #include <QMarkEmptyDirsAPI/SyncCommand.hpp>
 
 #include <QCoreApplication>
 #include <QDebug>
-#include <QDir>
 
 using namespace MarkEmptyDirs::Api;
 
@@ -43,25 +40,21 @@ int main(int argc, char *argv[])
 
     auto config = Config::createFromCommandLineArguments(app.arguments());
 
-    std::unique_ptr<ADirCommand> pCmd;
+    std::unique_ptr<ICommand> pCmd;
     if (app.arguments().contains("--stat"))
     {
-        pCmd.reset(new StatCommand(config));
+        pCmd.reset(new StatCommand);
     }
     else if (app.arguments().contains("--clean"))
     {
-        pCmd.reset(new CleanCommand(config));
+        pCmd.reset(new CleanCommand);
     }
     else
     {
-        pCmd.reset(new SyncCommand(config));
+        pCmd.reset(new SyncCommand);
     }
 
-    FileSystemCrawler crawler;
-    crawler.setConfig(config);
-    crawler.run();
-
-    pCmd->setPathMap(crawler.pathMap());
+    pCmd->init(config);
     pCmd->run();
 
     return 0;

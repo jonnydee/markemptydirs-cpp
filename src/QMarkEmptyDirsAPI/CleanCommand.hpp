@@ -41,9 +41,10 @@ class CleanCommand : public ADirCommand
     typedef ADirCommand super;
 
 public:
-    CleanCommand(const Config& config);
+    CleanCommand();
 
-    void run();
+protected:
+    void run(const PathMap& pathMap);
 };
 
 }

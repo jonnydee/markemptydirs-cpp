@@ -36,14 +36,13 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-CleanCommand::CleanCommand(const Config &config)
-    : super(config)
+CleanCommand::CleanCommand()
 {
 }
 
-void CleanCommand::run()
+void CleanCommand::run(const PathMap& pathMap)
 {
-    foreach (auto& dirDescr, pathMap().values())
+    foreach (auto& dirDescr, pathMap.values())
     {
         if (dirDescr.hasMarker())
             removeMarker(dirDescr.dir());

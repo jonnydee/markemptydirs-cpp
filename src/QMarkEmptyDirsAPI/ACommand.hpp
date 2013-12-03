@@ -24,10 +24,12 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef STATCOMMAND_HPP
-#define STATCOMMAND_HPP
+#ifndef ACOMMAND_HPP
+#define ACOMMAND_HPP
 
-#include "ADirCommand.hpp"
+#include "Config.hpp"
+#include "ICommand.hpp"
+#include "Logger.hpp"
 
 
 namespace MarkEmptyDirs
@@ -36,19 +38,29 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class StatCommand : public ADirCommand
+class ACommand : public ICommand
 {
-    typedef ADirCommand super;
+    typedef ICommand super;
 
 public:
-    StatCommand();
+    ~ACommand();
+
+    void init(const Config& config);
 
 protected:
-    void run(const PathMap& pathMap);
+    ACommand();
+
+    const Config& config() const;
+
+    Logger& logger();
+
+private:
+    Config m_config;
+    Logger m_logger;
 };
 
 }
 
 }
 
-#endif // STATCOMMAND_HPP
+#endif // ACOMMAND_HPP

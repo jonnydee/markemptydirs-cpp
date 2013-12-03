@@ -43,7 +43,7 @@ namespace Api
 class QMARKEMPTYDIRSAPISHARED_EXPORT Logger
 {
 public:
-    Logger(const Config& config = Config());
+    Logger();
 
     void setConfig(const Config& config);
     const Config& config() const;

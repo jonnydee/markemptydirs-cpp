@@ -27,11 +27,9 @@
 #ifndef ADIRCOMMAND_HPP
 #define ADIRCOMMAND_HPP
 
-#include "Config.hpp"
-#include "Logger.hpp"
+#include "ACommand.hpp"
 
 #include <QMap>
-#include <QTextStream>
 
 
 class QString;
@@ -44,33 +42,22 @@ namespace Api
 
 class DirDescriptor;
 
-class ADirCommand
+class ADirCommand : public ACommand
 {
+    typedef ACommand super;
+
 public:
-    typedef QMap<QString, DirDescriptor> PathMap;
-
-    virtual ~ADirCommand();
-
-    const Config& config() const;
-
-    virtual void run() = 0;
-
-    void setPathMap(const PathMap& pathMap);
+    void run();
 
 protected:
-    ADirCommand(const Config& config);
+    typedef QMap<QString, DirDescriptor> PathMap;
 
-    PathMap& pathMap();
+    virtual PathMap crawlDir();
+
+    virtual void run(const PathMap& pathMap) = 0;
 
     bool createMarker(const QDir& dir);
     bool removeMarker(const QDir& dir);
-
-    Logger& logger();
-
-private:
-    Config m_config;
-    PathMap m_pathMap;
-    Logger m_logger;
 };
 
 }

@@ -41,9 +41,10 @@ class SyncCommand : public ADirCommand
     typedef ADirCommand super;
 
 public:
-    SyncCommand(const Config& config);
+    SyncCommand();
 
-    void run();
+protected:
+    void run(const PathMap& pathMap);
 };
 
 }

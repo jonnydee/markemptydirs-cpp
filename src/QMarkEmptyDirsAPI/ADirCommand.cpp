@@ -26,12 +26,11 @@
 
 #include "ADirCommand.hpp"
 #include "DirDescriptor.hpp"
+#include "FileSystemCrawler.hpp"
 
 #include <QFile>
 #include <QFileInfo>
 #include <QObject>
-
-#include <iostream>
 
 
 namespace MarkEmptyDirs
@@ -40,19 +39,18 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-ADirCommand::ADirCommand(const Config& config)
-    : m_config(config)
-    , m_logger(config)
+void ADirCommand::run()
 {
+    auto pathMap = crawlDir();
+    run(pathMap);
 }
 
-ADirCommand::~ADirCommand()
+ADirCommand::PathMap ADirCommand::crawlDir()
 {
-}
-
-const Config& ADirCommand::config() const
-{
-    return m_config;
+    FileSystemCrawler crawler;
+    crawler.setConfig(config());
+    crawler.run();
+    return crawler.pathMap();
 }
 
 bool ADirCommand::createMarker(const QDir& dir)
@@ -95,21 +93,6 @@ bool ADirCommand::removeMarker(const QDir &dir)
                      LogLevel::ERROR);
         return false;
     }
-}
-
-void ADirCommand::setPathMap(const PathMap& pathMap)
-{
-    m_pathMap = pathMap;
-}
-
-ADirCommand::PathMap& ADirCommand::pathMap()
-{
-    return m_pathMap;
-}
-
-Logger& ADirCommand::logger()
-{
-    return m_logger;
 }
 
 }

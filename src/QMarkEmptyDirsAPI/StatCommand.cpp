@@ -27,8 +27,6 @@
 #include "StatCommand.hpp"
 #include "DirDescriptor.hpp"
 
-#include <QDebug>
-
 
 namespace MarkEmptyDirs
 {
@@ -36,21 +34,20 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-StatCommand::StatCommand(const Config &config)
-    : super(config)
+StatCommand::StatCommand()
 {
 }
 
-void StatCommand::run()
+void StatCommand::run(const PathMap& pathMap)
 {
-    auto paths = pathMap().keys();
+    auto paths = pathMap.keys();
     qSort(paths);
     foreach (auto path, paths)
         logger().log(QObject::tr("'%1' [children: %2, placeholder: %3, subDirs: %4]")
                      .arg(path)
-                     .arg(pathMap()[path].childCount())
-                     .arg(pathMap()[path].hasMarker() ? QObject::tr("yes") : QObject::tr("no"))
-                     .arg(pathMap()[path].subDirCount()),
+                     .arg(pathMap[path].childCount())
+                     .arg(pathMap[path].hasMarker() ? QObject::tr("yes") : QObject::tr("no"))
+                     .arg(pathMap[path].subDirCount()),
                      LogLevel::NONE);
 }
 

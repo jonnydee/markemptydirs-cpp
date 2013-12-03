@@ -33,9 +33,8 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-Logger::Logger(const Config& config)
-    : m_config(config)
-    , m_sysOut(stdout)
+Logger::Logger()
+    : m_sysOut(stdout)
     , m_sysErr(stderr)
 {
 }

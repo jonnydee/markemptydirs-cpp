@@ -27,8 +27,6 @@
 #include "SyncCommand.hpp"
 #include "DirDescriptor.hpp"
 
-#include <QDebug>
-
 
 namespace MarkEmptyDirs
 {
@@ -36,14 +34,13 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-SyncCommand::SyncCommand(const Config &config)
-    : super(config)
+SyncCommand::SyncCommand()
 {
 }
 
-void SyncCommand::run()
+void SyncCommand::run(const PathMap& pathMap)
 {
-    foreach (auto& dirDescr, pathMap().values())
+    foreach (auto& dirDescr, pathMap.values())
     {
         if (dirDescr.hasMarker() && dirDescr.hasChildren())
             removeMarker(dirDescr.dir());
