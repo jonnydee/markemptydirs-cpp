@@ -139,6 +139,27 @@ bool Config::shortMessages() const
     return m_shortMessages;
 }
 
+template <typename T>
+static QString nameValueStr(const QString& name, const T& value)
+{
+    QString valueStr = QString("%1").arg(value);
+    valueStr = valueStr.replace(QChar('\"'), "\\\"");
+    return QString("%1: \"%2\"").arg(name).arg(valueStr);
+}
+
+QString Config::toString() const
+{
+    return QString("[%1]").arg(
+        (QStringList()
+            << nameValueStr("dryRun", dryRun())
+            << nameValueStr("logLevel", logLevel())
+            << nameValueStr("markerFileName", markerFileName())
+            << nameValueStr("resolveSymLinks", resolveSymLinks())
+            << nameValueStr("rootDir", rootDir().canonicalPath())
+            << nameValueStr("shortMessages", shortMessages())
+        ).join(", "));
+}
+
 }
 
 }

@@ -66,6 +66,8 @@ public:
     void setShortMessages(bool shortMessages);
     bool shortMessages() const;
 
+    QString toString() const;
+
 private:
     bool m_dryRun;
     LogLevel m_logLevel;
