@@ -31,6 +31,7 @@
 #include "LogLevel.hpp"
 
 #include <QDir>
+#include <QList>
 #include <QString>
 
 
@@ -50,6 +51,8 @@ public:
         CLEAN,
         OVERVIEW
     };
+
+    typedef QList<QDir> DirList;
 
     static Config createFromCommandLineArguments(const QStringList& args);
 
@@ -71,8 +74,8 @@ public:
     void setResolveSymLinks(bool resolve);
     bool resolveSymLinks() const;
 
-    void setRootDir(const QDir& rootDir);
-    QDir rootDir() const;
+    void addRootDir(const QDir& rootDir);
+    DirList rootDirs() const;
 
     void setShortMessages(bool shortMessages);
     bool shortMessages() const;
@@ -85,7 +88,7 @@ private:
     LogLevel m_logLevel;
     QString m_markerFileName;
     bool m_resolveSymLinks;
-    QDir m_rootDir;
+    DirList m_rootDirs;
     bool m_shortMessages;
 };
 

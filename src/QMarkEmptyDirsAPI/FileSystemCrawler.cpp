@@ -73,7 +73,10 @@ void FileSystemCrawler::run()
 {
     const QDir::Filters filter = QDir::Dirs | QDir::Files | QDir::Hidden | QDir::NoDotAndDotDot;
 
-    auto dirQueue = QLinkedList<QDir>() << config().rootDir();
+    QLinkedList<QDir> dirQueue;
+    foreach (const auto& dir, config().rootDirs())
+        dirQueue.push_back(dir);
+
     while (!dirQueue.isEmpty())
     {
         auto dir = dirQueue.takeFirst();

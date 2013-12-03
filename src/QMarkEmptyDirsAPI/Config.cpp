@@ -141,7 +141,7 @@ Config Config::createFromCommandLineArguments(const QStringList& args)
         }
         else if (i > 0)
         {
-            config.setRootDir(QDir(arg.value));
+            config.addRootDir(QDir(arg.value));
         }
     }
 
@@ -154,7 +154,6 @@ Config::Config()
     , m_logLevel(LogLevel::NONE)
     , m_markerFileName(DEFAULT_MARKER_FILENAME)
     , m_resolveSymLinks(false)
-    , m_rootDir(".")
     , m_shortMessages(false)
 {
 }
@@ -213,14 +212,14 @@ bool Config::resolveSymLinks() const
     return m_resolveSymLinks;
 }
 
-void Config::setRootDir(const QDir& rootDir)
+void Config::addRootDir(const QDir& rootDir)
 {
-    m_rootDir = rootDir;
+    m_rootDirs.push_back(rootDir);
 }
 
-QDir Config::rootDir() const
+Config::DirList Config::rootDirs() const
 {
-    return m_rootDir;
+    return m_rootDirs;
 }
 
 void Config::setShortMessages(bool shortMessages)
@@ -234,11 +233,26 @@ bool Config::shortMessages() const
 }
 
 template <typename T>
-static QString nameValueStr(const QString& name, const T& value)
+static QString valueStr(const T& value)
 {
     auto valueStr = QString("%1").arg(value);
     valueStr = valueStr.replace(QChar('\"'), "\\\"");
-    return QString("%1: \"%2\"").arg(name).arg(valueStr);
+    return QString("\"%1\"").arg(valueStr);
+}
+
+template <typename T>
+static QString listValueStr(const T& list, std::function<QString(const typename T::value_type&)> convert)
+{
+    QStringList strValues;
+    foreach (const auto& value, list)
+        strValues << valueStr(convert(value));
+    return QString("[%1]").arg(strValues.join(", "));
+}
+
+template <typename T>
+static QString nameValueStr(const QString& name, const T& value)
+{
+    return QString("%1: %2").arg(name).arg(value);
 }
 
 QString Config::toString() const
@@ -248,9 +262,9 @@ QString Config::toString() const
             << nameValueStr("command", command())
             << nameValueStr("dryRun", dryRun())
             << nameValueStr("logLevel", logLevel())
-            << nameValueStr("markerFileName", markerFileName())
+            << nameValueStr("markerFileName", valueStr(markerFileName()))
             << nameValueStr("resolveSymLinks", resolveSymLinks())
-            << nameValueStr("rootDir", rootDir().canonicalPath())
+            << nameValueStr("rootDirs", listValueStr(rootDirs(), [](const QDir& dir) { return dir.canonicalPath(); }))
             << nameValueStr("shortMessages", shortMessages())
         ).join(", "));
 }
