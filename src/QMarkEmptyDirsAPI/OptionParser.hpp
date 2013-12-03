@@ -39,7 +39,7 @@ namespace Api
 class Option
 {
 public:
-    Option(const QStringList& names, const QString& description = "", const QString& valueName = "", const QString& defaultValue = "");
+    Option(const QStringList& names, const QString& description = QString::null, const QString& valueName = QString::null, const QString& defaultValue = QString::null);
 
     QString defaultValue() const;
     QString description() const;
