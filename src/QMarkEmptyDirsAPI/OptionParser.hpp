@@ -68,6 +68,7 @@ struct Argument
 
     bool isKnown() const { return nullptr != option; }
     bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
+    bool isBasedOn(const Option& opt) const { return &opt == option; }
 };
 
 struct Token;
