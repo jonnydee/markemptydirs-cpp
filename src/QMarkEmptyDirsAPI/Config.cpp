@@ -29,6 +29,7 @@
 
 #include <QDebug>
 
+#define DEFAULT_COMMAND             Config::UPDATE
 #define DEFAULT_FILE_FILENAME       "placeholder.txt"
 #define DEFAULT_MARKER_FILENAME     ".emptydir"
 #define DEFAULT_TEXT_CONTENT        ""
@@ -57,6 +58,8 @@ Config Config::createFromCommandLineArguments(const QStringList& args)
     Option fileOpt(QStringList() << "f" << "file", "create placeholder files using the specified template file as content", "name", DEFAULT_FILE_FILENAME);
     Option substOpt(QStringList() << "b" << "subst", "use variable subsitution");
     Option followSymLinksOpt(QStringList() << "m" << "follow-symlinks", "follow symbolic links");
+    Option overviewOpt(QStringList() << "o" << "overview", "scan directory and show some overview statistics");
+    Option updateOpt(QStringList() << "u" << "update", "create and delete placeholder files where necessary");
 
     OptionParser parser;
     parser.addOption(dryRunOpt);
@@ -74,6 +77,7 @@ Config Config::createFromCommandLineArguments(const QStringList& args)
     parser.addOption(substOpt);
     parser.addOption(textOpt);
     parser.addOption(followSymLinksOpt);
+    parser.addOption(updateOpt);
 
     parser.parse(args);
 
@@ -112,6 +116,28 @@ Config Config::createFromCommandLineArguments(const QStringList& args)
         {
             config.setResolveSymLinks(true);
         }
+        else if (arg.isBasedOn(helpOpt))
+        {
+            config.setCommand(Command::HELP);
+        }
+        else if (arg.isBasedOn(updateOpt))
+        {
+            config.setCommand(Command::UPDATE);
+        }
+        else if (arg.isBasedOn(listOpt))
+        {
+            config.setCommand(Command::CLEAN);
+            config.setDryRun(true);
+            config.setShortMessages(true);
+        }
+        else if (arg.isBasedOn(cleanOpt))
+        {
+            config.setCommand(Command::CLEAN);
+        }
+        else if (arg.isBasedOn(overviewOpt))
+        {
+            config.setCommand(Command::OVERVIEW);
+        }
         else if (i > 0)
         {
             config.setRootDir(QDir(arg.value));
@@ -122,7 +148,8 @@ Config Config::createFromCommandLineArguments(const QStringList& args)
 }
 
 Config::Config()
-    : m_dryRun(false)
+    : m_command(DEFAULT_COMMAND)
+    , m_dryRun(false)
     , m_logLevel(LogLevel::NONE)
     , m_markerFileName(DEFAULT_MARKER_FILENAME)
     , m_resolveSymLinks(false)
@@ -133,6 +160,16 @@ Config::Config()
 
 Config::~Config()
 {
+}
+
+void Config::setCommand(Command command)
+{
+    m_command = command;
+}
+
+Config::Command Config::command() const
+{
+    return m_command;
 }
 
 void Config::setDryRun(bool dryRun)

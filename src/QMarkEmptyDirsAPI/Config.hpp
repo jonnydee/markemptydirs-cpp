@@ -43,10 +43,21 @@ namespace Api
 class QMARKEMPTYDIRSAPISHARED_EXPORT Config
 {
 public:
+    enum Command
+    {
+        HELP,
+        UPDATE,
+        CLEAN,
+        OVERVIEW
+    };
+
     static Config createFromCommandLineArguments(const QStringList& args);
 
     Config();
     ~Config();
+
+    void setCommand(Command command);
+    Command command() const;
 
     void setDryRun(bool dryRun);
     bool dryRun() const;
@@ -69,6 +80,7 @@ public:
     QString toString() const;
 
 private:
+    Command m_command;
     bool m_dryRun;
     LogLevel m_logLevel;
     QString m_markerFileName;
