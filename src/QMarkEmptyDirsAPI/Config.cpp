@@ -236,7 +236,7 @@ bool Config::shortMessages() const
 template <typename T>
 static QString nameValueStr(const QString& name, const T& value)
 {
-    QString valueStr = QString("%1").arg(value);
+    auto valueStr = QString("%1").arg(value);
     valueStr = valueStr.replace(QChar('\"'), "\\\"");
     return QString("%1: \"%2\"").arg(name).arg(valueStr);
 }
