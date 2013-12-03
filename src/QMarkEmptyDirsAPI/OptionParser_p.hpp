@@ -24,10 +24,11 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef OPTIONPARSER_HPP
-#define OPTIONPARSER_HPP
+#ifndef OPTIONPARSER_P_HPP
+#define OPTIONPARSER_P_HPP
 
-#include <QStringList>
+#include <QList>
+#include <QString>
 
 
 namespace MarkEmptyDirs
@@ -36,74 +37,45 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class Option
+struct Token
 {
-public:
-    Option(const QStringList& names, const QString& description = "", const QString& valueName = "", const QString& defaultValue = "");
+    enum Type
+    {
+        LONGNAME,
+        SHORTNAME,
+        ASSIGN,
+        OTHER
+    };
 
-    QString defaultValue() const;
-    QString description() const;
-    bool hasValue() const;
-    QStringList longNames() const;
-    QStringList names() const;
-    QString valueName() const;
-    QList<QChar> shortNames() const;
+    Type type;
+    QString payload;
 
-private:
-    QStringList m_names;
-    QString m_description;
-    QString m_valueName;
-    QString m_defaultValue;
+    Token(Type aType, const QString& aPayload = QString::null)
+        : type(aType), payload(aPayload)
+    {}
 };
-typedef QList<const Option*> OptionList;
-
-struct Argument
-{
-    const Option* option;
-    QString name;
-    QString value;
-    QString errorMessage;
-
-    Argument() : option(nullptr) {}
-
-    bool isKnown() const { return nullptr != option; }
-    bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
-};
-
-struct Token;
 typedef QList<Token> TokenList;
 
-class OptionParser
+class Scanner
 {
 public:
-    typedef QList<Argument> ArgumentList;
+    Scanner();
 
-    OptionParser();
+    void scan(const QStringList& args);
 
-    void addOption(const Option& option);
-
-    ArgumentList arguments() const;
-    Argument findUnknownArgument() const;
-    Argument findArgument(const Option& option) const;
-    ArgumentList findUnknownArguments() const;
-    ArgumentList findArguments(const Option& option) const;
-
-    OptionList options() const;
-
-    void parse(const QStringList& args);
+    TokenList tokens() const;
 
 protected:
-    int parseShortOption(const TokenList& tokens, int startIndex);
-    int parseLongOption(const TokenList& tokens, int startIndex);
-    int parseOther(const TokenList& tokens, int startIndex);
+    int scanShortOptions(const QStringList& args, int startIndex);
+    int scanLongOption(const QStringList& args, int startIndex);
+    int scanOther(const QStringList& args, int startIndex);
 
 private:
-    OptionList m_options;
-    ArgumentList m_arguments;
+    TokenList m_tokens;
 };
 
 }
 
 }
 
-#endif // OPTIONPARSER_HPP
+#endif // OPTIONPARSER_P_HPP

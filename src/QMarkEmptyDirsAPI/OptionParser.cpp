@@ -25,6 +25,7 @@
 // or implied, of Johann Duscher.
 
 #include "OptionParser.hpp"
+#include "OptionParser_p.hpp"
 
 namespace MarkEmptyDirs
 {

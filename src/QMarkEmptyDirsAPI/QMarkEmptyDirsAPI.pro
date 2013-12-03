@@ -35,7 +35,8 @@ HEADERS += QMarkEmptyDirsAPI.hpp\
     CleanCommand.hpp \
     Logger.hpp \
     LogLevel.hpp \
-    OptionParser.hpp
+    OptionParser.hpp \
+    OptionParser_p.hpp
 
 unix:!symbian {
     maemo5 {
