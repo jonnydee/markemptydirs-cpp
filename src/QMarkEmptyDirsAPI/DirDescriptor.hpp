@@ -45,7 +45,7 @@ public:
     DirDescriptor()
         : m_dir()
         , m_childCount(0)
-        , m_hasMarker(false)
+        , m_hasPlaceHolder(false)
         , m_subDirCount(0)
     {
     }
@@ -57,8 +57,8 @@ public:
     int childCount() const { return m_childCount; }
     bool hasChildren() const { return m_childCount > 0; }
 
-    void setHasMarker() { m_hasMarker = true; }
-    bool hasMarker() const { return m_hasMarker; }
+    void setHasPlaceHolder() { m_hasPlaceHolder = true; }
+    bool hasPlaceHolder() const { return m_hasPlaceHolder; }
 
     void incSubDirCount() { ++m_subDirCount; }
     int subDirCount() const { return m_subDirCount; }
@@ -67,7 +67,7 @@ public:
 private:
     QDir m_dir;
     int m_childCount;
-    bool m_hasMarker;
+    bool m_hasPlaceHolder;
     int m_subDirCount;
 };
 

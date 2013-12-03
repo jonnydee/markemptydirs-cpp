@@ -44,7 +44,7 @@ void CleanCommand::run(const PathMap& pathMap)
 {
     foreach (auto& dirDescr, pathMap.values())
     {
-        if (dirDescr.hasMarker())
+        if (dirDescr.hasPlaceHolder())
             deletePlaceHolder(dirDescr.dir());
     }
 }

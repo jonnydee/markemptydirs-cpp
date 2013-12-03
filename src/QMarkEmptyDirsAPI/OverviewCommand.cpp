@@ -46,7 +46,7 @@ void OverviewCommand::run(const PathMap& pathMap)
         logger().log(QObject::tr("'%1' [children: %2, placeholder: %3, subDirs: %4]")
                      .arg(path)
                      .arg(pathMap[path].childCount())
-                     .arg(pathMap[path].hasMarker() ? QObject::tr("yes") : QObject::tr("no"))
+                     .arg(pathMap[path].hasPlaceHolder() ? QObject::tr("yes") : QObject::tr("no"))
                      .arg(pathMap[path].subDirCount()),
                      LogLevel::NONE);
 }
