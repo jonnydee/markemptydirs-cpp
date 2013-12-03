@@ -24,8 +24,10 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "SyncCommand.hpp"
-#include "DirDescriptor.hpp"
+#ifndef UPDATECOMMAND_HPP
+#define UPDATECOMMAND_HPP
+
+#include "ADirCommand.hpp"
 
 
 namespace MarkEmptyDirs
@@ -34,22 +36,19 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-SyncCommand::SyncCommand()
+class UpdateCommand : public ADirCommand
 {
-}
+    typedef ADirCommand super;
 
-void SyncCommand::run(const PathMap& pathMap)
-{
-    foreach (auto& dirDescr, pathMap.values())
-    {
-        if (dirDescr.hasMarker() && dirDescr.hasChildren())
-            removeMarker(dirDescr.dir());
+public:
+    UpdateCommand();
 
-        if (!dirDescr.hasMarker() && !dirDescr.hasChildren())
-            createMarker(dirDescr.dir());
-    }
-}
+protected:
+    void run(const PathMap& pathMap);
+};
 
 }
 
 }
+
+#endif // UPDATECOMMAND_HPP

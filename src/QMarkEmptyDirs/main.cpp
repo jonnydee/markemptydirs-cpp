@@ -27,7 +27,7 @@
 #include <QMarkEmptyDirsAPI/Config.hpp>
 #include <QMarkEmptyDirsAPI/CleanCommand.hpp>
 #include <QMarkEmptyDirsAPI/StatCommand.hpp>
-#include <QMarkEmptyDirsAPI/SyncCommand.hpp>
+#include <QMarkEmptyDirsAPI/UpdateCommand.hpp>
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        pCmd.reset(new SyncCommand);
+        pCmd.reset(new UpdateCommand);
     }
 
     pCmd->init(config);

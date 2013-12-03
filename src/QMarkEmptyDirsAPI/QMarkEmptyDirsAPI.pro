@@ -18,7 +18,7 @@ SOURCES += QMarkEmptyDirsAPI.cpp \
     FileSystemCrawler.cpp \
     ADirCommand.cpp \
     Config.cpp \
-    SyncCommand.cpp \
+    UpdateCommand.cpp \
     StatCommand.cpp \
     CleanCommand.cpp \
     Logger.cpp \
@@ -31,7 +31,7 @@ HEADERS += QMarkEmptyDirsAPI.hpp\
     ADirCommand.hpp \
     DirDescriptor.hpp \
     Config.hpp \
-    SyncCommand.hpp \
+    UpdateCommand.hpp \
     StatCommand.hpp \
     CleanCommand.hpp \
     Logger.hpp \

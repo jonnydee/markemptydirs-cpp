@@ -20,7 +20,7 @@ CONFIG += c++11
 SOURCES += main.cpp \
     ../QMarkEmptyDirsAPI/FileSystemCrawler.cpp \
     ../QMarkEmptyDirsAPI/Config.cpp \
-    ../QMarkEmptyDirsAPI/SyncCommand.cpp \
+    ../QMarkEmptyDirsAPI/UpdateCommand.cpp \
     ../QMarkEmptyDirsAPI/ADirCommand.cpp \
     ../QMarkEmptyDirsAPI/StatCommand.cpp \
     ../QMarkEmptyDirsAPI/CleanCommand.cpp \
@@ -41,7 +41,7 @@ HEADERS += \
     ../QMarkEmptyDirsAPI/qmarkemptydirsapi_global.hpp \
     ../QMarkEmptyDirsAPI/FileSystemCrawler.hpp \
     ../QMarkEmptyDirsAPI/Config.hpp \
-    ../QMarkEmptyDirsAPI/SyncCommand.hpp \
+    ../QMarkEmptyDirsAPI/UpdateCommand.hpp \
     ../QMarkEmptyDirsAPI/ADirCommand.hpp \
     ../QMarkEmptyDirsAPI/StatCommand.hpp \
     ../QMarkEmptyDirsAPI/CleanCommand.hpp \
