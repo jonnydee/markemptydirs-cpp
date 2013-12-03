@@ -27,8 +27,6 @@
 #include "CleanCommand.hpp"
 #include "DirDescriptor.hpp"
 
-#include <QDebug>
-
 
 namespace MarkEmptyDirs
 {
