@@ -79,40 +79,43 @@ Config Config::createFromCommandLineArguments(const QStringList& args)
 
     Config config;
 
-    if (!parser.findArgument(dryRunOpt).isNull())
+    const auto arguments = parser.arguments();
+    for (int i = 0; i < arguments.size(); i++)
     {
-        config.setDryRun(true);
-    }
+        const auto& arg = arguments[i];
 
-    if (!parser.findArgument(shortOpt).isNull())
-    {
-        config.setShortMessages(true);
-    }
-
-    {
-        auto verboseArgs = parser.findArguments(verboseOpt);
-        int level = verboseArgs.size();
-        if (1 == level)
-            config.setLogLevel(LogLevel::INFO);
-        else if (2 <= level)
-            config.setLogLevel(LogLevel::DEBUG);
-    }
-
-    {
-        auto arg = parser.findArgument(placeHolderOpt);
-        if (!arg.isNull())
+        if (arg.isBasedOn(dryRunOpt))
+        {
+            config.setDryRun(true);
+        }
+        else if (arg.isBasedOn(shortOpt))
+        {
+            config.setShortMessages(true);
+        }
+        else if (arg.isBasedOn(verboseOpt))
+        {
+            switch (config.logLevel())
+            {
+            case LogLevel::NONE:
+                config.setLogLevel(LogLevel::INFO);
+                break;
+            case LogLevel::INFO:
+            default:
+                config.setLogLevel(LogLevel::DEBUG);
+            }
+        }
+        else if (arg.isBasedOn(placeHolderOpt))
+        {
             config.setMarkerFileName(arg.value);
-    }
-
-    if (!parser.findArgument(followSymLinksOpt).isNull())
-    {
-        config.setResolveSymLinks(true);
-    }
-
-    {
-        auto args = parser.findUnknownArguments();
-        if (args.size() > 1)
-            config.setRootDir(QDir(args.last().value));
+        }
+        else if (arg.isBasedOn(followSymLinksOpt))
+        {
+            config.setResolveSymLinks(true);
+        }
+        else if (i > 0)
+        {
+            config.setRootDir(QDir(arg.value));
+        }
     }
 
     return config;
