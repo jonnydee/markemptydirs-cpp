@@ -82,7 +82,7 @@ bool ADirCommand::deletePlaceHolder(const QDir &dir)
     if (config().dryRun() || markerFile.remove())
     {
         const auto logMsg = config().shortMessages()
-                ? QString("%1: '%2'").arg(QObject::tr("Deleted")).arg(filePath)
+                ? filePath
                 : QString("%1: '%2'").arg(QObject::tr("Deleted placeholder")).arg(filePath);
         logger().log(logMsg, LogLevel::INFO);
         return true;
