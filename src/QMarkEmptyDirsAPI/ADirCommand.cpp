@@ -74,7 +74,7 @@ bool ADirCommand::createPlaceHolder(const QDir& dir)
     }
 }
 
-bool ADirCommand::removeMarker(const QDir &dir)
+bool ADirCommand::deletePlaceHolder(const QDir &dir)
 {
     QFileInfo markerFileInfo(dir, config().markerFileName());
     auto filePath = markerFileInfo.canonicalFilePath();

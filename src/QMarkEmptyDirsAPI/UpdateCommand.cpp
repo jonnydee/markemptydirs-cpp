@@ -43,7 +43,7 @@ void UpdateCommand::run(const PathMap& pathMap)
     foreach (auto& dirDescr, pathMap.values())
     {
         if (dirDescr.hasMarker() && dirDescr.hasChildren())
-            removeMarker(dirDescr.dir());
+            deletePlaceHolder(dirDescr.dir());
 
         if (!dirDescr.hasMarker() && !dirDescr.hasChildren())
             createPlaceHolder(dirDescr.dir());
