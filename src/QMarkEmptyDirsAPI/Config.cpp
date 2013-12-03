@@ -129,6 +129,7 @@ Config Config::createFromCommandLineArguments(const QStringList& args)
             config.setCommand(Command::CLEAN);
             config.setDryRun(true);
             config.setShortMessages(true);
+            config.setLogLevel(LogLevel::INFO);
         }
         else if (arg.isBasedOn(cleanOpt))
         {
