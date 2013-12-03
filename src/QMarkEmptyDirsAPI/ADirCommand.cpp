@@ -53,7 +53,7 @@ ADirCommand::PathMap ADirCommand::crawlDir()
     return crawler.pathMap();
 }
 
-bool ADirCommand::createMarker(const QDir& dir)
+bool ADirCommand::createPlaceHolder(const QDir& dir)
 {
     QFileInfo markerFileInfo(dir, config().markerFileName());
     auto filePath = markerFileInfo.absoluteFilePath();
