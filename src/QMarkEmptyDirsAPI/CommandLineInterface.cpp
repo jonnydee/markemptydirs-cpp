@@ -31,6 +31,11 @@
 #define DEFAULT_EXCLUDE_DIRS        ".bzr:CVS:.git:.hg:.svn"
 #define DEFAULT_MARKER_FILENAME     ".emptydir"
 
+#ifdef Q_OS_WIN32
+ #define PATH_LIST_SEPARATOR        ';'
+#else
+ #define PATH_LIST_SEPARATOR        ':'
+#endif
 
 namespace MarkEmptyDirs
 {
@@ -145,6 +150,13 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         if (arg.isBasedOn(dryRunOpt))
         {
             config.setDryRun(true);
+        }
+        else if (arg.isBasedOn(excludeOpt))
+        {
+            Config::DirList dirs;
+            foreach (auto dir, arg.value.split(PATH_LIST_SEPARATOR, QString::SkipEmptyParts))
+                dirs.push_back(dir);
+            config.setExcludeDirs(dirs);
         }
         else if (arg.isBasedOn(shortOpt))
         {
