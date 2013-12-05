@@ -33,59 +33,6 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-Option::Option(const QStringList& names, const QString& description, const QString& valueName, const QString& defaultValue)
-    : m_names(names)
-    , m_description(description)
-    , m_valueName(valueName)
-    , m_defaultValue(defaultValue)
-{
-}
-
-QStringList Option::names() const
-{
-    return m_names;
-}
-
-QString Option::defaultValue() const
-{
-    return m_defaultValue;
-}
-
-bool Option::hasValue() const
-{
-    return !m_defaultValue.isNull();
-}
-
-QString Option::description() const
-{
-    return m_description;
-}
-
-QString Option::valueName() const
-{
-    return m_valueName;
-}
-
-QList<QChar> Option::shortNames() const
-{
-    QList<QChar> foundNames;
-    foreach (auto name, names())
-        if (name.length() == 1)
-            foundNames.push_back(name[0]);
-    return foundNames;
-}
-
-QStringList Option::longNames() const
-{
-    QStringList foundNames;
-    foreach (auto name, names())
-        if (name.length() > 1)
-            foundNames.push_back(name);
-    return foundNames;
-}
-
-/////////////////////
-
 Scanner::Scanner()
 {
 }

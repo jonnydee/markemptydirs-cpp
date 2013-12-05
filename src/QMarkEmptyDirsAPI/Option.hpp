@@ -24,10 +24,8 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef OPTIONPARSER_HPP
-#define OPTIONPARSER_HPP
-
-#include "Option.hpp"
+#ifndef OPTION_HPP
+#define OPTION_HPP
 
 #include <QList>
 #include <QString>
@@ -40,54 +38,30 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-struct Argument
-{
-    const Option* option;
-    QString name;
-    QString value;
-    QString errorMessage;
-
-    Argument() : option(nullptr) {}
-
-    bool isKnown() const { return nullptr != option; }
-    bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
-    bool isBasedOn(const Option& opt) const { return &opt == option; }
-};
-
-struct Token;
-typedef QList<Token> TokenList;
-
-class OptionParser
+class Option
 {
 public:
-    typedef QList<Argument> ArgumentList;
+    Option(const QStringList& names, const QString& description = QString::null, const QString& valueName = QString::null, const QString& defaultValue = QString::null);
 
-    OptionParser();
-
-    void addOption(const Option& option);
-
-    ArgumentList arguments() const;
-    Argument findUnknownArgument() const;
-    Argument findArgument(const Option& option) const;
-    ArgumentList findUnknownArguments() const;
-    ArgumentList findArguments(const Option& option) const;
-
-    OptionList options() const;
-
-    void parse(const QStringList& args);
-
-protected:
-    int parseShortOption(const TokenList& tokens, int startIndex);
-    int parseLongOption(const TokenList& tokens, int startIndex);
-    int parseOther(const TokenList& tokens, int startIndex);
+    QString defaultValue() const;
+    QString description() const;
+    bool hasValue() const;
+    QStringList longNames() const;
+    QStringList names() const;
+    QString valueName() const;
+    QList<QChar> shortNames() const;
 
 private:
-    OptionList m_options;
-    ArgumentList m_arguments;
+    QStringList m_names;
+    QString m_description;
+    QString m_valueName;
+    QString m_defaultValue;
 };
 
-}
+typedef QList<const Option*> OptionList;
 
 }
 
-#endif // OPTIONPARSER_HPP
+}
+
+#endif // OPTION_HPP

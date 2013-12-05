@@ -24,14 +24,7 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef OPTIONPARSER_HPP
-#define OPTIONPARSER_HPP
-
 #include "Option.hpp"
-
-#include <QList>
-#include <QString>
-#include <QStringList>
 
 
 namespace MarkEmptyDirs
@@ -40,54 +33,57 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-struct Argument
+Option::Option(const QStringList& names, const QString& description, const QString& valueName, const QString& defaultValue)
+    : m_names(names)
+    , m_description(description)
+    , m_valueName(valueName)
+    , m_defaultValue(defaultValue)
 {
-    const Option* option;
-    QString name;
-    QString value;
-    QString errorMessage;
+}
 
-    Argument() : option(nullptr) {}
-
-    bool isKnown() const { return nullptr != option; }
-    bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
-    bool isBasedOn(const Option& opt) const { return &opt == option; }
-};
-
-struct Token;
-typedef QList<Token> TokenList;
-
-class OptionParser
+QStringList Option::names() const
 {
-public:
-    typedef QList<Argument> ArgumentList;
+    return m_names;
+}
 
-    OptionParser();
+QString Option::defaultValue() const
+{
+    return m_defaultValue;
+}
 
-    void addOption(const Option& option);
+bool Option::hasValue() const
+{
+    return !m_defaultValue.isNull();
+}
 
-    ArgumentList arguments() const;
-    Argument findUnknownArgument() const;
-    Argument findArgument(const Option& option) const;
-    ArgumentList findUnknownArguments() const;
-    ArgumentList findArguments(const Option& option) const;
+QString Option::description() const
+{
+    return m_description;
+}
 
-    OptionList options() const;
+QString Option::valueName() const
+{
+    return m_valueName;
+}
 
-    void parse(const QStringList& args);
+QList<QChar> Option::shortNames() const
+{
+    QList<QChar> foundNames;
+    foreach (auto name, names())
+        if (name.length() == 1)
+            foundNames.push_back(name[0]);
+    return foundNames;
+}
 
-protected:
-    int parseShortOption(const TokenList& tokens, int startIndex);
-    int parseLongOption(const TokenList& tokens, int startIndex);
-    int parseOther(const TokenList& tokens, int startIndex);
-
-private:
-    OptionList m_options;
-    ArgumentList m_arguments;
-};
-
+QStringList Option::longNames() const
+{
+    QStringList foundNames;
+    foreach (auto name, names())
+        if (name.length() > 1)
+            foundNames.push_back(name);
+    return foundNames;
 }
 
 }
 
-#endif // OPTIONPARSER_HPP
+}

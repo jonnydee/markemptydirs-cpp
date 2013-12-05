@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     ../QMarkEmptyDirsAPI/Logger.cpp \
     ../QMarkEmptyDirsAPI/OptionParser.cpp \
     ../QMarkEmptyDirsAPI/ACommand.cpp \
-    ../QMarkEmptyDirsAPI/HelpCommand.cpp
+    ../QMarkEmptyDirsAPI/HelpCommand.cpp \
+    ../QMarkEmptyDirsAPI/Option.cpp
 
 INCLUDEPATH += \
     ..
@@ -49,4 +50,5 @@ HEADERS += \
     ../QMarkEmptyDirsAPI/Logger.hpp \
     ../QMarkEmptyDirsAPI/OptionParser.hpp \
     ../QMarkEmptyDirsAPI/ACommand.hpp \
-    ../QMarkEmptyDirsAPI/HelpCommand.hpp
+    ../QMarkEmptyDirsAPI/HelpCommand.hpp \
+    ../QMarkEmptyDirsAPI/Option.hpp

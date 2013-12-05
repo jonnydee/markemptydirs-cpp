@@ -24,7 +24,8 @@ SOURCES += QMarkEmptyDirsAPI.cpp \
     Logger.cpp \
     OptionParser.cpp \
     ACommand.cpp \
-    HelpCommand.cpp
+    HelpCommand.cpp \
+    Option.cpp
 
 HEADERS += QMarkEmptyDirsAPI.hpp\
         qmarkemptydirsapi_global.hpp \
@@ -41,7 +42,8 @@ HEADERS += QMarkEmptyDirsAPI.hpp\
     OptionParser_p.hpp \
     ICommand.hpp \
     ACommand.hpp \
-    HelpCommand.hpp
+    HelpCommand.hpp \
+    Option.hpp
 
 unix:!symbian {
     maemo5 {
