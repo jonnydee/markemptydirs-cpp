@@ -49,7 +49,8 @@ public:
         HELP,
         UPDATE,
         CLEAN,
-        OVERVIEW
+        OVERVIEW,
+        VERSION
     };
 
     typedef QList<QDir> DirList;
