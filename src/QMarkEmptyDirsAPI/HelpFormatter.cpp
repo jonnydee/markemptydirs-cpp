@@ -47,16 +47,18 @@ QStringList HelpFormatter::formatOptionDetailList(const OptionList& options) con
     adjustToMaxLen(shortNamesColumn);
 
     auto longNamesColumn = formatLongNames(options);
-    adjustToMaxLen(longNamesColumn);
 
     auto optionsColumn = joinColumns(QList<QStringList>() << shortNamesColumn << longNamesColumn, " ");
+    trimRight(optionsColumn);
 
     auto valueNamesColumn = formatValueNames(options);
-    adjustToMaxLen(valueNamesColumn);
+
+    auto leftSide = joinColumns(QList<QStringList>() << optionsColumn << valueNamesColumn, " ");
+    adjustToMaxLen(leftSide);
 
     auto descriptionsColumn = formatDescriptions(options);
 
-    return joinColumns(QList<QStringList>() << optionsColumn << valueNamesColumn << descriptionsColumn, " ");
+    return joinColumns(QList<QStringList>() << leftSide << descriptionsColumn, " ");
 }
 
 QStringList HelpFormatter::formatShortNames(const OptionList& options) const
@@ -151,6 +153,23 @@ QStringList HelpFormatter::joinColumns(const QList<QStringList>& columns, const 
 
     return joined;
 }
+
+static void strTrimRight(QString& str)
+{
+    for (int i = str.size() - 1; i >= 0; --i)
+        if (!str[i].isSpace())
+        {
+            str.truncate(i + 1);
+            break;
+        }
+}
+
+void HelpFormatter::trimRight(QStringList& strings) const
+{
+    for (int i = 0; i < strings.size(); i++)
+        strTrimRight(strings[i]);
+}
+
 
 }
 

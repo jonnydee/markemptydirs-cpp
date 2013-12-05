@@ -51,6 +51,7 @@ protected:
     void adjustToMaxLen(QStringList& strings) const;
     void indent(QStringList& strings, int count) const;
     QStringList joinColumns(const QList<QStringList>& columns, const QString& separator) const;
+    void trimRight(QStringList& strings) const;
 };
 
 }
