@@ -53,7 +53,7 @@ QString Option::defaultValue() const
 
 bool Option::hasValue() const
 {
-    return !m_defaultValue.isNull();
+    return !m_valueName.isNull();
 }
 
 QString Option::description() const
