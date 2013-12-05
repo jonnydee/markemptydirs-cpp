@@ -135,6 +135,11 @@ void OptionParser::addOption(const Option& option)
     m_options.push_back(&option);
 }
 
+void OptionParser::addOptions(const OptionList& options)
+{
+    m_options << options;
+}
+
 ArgumentList OptionParser::arguments() const
 {
     return m_arguments;

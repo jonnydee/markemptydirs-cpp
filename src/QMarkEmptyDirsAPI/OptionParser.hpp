@@ -64,6 +64,7 @@ public:
     OptionParser();
 
     void addOption(const Option& option);
+    void addOptions(const OptionList& options);
 
     ArgumentList arguments() const;
     Argument findUnknownArgument() const;
