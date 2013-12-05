@@ -54,8 +54,6 @@ public:
 
     typedef QList<QDir> DirList;
 
-    static Config createFromCommandLineArguments(const QStringList& args);
-
     Config();
     ~Config();
 

@@ -24,47 +24,52 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include <QMarkEmptyDirsAPI/CommandLineInterface.hpp>
-#include <QMarkEmptyDirsAPI/Config.hpp>
-#include <QMarkEmptyDirsAPI/CleanCommand.hpp>
-#include <QMarkEmptyDirsAPI/HelpCommand.hpp>
-#include <QMarkEmptyDirsAPI/OverviewCommand.hpp>
-#include <QMarkEmptyDirsAPI/UpdateCommand.hpp>
+#ifndef COMMANDLINEINTERFACE_HPP
+#define COMMANDLINEINTERFACE_HPP
 
-#include <QCoreApplication>
-#include <QDebug>
+#include "Config.hpp"
+#include "Option.hpp"
 
-using namespace MarkEmptyDirs::Api;
 
-int main(int argc, char *argv[])
+namespace MarkEmptyDirs
 {
-    QCoreApplication app(argc, argv);
 
-    CommandLineInterface cli;
+namespace Api
+{
 
-    const auto config = cli.createConfig(app.arguments());
+class CommandLineInterface
+{
+public:
+    const Option dryRunOpt;
+    const Option shortOpt;
+    const Option verboseOpt;
+    const Option cleanOpt;
+    const Option helpOpt;
+    const Option createHookOpt;
+    const Option deleteHookOpt;
+    const Option listOpt;
+    const Option purgeOpt;
+    const Option excludeOpt;
+    const Option placeHolderOpt;
+    const Option textOpt;
+    const Option fileOpt;
+    const Option substOpt;
+    const Option followSymLinksOpt;
+    const Option overviewOpt;
+    const Option updateOpt;
 
-    std::unique_ptr<ICommand> pCmd;
-    switch (config.command())
-    {
-    case Config::CLEAN:
-        pCmd.reset(new CleanCommand);
-        break;
-    case Config::UPDATE:
-        pCmd.reset(new UpdateCommand);
-        break;
-    case Config::OVERVIEW:
-        pCmd.reset(new OverviewCommand);
-        break;
-    case Config::HELP:
-    default:
-        pCmd.reset(new HelpCommand);
-        break;
-    }
+    CommandLineInterface();
 
-    pCmd->init(config);
-    pCmd->run();
+    const OptionList& options() const;
 
-    return 0;
-//    return app.exec();
+    Config createConfig(const QStringList& args) const;
+
+private:
+    OptionList m_options;
+};
+
 }
+
+}
+
+#endif // COMMANDLINEINTERFACE_HPP
