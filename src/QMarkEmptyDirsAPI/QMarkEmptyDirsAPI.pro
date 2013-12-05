@@ -25,6 +25,7 @@ SOURCES += QMarkEmptyDirsAPI.cpp \
     OptionParser.cpp \
     ACommand.cpp \
     HelpCommand.cpp \
+    HelpFormatter.cpp \
     CommandLineInterface.cpp \
     Option.cpp
 
@@ -44,6 +45,7 @@ HEADERS += QMarkEmptyDirsAPI.hpp\
     ICommand.hpp \
     ACommand.hpp \
     HelpCommand.hpp \
+    HelpFormatter.hpp \
     CommandLineInterface.hpp \
     Option.hpp
 
