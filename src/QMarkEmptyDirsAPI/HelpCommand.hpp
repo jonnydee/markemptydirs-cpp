@@ -28,6 +28,7 @@
 #define HELPCOMMAND_HPP
 
 #include "ACommand.hpp"
+#include "CommandLineInterface.hpp"
 
 
 namespace MarkEmptyDirs
@@ -39,9 +40,12 @@ namespace Api
 class HelpCommand : public ACommand
 {
 public:
-    HelpCommand();
+    HelpCommand(const CommandLineInterface& cli);
 
     void run();
+
+private:
+    const CommandLineInterface* m_pCli;
 };
 
 }

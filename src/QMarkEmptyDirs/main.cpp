@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
         break;
     case Config::HELP:
     default:
-        pCmd.reset(new HelpCommand);
+        pCmd.reset(new HelpCommand(cli));
         break;
     }
 

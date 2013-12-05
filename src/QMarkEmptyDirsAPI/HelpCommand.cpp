@@ -25,6 +25,7 @@
 // or implied, of Johann Duscher.
 
 #include "HelpCommand.hpp"
+#include "HelpFormatter.hpp"
 
 
 namespace MarkEmptyDirs
@@ -33,13 +34,17 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-HelpCommand::HelpCommand()
+HelpCommand::HelpCommand(const CommandLineInterface& cli)
+    : m_pCli(&cli)
 {
 }
 
 void HelpCommand::run()
 {
-    logger().log(QString("Current config: %1").arg(config().toString()), LogLevel::NONE);
+    HelpFormatter formatter;
+    auto help = formatter.format(m_pCli->options());
+//    logger().log(QString("Current config: %1").arg(config().toString()), LogLevel::NONE);
+    logger().log(help, LogLevel::NONE);
 }
 
 }
