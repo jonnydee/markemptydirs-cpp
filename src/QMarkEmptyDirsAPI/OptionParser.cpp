@@ -135,7 +135,7 @@ void OptionParser::addOption(const Option& option)
     m_options.push_back(&option);
 }
 
-OptionParser::ArgumentList OptionParser::arguments() const
+ArgumentList OptionParser::arguments() const
 {
     return m_arguments;
 }
@@ -156,7 +156,7 @@ Argument OptionParser::findArgument(const Option& option) const
     return Argument();
 }
 
-OptionParser::ArgumentList OptionParser::findUnknownArguments() const
+ArgumentList OptionParser::findUnknownArguments() const
 {
     ArgumentList args;
     foreach (auto& arg, m_arguments)
@@ -165,7 +165,7 @@ OptionParser::ArgumentList OptionParser::findUnknownArguments() const
     return args;
 }
 
-OptionParser::ArgumentList OptionParser::findArguments(const Option& option) const
+ArgumentList OptionParser::findArguments(const Option& option) const
 {
     ArgumentList args;
     foreach (auto& arg, m_arguments)

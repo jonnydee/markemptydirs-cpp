@@ -53,6 +53,7 @@ struct Argument
     bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
     bool isBasedOn(const Option& opt) const { return &opt == option; }
 };
+typedef QList<Argument> ArgumentList;
 
 struct Token;
 typedef QList<Token> TokenList;
@@ -60,8 +61,6 @@ typedef QList<Token> TokenList;
 class OptionParser
 {
 public:
-    typedef QList<Argument> ArgumentList;
-
     OptionParser();
 
     void addOption(const Option& option);
