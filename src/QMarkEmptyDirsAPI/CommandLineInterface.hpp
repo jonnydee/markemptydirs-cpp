@@ -54,9 +54,12 @@ public:
     const Option textOpt;
     const Option fileOpt;
     const Option substOpt;
+    const Option noSubstOpt;
     const Option followSymLinksOpt;
+    const Option noFollowSymLinksOpt;
     const Option overviewOpt;
     const Option updateOpt;
+    const Option versionOpt;
 
     CommandLineInterface();
 

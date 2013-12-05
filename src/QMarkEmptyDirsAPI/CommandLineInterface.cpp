@@ -28,9 +28,8 @@
 #include "OptionParser.hpp"
 
 #define DEFAULT_COMMAND             Config::UPDATE
-#define DEFAULT_FILE_FILENAME       "placeholder.txt"
+#define DEFAULT_EXCLUDE_DIRS        ".bzr:CVS:.git:.hg:.svn"
 #define DEFAULT_MARKER_FILENAME     ".emptydir"
-#define DEFAULT_TEXT_CONTENT        ""
 
 
 namespace MarkEmptyDirs
@@ -40,23 +39,73 @@ namespace Api
 {
 
 CommandLineInterface::CommandLineInterface()
-    : dryRunOpt(QStringList() << "d" << "dry-run", "simulate command execution without any side effects")
-    , shortOpt(QStringList() << "s" << "short", "output short verbose messages")
-    , verboseOpt(QStringList() << "v" << "verbose", "output verbose messages", "level", "1")
-    , cleanOpt(QStringList() << "c" << "clean", "delete all placeholder files")
-    , helpOpt(QStringList() << "h" << "help", "print help information")
-    , createHookOpt(QStringList() << "a" << "create-hook", "invoke command after placeholder creation (use template variables)")
-    , deleteHookOpt(QStringList() << "r" << "delete-hook", "invoke command before placeholder deletion (use template variables)")
-    , listOpt(QStringList() << "l" << "list", "list all placeholder files")
-    , purgeOpt(QStringList() << "g" << "purge", "delete everything within directories containing placeholders")
-    , excludeOpt(QStringList() << "x" << "exclude", "skip excluded dirs", "dirs", ".bzr:CVS:.git:.hg:.svn")
-    , placeHolderOpt(QStringList() << "p" << "place-holder", "use another name for placeholder files", "name", DEFAULT_MARKER_FILENAME)
-    , textOpt(QStringList() << "t" << "text", "create placeholder files with the specified text as content", "content", DEFAULT_TEXT_CONTENT)
-    , fileOpt(QStringList() << "f" << "file", "create placeholder files using the specified template file as content", "name", DEFAULT_FILE_FILENAME)
-    , substOpt(QStringList() << "b" << "subst", "use variable subsitution")
-    , followSymLinksOpt(QStringList() << "m" << "follow-symlinks", "follow symbolic links")
-    , overviewOpt(QStringList() << "o" << "overview", "scan directory and show some overview statistics")
-    , updateOpt(QStringList() << "u" << "update", "create and delete placeholder files where necessary")
+    : dryRunOpt(
+          QStringList() << "n" << "dry-run",
+          QObject::tr("simulate command execution without any side effects", "dry-run"))
+    , shortOpt(
+          QStringList() << "short",
+          QObject::tr("output short verbose messages", "short"))
+    , verboseOpt(
+          QStringList() << "v" << "verbose",
+          QObject::tr("output verbose messages", "verbose"))
+    , cleanOpt(
+          QStringList() << "c" << "clean",
+          QObject::tr("delete all placeholder files", "clean"))
+    , helpOpt(
+          QStringList() << "h" << "help",
+          QObject::tr("print help information", "help"))
+    , createHookOpt(
+          QStringList() << "create-hook",
+          QObject::tr("invoke command after placeholder creation (use template variables)", "create-hook"),
+          QObject::tr("COMMAND", "create-hook"))
+    , deleteHookOpt(
+          QStringList() << "delete-hook",
+          QObject::tr("invoke command before placeholder deletion (use template variables)", "delete-hook"),
+          QObject::tr("COMMAND", "delete-hook"))
+    , listOpt(
+          QStringList() << "l" << "list",
+          QObject::tr("list all placeholder files", "list"))
+    , purgeOpt(
+          QStringList() << "purge",
+          QObject::tr("delete everything within directories containing placeholders", "purge"))
+    , excludeOpt(
+          QStringList() << "x" << "exclude",
+          QObject::tr("skip excluded dirs", "exclude"),
+          QObject::tr("DIRS", "exclude"),
+          DEFAULT_EXCLUDE_DIRS)
+    , placeHolderOpt(
+          QStringList() << "p" << "place-holder",
+          QObject::tr("use another name for placeholder files", "place-holder"),
+          QObject::tr("NAME", "place-holder"))
+    , textOpt(
+          QStringList() << "text",
+          QObject::tr("create placeholder files with the specified text as content", "text"),
+          QObject::tr("CONTENT", "text"))
+    , fileOpt(
+          QStringList() << "F" << "file",
+          QObject::tr("create placeholder files using the specified template file as content", "file"),
+          QObject::tr("NAME", "file"))
+    , substOpt(
+          QStringList() << "subst",
+          QObject::tr("use variable subsitution", "subst"))
+    , noSubstOpt(
+          QStringList() << "no-subst",
+          QObject::tr("do not use variable subsitution", "subst"))
+    , followSymLinksOpt(
+          QStringList() << "L" << "dereference",
+          QObject::tr("follow symbolic links", "dereference"))
+    , noFollowSymLinksOpt(
+          QStringList() << "no-dereference",
+          QObject::tr("do not follow symbolic links", "dereference"))
+    , overviewOpt(
+          QStringList() << "overview",
+          QObject::tr("scan directory and show some overview statistics", "overview"))
+    , updateOpt(
+          QStringList() << "u" << "update",
+          QObject::tr("create and delete placeholder files where necessary", "update"))
+    , versionOpt(
+          QStringList() << "version",
+          QObject::tr("show version information", "version"))
 {
     m_options
         << &dryRunOpt
@@ -72,9 +121,12 @@ CommandLineInterface::CommandLineInterface()
         << &placeHolderOpt
         << &fileOpt
         << &substOpt
+        << &noSubstOpt
         << &textOpt
         << &followSymLinksOpt
-        << &updateOpt;
+        << &noFollowSymLinksOpt
+        << &updateOpt
+        << &versionOpt;
 }
 
 Config CommandLineInterface::createConfig(const QStringList& args) const
@@ -118,6 +170,18 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         {
             config.setResolveSymLinks(true);
         }
+        else if (arg.isBasedOn(noFollowSymLinksOpt))
+        {
+            config.setResolveSymLinks(false);
+        }
+        else if (arg.isBasedOn(substOpt))
+        {
+            config.setSubstituteVariables(true);
+        }
+        else if (arg.isBasedOn(noSubstOpt))
+        {
+            config.setSubstituteVariables(false);
+        }
         else if (arg.isBasedOn(helpOpt))
         {
             config.setCommand(Config::Command::HELP);
@@ -140,6 +204,10 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         else if (arg.isBasedOn(overviewOpt))
         {
             config.setCommand(Config::Command::OVERVIEW);
+        }
+        else if (arg.isBasedOn(versionOpt))
+        {
+            config.setCommand(Config::Command::VERSION);
         }
         else if (i > 0)
         {
