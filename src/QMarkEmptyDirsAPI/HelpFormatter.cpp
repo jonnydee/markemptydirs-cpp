@@ -101,7 +101,7 @@ QStringList HelpFormatter::formatValueNames(const OptionList& options) const
     foreach (const auto pOption, options)
     {
         if (pOption->hasValue())
-            allNames << QString("<%1>").arg(pOption->valueName());
+            allNames << QString(pOption->isValueMandatory() ? "<%1>" : "[%1]").arg(pOption->valueName());
         else
             allNames << QString();
     }
