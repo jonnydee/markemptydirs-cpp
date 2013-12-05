@@ -48,6 +48,7 @@ Config::Config()
     , m_markerFileName(DEFAULT_MARKER_FILENAME)
     , m_resolveSymLinks(false)
     , m_shortMessages(false)
+    , m_substituteVariables(true)
 {
 }
 
@@ -125,6 +126,16 @@ bool Config::shortMessages() const
     return m_shortMessages;
 }
 
+void Config::setSubstituteVariables(bool subst)
+{
+    m_substituteVariables = subst;
+}
+
+bool Config::substituteVariables() const
+{
+    return m_substituteVariables;
+}
+
 template <typename T>
 static QString valueStr(const T& value)
 {
@@ -159,6 +170,7 @@ QString Config::toString() const
             << nameValueStr("resolveSymLinks", resolveSymLinks())
             << nameValueStr("rootDirs", listValueStr(rootDirs(), [](const QDir& dir) { return dir.canonicalPath(); }))
             << nameValueStr("shortMessages", shortMessages())
+            << nameValueStr("substituteVariables", substituteVariables())
         ).join(", "));
 }
 

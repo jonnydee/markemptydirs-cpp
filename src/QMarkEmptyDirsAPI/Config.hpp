@@ -78,6 +78,9 @@ public:
     void setShortMessages(bool shortMessages);
     bool shortMessages() const;
 
+    void setSubstituteVariables(bool subst);
+    bool substituteVariables() const;
+
     QString toString() const;
 
 private:
@@ -88,6 +91,7 @@ private:
     bool m_resolveSymLinks;
     DirList m_rootDirs;
     bool m_shortMessages;
+    bool m_substituteVariables;
 };
 
 }
