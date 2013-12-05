@@ -46,6 +46,7 @@ public:
     QString defaultValue() const;
     QString description() const;
     bool hasValue() const;
+    bool isValueMandatory() const;
     QStringList longNames() const;
     QStringList names() const;
     QString valueName() const;

@@ -56,6 +56,11 @@ bool Option::hasValue() const
     return !m_valueName.isNull();
 }
 
+bool Option::isValueMandatory() const
+{
+    return hasValue() && m_defaultValue.isNull();
+}
+
 QString Option::description() const
 {
     return m_description;
