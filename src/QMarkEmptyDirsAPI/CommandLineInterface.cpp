@@ -28,15 +28,16 @@
 #include "HelpFormatter.hpp"
 #include "OptionParser.hpp"
 
-#define DEFAULT_COMMAND             Config::UPDATE
-#define DEFAULT_EXCLUDE_DIRS        ".bzr:CVS:.git:.hg:.svn"
-#define DEFAULT_MARKER_FILENAME     ".emptydir"
-
 #ifdef Q_OS_WIN32
  #define PATH_LIST_SEPARATOR        ';'
 #else
  #define PATH_LIST_SEPARATOR        ':'
 #endif
+
+#define DEFAULT_COMMAND             Config::UPDATE
+#define DEFAULT_EXCLUDE_DIRS        ((QStringList() << ".bzr" << "CVS" << ".git" << ".hg" << ".svn").join(PATH_LIST_SEPARATOR))
+#define DEFAULT_MARKER_FILENAME     ".emptydir"
+
 
 namespace MarkEmptyDirs
 {
