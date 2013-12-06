@@ -183,11 +183,11 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         }
         else if (arg.isBasedOn(followSymLinksOpt))
         {
-            config.setResolveSymLinks(true);
+            config.setDereferenceSymLinks(true);
         }
         else if (arg.isBasedOn(noFollowSymLinksOpt))
         {
-            config.setResolveSymLinks(false);
+            config.setDereferenceSymLinks(false);
         }
         else if (arg.isBasedOn(substOpt))
         {

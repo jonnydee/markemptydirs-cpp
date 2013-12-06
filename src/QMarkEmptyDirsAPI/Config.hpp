@@ -76,8 +76,8 @@ public:
     void setMarkerFileName(const QString& fileName);
     QString markerFileName() const;
 
-    void setResolveSymLinks(bool resolve);
-    bool resolveSymLinks() const;
+    void setDereferenceSymLinks(bool dereference);
+    bool dereferenceSymLinks() const;
 
     void addRootDir(const QDir& rootDir);
     DirList rootDirs() const;
@@ -97,7 +97,7 @@ private:
     QString m_helpText;
     LogLevel m_logLevel;
     QString m_markerFileName;
-    bool m_resolveSymLinks;
+    bool m_dereferenceSymLinks;
     DirList m_rootDirs;
     bool m_shortMessages;
     bool m_substituteVariables;

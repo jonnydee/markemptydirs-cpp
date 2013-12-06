@@ -47,7 +47,7 @@ Config::Config()
     , m_excludeDirs()
     , m_logLevel(LogLevel::NONE)
     , m_markerFileName(DEFAULT_MARKER_FILENAME)
-    , m_resolveSymLinks(false)
+    , m_dereferenceSymLinks(false)
     , m_shortMessages(false)
     , m_substituteVariables(true)
 {
@@ -117,14 +117,14 @@ QString Config::markerFileName() const
     return m_markerFileName;
 }
 
-void Config::setResolveSymLinks(bool resolve)
+void Config::setDereferenceSymLinks(bool dereference)
 {
-    m_resolveSymLinks = resolve;
+    m_dereferenceSymLinks = dereference;
 }
 
-bool Config::resolveSymLinks() const
+bool Config::dereferenceSymLinks() const
 {
-    return m_resolveSymLinks;
+    return m_dereferenceSymLinks;
 }
 
 void Config::addRootDir(const QDir& rootDir)
@@ -189,7 +189,7 @@ QString Config::toString() const
             << nameValueStr("excludeDirs", listValueStr(excludeDirs(), [](const QDir& dir) { return dir.path(); }))
             << nameValueStr("logLevel", logLevel())
             << nameValueStr("markerFileName", valueStr(markerFileName()))
-            << nameValueStr("resolveSymLinks", resolveSymLinks())
+            << nameValueStr("dereferenceSymLinks", dereferenceSymLinks())
             << nameValueStr("rootDirs", listValueStr(rootDirs(), [](const QDir& dir) { return dir.path(); }))
             << nameValueStr("shortMessages", shortMessages())
             << nameValueStr("substituteVariables", substituteVariables())
