@@ -30,7 +30,6 @@
 #include <QDebug>
 
 #define DEFAULT_COMMAND             Config::UPDATE
-#define DEFAULT_EXCLUDE_DIRS        (DirList() << QDir(".bzr") << QDir("CVS") << QDir(".git") << QDir(".hg") << QDir(".svn"))
 #define DEFAULT_FILE_FILENAME       "placeholder.txt"
 #define DEFAULT_MARKER_FILENAME     ".emptydir"
 #define DEFAULT_TEXT_CONTENT        ""
@@ -45,7 +44,7 @@ namespace Api
 Config::Config()
     : m_command(DEFAULT_COMMAND)
     , m_dryRun(false)
-    , m_excludeDirs(DEFAULT_EXCLUDE_DIRS)
+    , m_excludeDirs()
     , m_logLevel(LogLevel::NONE)
     , m_markerFileName(DEFAULT_MARKER_FILENAME)
     , m_resolveSymLinks(false)
