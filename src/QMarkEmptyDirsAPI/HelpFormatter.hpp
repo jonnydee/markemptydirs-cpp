@@ -39,6 +39,8 @@ namespace Api
 class HelpFormatter
 {
 public:
+    HelpFormatter(int optionListIndent = 2, int maxLineLength = 80);
+
     QString format(const OptionList& options) const;
 
 protected:
@@ -47,10 +49,15 @@ protected:
     QStringList formatLongOptionsColumn(const OptionList& options) const;
     QStringList formatDescriptionColumn(const OptionList& options) const;
 
-    void adjustToMaxLen(QStringList& strings) const;
+    int adjustToMaxLen(QStringList& strings) const;
     void indent(QStringList& strings, int count) const;
     QStringList joinColumns(const QList<QStringList>& columns, const QString& separator) const;
     void trimRight(QStringList& strings) const;
+    QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0) const;
+
+private:
+    int m_optionListIndent;
+    int m_maxLineLength;
 };
 
 }

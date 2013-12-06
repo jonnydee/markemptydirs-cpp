@@ -27,6 +27,8 @@
 #include "HelpFormatter.hpp"
 #include "Option.hpp"
 
+#define WRAPPED_LINE_MIN_LENGTH     40
+
 
 namespace MarkEmptyDirs
 {
@@ -34,26 +36,43 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
+HelpFormatter::HelpFormatter(int optionListIndent, int maxLineLength)
+    : m_optionListIndent(optionListIndent)
+    , m_maxLineLength(maxLineLength)
+{
+    if (m_maxLineLength - m_optionListIndent < WRAPPED_LINE_MIN_LENGTH)
+    {
+        m_optionListIndent = 0;
+
+        if (m_maxLineLength < WRAPPED_LINE_MIN_LENGTH)
+            m_maxLineLength = std::numeric_limits<int>::max();
+    }
+}
+
 QString HelpFormatter::format(const OptionList& options) const
 {
     auto detailList = formatOptionDetailList(options);
-    indent(detailList, 4);
+    indent(detailList, m_optionListIndent);
     return detailList.join('\n');
 }
 
 QStringList HelpFormatter::formatOptionDetailList(const OptionList& options) const
 {
     auto shortNamesColumn = formatShortOptionsColumn(options);
-    adjustToMaxLen(shortNamesColumn);
+    const int shortNamesColumnWidth = adjustToMaxLen(shortNamesColumn);
 
     auto longNamesColumn = formatLongOptionsColumn(options);
-    adjustToMaxLen(longNamesColumn);
+    const int longNamesColumnWidth = adjustToMaxLen(longNamesColumn);
 
-    auto optionsColumn = joinColumns(QList<QStringList>() << shortNamesColumn << longNamesColumn, " ");
+    const auto descriptionsColumn = formatDescriptionColumn(options);
 
-    auto descriptionsColumn = formatDescriptionColumn(options);
+    const auto textLines = joinColumns(QList<QStringList>() << shortNamesColumn << longNamesColumn << descriptionsColumn, " ");
+    const int indent = shortNamesColumnWidth + 1 + longNamesColumnWidth + 1;
 
-    return joinColumns(QList<QStringList>() << optionsColumn << descriptionsColumn, " ");
+    QStringList wrappedTextLines;
+    foreach (const auto textLine, textLines)
+        wrappedTextLines << wrapLine(textLine, m_maxLineLength, indent);
+    return wrappedTextLines;
 }
 
 QStringList HelpFormatter::formatShortOptionsColumn(const OptionList& options) const
@@ -117,13 +136,14 @@ QStringList HelpFormatter::formatDescriptionColumn(const OptionList& options) co
     return descriptionColumn;
 }
 
-void HelpFormatter::adjustToMaxLen(QStringList& strings) const
+int HelpFormatter::adjustToMaxLen(QStringList& strings) const
 {
     int maxLen = 0;
     foreach (const auto& str, strings)
         maxLen = qMax(maxLen, str.length());
     for (int i = 0; i < strings.size(); i++)
         strings[i] += QString(maxLen - strings[i].length(), ' ');
+    return maxLen;
 }
 
 void HelpFormatter::indent(QStringList& strings, int count) const
@@ -171,6 +191,27 @@ void HelpFormatter::trimRight(QStringList& strings) const
         strTrimRight(strings[i]);
 }
 
+QStringList HelpFormatter::wrapLine(const QString& line, int maxLength, int newLineIndent) const
+{
+    QStringList wrappedLines;
+
+    auto currentLine = line;
+    while (currentLine.length() > maxLength)
+    {
+        int i = maxLength;
+        while (i >= 0 && !currentLine[i].isSpace())
+            --i;
+
+        auto newLine = currentLine.left(i);
+        strTrimRight(newLine);
+        wrappedLines << newLine;
+
+        currentLine = QString(newLineIndent, ' ') + currentLine.mid(i++).trimmed();
+    }
+    wrappedLines << currentLine;
+
+    return wrappedLines;
+}
 
 }
 
