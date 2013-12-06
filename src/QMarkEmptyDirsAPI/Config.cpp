@@ -181,7 +181,7 @@ QString Config::toString() const
             << nameValueStr("logLevel", logLevel())
             << nameValueStr("markerFileName", valueStr(markerFileName()))
             << nameValueStr("resolveSymLinks", resolveSymLinks())
-            << nameValueStr("rootDirs", listValueStr(rootDirs(), [](const QDir& dir) { return dir.canonicalPath(); }))
+            << nameValueStr("rootDirs", listValueStr(rootDirs(), [](const QDir& dir) { return dir.path(); }))
             << nameValueStr("shortMessages", shortMessages())
             << nameValueStr("substituteVariables", substituteVariables())
         ).join(", "));
