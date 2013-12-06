@@ -132,6 +132,7 @@ CommandLineInterface::CommandLineInterface()
         << &textOpt
         << &followSymLinksOpt
         << &noFollowSymLinksOpt
+        << &overviewOpt
         << &updateOpt
         << &versionOpt;
 }
