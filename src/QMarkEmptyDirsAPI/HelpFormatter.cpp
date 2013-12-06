@@ -27,8 +27,9 @@
 #include "HelpFormatter.hpp"
 #include "Option.hpp"
 
-#define WRAPPED_LINE_MIN_LENGTH     40
-
+#define WRAPPED_LINE_MIN_LENGTH             40
+#define OPTION_COLUMN_PADDING_SIZE          1
+#define DESCRIPTION_COLUMN_PADDING_SIZE     2
 
 namespace MarkEmptyDirs
 {
@@ -66,8 +67,9 @@ QStringList HelpFormatter::formatOptionDetailList(const OptionList& options) con
 
     const auto descriptionsColumn = formatDescriptionColumn(options);
 
-    const auto textLines = joinColumns(QList<QStringList>() << shortNamesColumn << longNamesColumn << descriptionsColumn, " ");
-    const int indent = shortNamesColumnWidth + 1 + longNamesColumnWidth + 1;
+    auto textLines = joinColumns(QList<QStringList>() << shortNamesColumn << longNamesColumn, QString(OPTION_COLUMN_PADDING_SIZE, ' '));
+    textLines = joinColumns(QList<QStringList>() << textLines << descriptionsColumn, QString(DESCRIPTION_COLUMN_PADDING_SIZE, ' '));
+    const int indent = shortNamesColumnWidth + OPTION_COLUMN_PADDING_SIZE + longNamesColumnWidth + DESCRIPTION_COLUMN_PADDING_SIZE;
 
     QStringList wrappedTextLines;
     foreach (const auto textLine, textLines)
