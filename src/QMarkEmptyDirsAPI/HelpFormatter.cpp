@@ -43,72 +43,68 @@ QString HelpFormatter::format(const OptionList& options) const
 
 QStringList HelpFormatter::formatOptionDetailList(const OptionList& options) const
 {
-    auto shortNamesColumn = formatShortNames(options);
+    auto shortNamesColumn = formatShortOptionsColumn(options);
     adjustToMaxLen(shortNamesColumn);
 
-    auto longNamesColumn = formatLongNames(options);
+    auto longNamesColumn = formatLongOptionsColumn(options);
+    adjustToMaxLen(longNamesColumn);
 
     auto optionsColumn = joinColumns(QList<QStringList>() << shortNamesColumn << longNamesColumn, " ");
-    trimRight(optionsColumn);
 
-    auto valueNamesColumn = formatValueNames(options);
+    auto descriptionsColumn = formatDescriptionColumn(options);
 
-    auto leftSide = joinColumns(QList<QStringList>() << optionsColumn << valueNamesColumn, " ");
-    adjustToMaxLen(leftSide);
-
-    auto descriptionsColumn = formatDescriptions(options);
-
-    return joinColumns(QList<QStringList>() << leftSide << descriptionsColumn, " ");
+    return joinColumns(QList<QStringList>() << optionsColumn << descriptionsColumn, " ");
 }
 
-QStringList HelpFormatter::formatShortNames(const OptionList& options) const
+QStringList HelpFormatter::formatShortOptionsColumn(const OptionList& options) const
 {
-    QStringList allNames;
+    QStringList shortOptionsColumn;
     foreach (const auto pOption, options)
     {
         auto shortNames = pOption->shortNames();
         qSort(shortNames);
         QStringList names;
         foreach (const auto& shortName, shortNames)
-            names << QString("-%1").arg(shortName);
+            names << QString(shortName);
 
-        auto joined = names.join(", ");
-        if (!joined.isEmpty() && !pOption->longNames().isEmpty())
-            joined += ",";
+        auto shortOptions = names.join("|");
+        if (!shortOptions.isEmpty())
+        {
+            shortOptions.insert(0, '-');
 
-        allNames << joined;
+            if (pOption->hasValue())
+                shortOptions += QString(pOption->isValueMandatory() ? " %1" : " [%1]").arg(pOption->valueName().toUpper());
+
+            if (!shortOptions.isEmpty() && !pOption->longNames().isEmpty())
+                shortOptions += ",";
+        }
+        shortOptionsColumn << shortOptions;
     }
-    return allNames;
+    return shortOptionsColumn;
 }
 
-QStringList HelpFormatter::formatLongNames(const OptionList& options) const
+QStringList HelpFormatter::formatLongOptionsColumn(const OptionList& options) const
 {
-    QStringList allNames;
+    QStringList longOptionsColumn;
     foreach (const auto pOption, options)
     {
         auto names = pOption->longNames();
         qSort(names);
-        for (int i = 0; i < names.size(); i++)
-            names[i] = QString("--%1").arg(names[i]);
-        allNames << names.join(", ");
+
+        auto longOptions = names.join('|');
+        if (!longOptions.isEmpty())
+        {
+            longOptions.insert(0, "--");
+
+            if (pOption->hasValue())
+                longOptions += QString(pOption->isValueMandatory() ? "=%1" : "[=%1]").arg(pOption->valueName().toUpper());
+        }
+        longOptionsColumn << longOptions;
     }
-    return allNames;
+    return longOptionsColumn;
 }
 
-QStringList HelpFormatter::formatValueNames(const OptionList& options) const
-{
-    QStringList allNames;
-    foreach (const auto pOption, options)
-    {
-        if (pOption->hasValue())
-            allNames << QString(pOption->isValueMandatory() ? "<%1>" : "[%1]").arg(pOption->valueName());
-        else
-            allNames << QString();
-    }
-    return allNames;
-}
-
-QStringList HelpFormatter::formatDescriptions(const OptionList& options) const
+QStringList HelpFormatter::formatDescriptionColumn(const OptionList& options) const
 {
     QStringList allDescriptions;
     foreach (const auto pOption, options)

@@ -43,10 +43,9 @@ public:
 
 protected:
     QStringList formatOptionDetailList(const OptionList& options) const;
-    QStringList formatShortNames(const OptionList& options) const;
-    QStringList formatLongNames(const OptionList& options) const;
-    QStringList formatValueNames(const OptionList& options) const;
-    QStringList formatDescriptions(const OptionList& options) const;
+    QStringList formatShortOptionsColumn(const OptionList& options) const;
+    QStringList formatLongOptionsColumn(const OptionList& options) const;
+    QStringList formatDescriptionColumn(const OptionList& options) const;
 
     void adjustToMaxLen(QStringList& strings) const;
     void indent(QStringList& strings, int count) const;
