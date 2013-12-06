@@ -121,7 +121,7 @@ void FileSystemCrawler::run()
             else if (child.isFile())
             {
                 if (child.fileName() == config().markerFileName())
-                    dirDescr.setHasPlaceHolder();
+                    dirDescr.setHasMarker();
                 else
                     dirDescr.incChildCount();
             }
@@ -139,10 +139,10 @@ void FileSystemCrawler::run()
         }
         else
         {
-            logger().log(QObject::tr("Visited directory: '%1' [children: %2, placeholder: %3]")
+            logger().log(QObject::tr("Visited directory: '%1' [children: %2, marker: %3]")
                          .arg(dirDescr.dir().canonicalPath())
                          .arg(dirDescr.childCount())
-                         .arg(dirDescr.hasPlaceHolder() ? QObject::tr("yes") : QObject::tr("no")),
+                         .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no")),
                          LogLevel::DEBUG);
         }
     }

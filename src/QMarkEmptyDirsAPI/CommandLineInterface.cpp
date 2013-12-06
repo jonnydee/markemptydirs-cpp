@@ -57,40 +57,40 @@ CommandLineInterface::CommandLineInterface()
           QObject::tr("output verbose messages", "verbose"))
     , cleanOpt(
           QStringList() << "c" << "clean",
-          QObject::tr("delete all placeholder files", "clean"))
+          QObject::tr("delete all marker files", "clean"))
     , helpOpt(
           QStringList() << "h" << "help",
           QObject::tr("print help information", "help"))
     , createHookOpt(
           QStringList() << "create-hook",
-          QObject::tr("invoke command after placeholder creation (use template variables)", "create-hook"),
+          QObject::tr("invoke command after marker creation (use template variables)", "create-hook"),
           QObject::tr("COMMAND", "create-hook"))
     , deleteHookOpt(
           QStringList() << "delete-hook",
-          QObject::tr("invoke command before placeholder deletion (use template variables)", "delete-hook"),
+          QObject::tr("invoke command before marker deletion (use template variables)", "delete-hook"),
           QObject::tr("COMMAND", "delete-hook"))
     , listOpt(
           QStringList() << "l" << "list",
-          QObject::tr("list all placeholder files", "list"))
+          QObject::tr("list all marker files", "list"))
     , purgeOpt(
           QStringList() << "purge",
-          QObject::tr("delete everything within directories containing placeholders", "purge"))
+          QObject::tr("delete everything within directories containing markers", "purge"))
     , excludeOpt(
           QStringList() << "x" << "exclude",
           QObject::tr("skip excluded dirs", "exclude"),
           QObject::tr("DIRS", "exclude"),
           DEFAULT_EXCLUDE_DIRS)
-    , placeHolderOpt(
-          QStringList() << "p" << "place-holder",
-          QObject::tr("use another name for placeholder files", "place-holder"),
-          QObject::tr("NAME", "place-holder"))
+    , markerOpt(
+          QStringList() << "m" << "marker",
+          QObject::tr("use another name for marker files", "marker"),
+          QObject::tr("NAME", "marker"))
     , textOpt(
           QStringList() << "text",
-          QObject::tr("create placeholder files with the specified text as content", "text"),
+          QObject::tr("create marker files with the specified text as content", "text"),
           QObject::tr("CONTENT", "text"))
     , fileOpt(
           QStringList() << "F" << "file",
-          QObject::tr("create placeholder files using the specified template file as content", "file"),
+          QObject::tr("create marker files using the specified template file as content", "file"),
           QObject::tr("NAME", "file"))
     , substOpt(
           QStringList() << "subst",
@@ -109,7 +109,7 @@ CommandLineInterface::CommandLineInterface()
           QObject::tr("scan directory and show some overview statistics", "overview"))
     , updateOpt(
           QStringList() << "u" << "update",
-          QObject::tr("create and delete placeholder files where necessary", "update"))
+          QObject::tr("create and delete marker files where necessary", "update"))
     , versionOpt(
           QStringList() << "version",
           QObject::tr("show version information", "version"))
@@ -125,7 +125,7 @@ CommandLineInterface::CommandLineInterface()
         << &listOpt
         << &purgeOpt
         << &excludeOpt
-        << &placeHolderOpt
+        << &markerOpt
         << &fileOpt
         << &substOpt
         << &noSubstOpt
@@ -177,7 +177,7 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
                 config.setLogLevel(LogLevel::DEBUG);
             }
         }
-        else if (arg.isBasedOn(placeHolderOpt))
+        else if (arg.isBasedOn(markerOpt))
         {
             config.setMarkerFileName(arg.value);
         }

@@ -56,8 +56,8 @@ protected:
 
     virtual void run(const PathMap& pathMap) = 0;
 
-    bool createPlaceHolder(const QDir& dir);
-    bool deletePlaceHolder(const QDir& dir);
+    bool createMarker(const QDir& dir);
+    bool deleteMarker(const QDir& dir);
 };
 
 }

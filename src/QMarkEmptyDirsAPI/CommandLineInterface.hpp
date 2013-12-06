@@ -50,7 +50,7 @@ public:
     const Option listOpt;
     const Option purgeOpt;
     const Option excludeOpt;
-    const Option placeHolderOpt;
+    const Option markerOpt;
     const Option textOpt;
     const Option fileOpt;
     const Option substOpt;

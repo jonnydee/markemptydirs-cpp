@@ -30,7 +30,7 @@
 #include <QDebug>
 
 #define DEFAULT_COMMAND             Config::UPDATE
-#define DEFAULT_FILE_FILENAME       "placeholder.txt"
+#define DEFAULT_FILE_FILENAME       "marker.txt"
 #define DEFAULT_MARKER_FILENAME     ".emptydir"
 #define DEFAULT_TEXT_CONTENT        ""
 

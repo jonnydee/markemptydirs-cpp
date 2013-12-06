@@ -53,7 +53,7 @@ ADirCommand::PathMap ADirCommand::crawlDir()
     return crawler.pathMap();
 }
 
-bool ADirCommand::createPlaceHolder(const QDir& dir)
+bool ADirCommand::createMarker(const QDir& dir)
 {
     QFileInfo markerFileInfo(dir, config().markerFileName());
     auto filePath = markerFileInfo.absoluteFilePath();
@@ -62,19 +62,19 @@ bool ADirCommand::createPlaceHolder(const QDir& dir)
     {
         const auto logMsg = config().shortMessages()
                 ? QString("%1: '%2'").arg(QObject::tr("Created")).arg(filePath)
-                : QString("%1: '%2'").arg(QObject::tr("Created placeholder")).arg(filePath);
+                : QString("%1: '%2'").arg(QObject::tr("Created marker")).arg(filePath);
         logger().log(logMsg, LogLevel::INFO);
         return true;
     }
     else
     {
-        logger().log(QString("%1: '%2' (%3)").arg(QObject::tr("Could not create placeholder")).arg(filePath).arg(markerFile.errorString()),
+        logger().log(QString("%1: '%2' (%3)").arg(QObject::tr("Could not create marker")).arg(filePath).arg(markerFile.errorString()),
                      LogLevel::ERROR);
         return false;
     }
 }
 
-bool ADirCommand::deletePlaceHolder(const QDir &dir)
+bool ADirCommand::deleteMarker(const QDir &dir)
 {
     QFileInfo markerFileInfo(dir, config().markerFileName());
     auto filePath = markerFileInfo.canonicalFilePath();
@@ -83,13 +83,13 @@ bool ADirCommand::deletePlaceHolder(const QDir &dir)
     {
         const auto logMsg = config().shortMessages()
                 ? filePath
-                : QString("%1: '%2'").arg(QObject::tr("Deleted placeholder")).arg(filePath);
+                : QString("%1: '%2'").arg(QObject::tr("Deleted marker")).arg(filePath);
         logger().log(logMsg, LogLevel::INFO);
         return true;
     }
     else
     {
-        logger().log(QString("%1: '%2' (%3)").arg(QObject::tr("Could not delete placeholder")).arg(filePath).arg(markerFile.errorString()),
+        logger().log(QString("%1: '%2' (%3)").arg(QObject::tr("Could not delete marker")).arg(filePath).arg(markerFile.errorString()),
                      LogLevel::ERROR);
         return false;
     }
