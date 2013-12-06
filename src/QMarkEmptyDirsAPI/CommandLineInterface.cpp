@@ -49,72 +49,72 @@ namespace Api
 CommandLineInterface::CommandLineInterface()
     : dryRunOpt(
           QStringList() << "n" << "dry-run",
-          QObject::tr("simulate command execution without any side effects", "dry-run"))
+          QObject::tr("Simulate command execution without any side effects.", "dry-run"))
     , shortOpt(
           QStringList() << "short",
-          QObject::tr("output short verbose messages", "short"))
+          QObject::tr("Output short verbose messages.", "short"))
     , verboseOpt(
           QStringList() << "v" << "verbose",
-          QObject::tr("output verbose messages", "verbose"))
+          QObject::tr("Output verbose messages.", "verbose"))
     , cleanOpt(
           QStringList() << "c" << "clean",
-          QObject::tr("delete all marker files", "clean"))
+          QObject::tr("Delete all marker files.", "clean"))
     , helpOpt(
           QStringList() << "h" << "help",
-          QObject::tr("print help information", "help"))
+          QObject::tr("Print help information.", "help"))
     , createHookOpt(
           QStringList() << "create-hook",
-          QObject::tr("invoke command after marker creation (use template variables)", "create-hook"),
+          QObject::tr("Invoke command after marker creation.", "create-hook"),
           QObject::tr("COMMAND", "create-hook"))
     , deleteHookOpt(
           QStringList() << "delete-hook",
-          QObject::tr("invoke command before marker deletion (use template variables)", "delete-hook"),
+          QObject::tr("Invoke command before marker deletion.", "delete-hook"),
           QObject::tr("COMMAND", "delete-hook"))
     , listOpt(
           QStringList() << "l" << "list",
-          QObject::tr("list all marker files", "list"))
+          QObject::tr("List all marker files.", "list"))
     , purgeOpt(
           QStringList() << "purge",
-          QObject::tr("delete everything within directories containing markers", "purge"))
+          QObject::tr("Delete everything within directories containing markers.", "purge"))
     , excludeOpt(
           QStringList() << "x" << "exclude",
-          QObject::tr("skip excluded dirs", "exclude"),
+          QObject::tr("Skip excluded dirs.", "exclude"),
           QObject::tr("DIRS", "exclude"),
           DEFAULT_EXCLUDE_DIRS)
     , markerOpt(
           QStringList() << "m" << "marker-name",
-          QObject::tr("use another name for marker files", "marker-name"),
+          QObject::tr("Use another name for marker files.", "marker-name"),
           QObject::tr("NAME", "marker-name"))
     , textOpt(
           QStringList() << "text",
-          QObject::tr("create marker files with the specified text as content", "text"),
+          QObject::tr("Create marker files with the specified text as content.", "text"),
           QObject::tr("CONTENT", "text"))
     , fileOpt(
           QStringList() << "F" << "file",
-          QObject::tr("create marker files using the specified template file as content", "file"),
+          QObject::tr("Create marker files using the specified template file as content.", "file"),
           QObject::tr("NAME", "file"),
           DEFAULT_MARKER_CONTENT_FILENAME)
     , substOpt(
           QStringList() << "subst",
-          QObject::tr("use variable subsitution", "subst"))
+          QObject::tr("Use variable subsitution.", "subst"))
     , noSubstOpt(
           QStringList() << "no-subst",
-          QObject::tr("do not use variable subsitution", "subst"))
+          QObject::tr("Do not use variable subsitution.", "subst"))
     , followSymLinksOpt(
           QStringList() << "L" << "dereference",
-          QObject::tr("follow symbolic links", "dereference"))
+          QObject::tr("Follow symbolic links.", "dereference"))
     , noFollowSymLinksOpt(
           QStringList() << "no-dereference",
-          QObject::tr("do not follow symbolic links", "dereference"))
+          QObject::tr("Do not follow symbolic links.", "dereference"))
     , overviewOpt(
           QStringList() << "overview",
-          QObject::tr("scan directory and show some overview statistics", "overview"))
+          QObject::tr("Scan directory and show some overview statistics.", "overview"))
     , updateOpt(
           QStringList() << "u" << "update",
-          QObject::tr("create and delete marker files where necessary", "update"))
+          QObject::tr("Create and delete marker files where necessary.", "update"))
     , versionOpt(
           QStringList() << "version",
-          QObject::tr("show version information", "version"))
+          QObject::tr("Show version information.", "version"))
 {
     m_options
         << &dryRunOpt
