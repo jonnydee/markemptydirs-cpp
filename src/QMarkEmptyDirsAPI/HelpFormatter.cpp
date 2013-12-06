@@ -106,10 +106,15 @@ QStringList HelpFormatter::formatLongOptionsColumn(const OptionList& options) co
 
 QStringList HelpFormatter::formatDescriptionColumn(const OptionList& options) const
 {
-    QStringList allDescriptions;
+    QStringList descriptionColumn;
     foreach (const auto pOption, options)
-        allDescriptions << pOption->description();
-    return allDescriptions;
+    {
+        auto description = pOption->description();
+        if (pOption->hasValue() && !pOption->isValueMandatory())
+            description = QString("%1 (default is '%2')").arg(description).arg(pOption->defaultValue());
+        descriptionColumn << description;
+    }
+    return descriptionColumn;
 }
 
 void HelpFormatter::adjustToMaxLen(QStringList& strings) const
