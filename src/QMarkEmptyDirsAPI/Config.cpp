@@ -88,6 +88,16 @@ Config::DirList Config::excludeDirs() const
     return m_excludeDirs;
 }
 
+void Config::setHelpText(const QString& text)
+{
+    m_helpText = text;
+}
+
+QString Config::helpText() const
+{
+    return m_helpText;
+}
+
 void Config::setLogLevel(LogLevel logLevel)
 {
     m_logLevel = logLevel;

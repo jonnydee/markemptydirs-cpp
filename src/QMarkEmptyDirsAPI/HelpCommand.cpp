@@ -34,17 +34,13 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-HelpCommand::HelpCommand(const CommandLineInterface& cli)
-    : m_pCli(&cli)
+HelpCommand::HelpCommand()
 {
 }
 
 void HelpCommand::run()
 {
-    HelpFormatter formatter;
-    auto help = formatter.format(m_pCli->options());
-//    logger().log(QString("Current config: %1").arg(config().toString()), LogLevel::NONE);
-    logger().log(help, LogLevel::NONE);
+    logger().log(config().helpText(), LogLevel::NONE);
 }
 
 }

@@ -67,6 +67,9 @@ public:
     void setExcludeDirs(const DirList& excludeDirs);
     DirList excludeDirs() const;
 
+    void setHelpText(const QString& text);
+    QString helpText() const;
+
     void setLogLevel(LogLevel logLevel);
     LogLevel logLevel() const;
 
@@ -91,6 +94,7 @@ private:
     Command m_command;
     bool m_dryRun;
     DirList m_excludeDirs;
+    QString m_helpText;
     LogLevel m_logLevel;
     QString m_markerFileName;
     bool m_resolveSymLinks;

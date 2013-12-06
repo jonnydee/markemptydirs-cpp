@@ -24,10 +24,10 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef HELPCOMMAND_HPP
-#define HELPCOMMAND_HPP
+#ifndef COMMANDFACTORY_HPP
+#define COMMANDFACTORY_HPP
 
-#include "ACommand.hpp"
+#include <memory>
 
 
 namespace MarkEmptyDirs
@@ -36,16 +36,19 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class HelpCommand : public ACommand
+class ICommand;
+class Config;
+
+class CommandFactory
 {
 public:
-    HelpCommand();
+    CommandFactory();
 
-    void run();
+    std::unique_ptr<ICommand> createCommand(const Config& config) const;
 };
 
 }
 
 }
 
-#endif // HELPCOMMAND_HPP
+#endif // COMMANDFACTORY_HPP

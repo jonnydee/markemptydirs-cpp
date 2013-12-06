@@ -25,6 +25,7 @@
 // or implied, of Johann Duscher.
 
 #include "CommandLineInterface.hpp"
+#include "HelpFormatter.hpp"
 #include "OptionParser.hpp"
 
 #define DEFAULT_COMMAND             Config::UPDATE
@@ -225,6 +226,13 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         {
             config.addRootDir(QDir(arg.value));
         }
+    }
+
+    // Set help text.
+    {
+        HelpFormatter formatter;
+        auto text = formatter.format(options());
+        config.setHelpText(text);
     }
 
     return config;

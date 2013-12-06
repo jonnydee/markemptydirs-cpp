@@ -24,12 +24,9 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
+#include <QMarkEmptyDirsAPI/CommandFactory.hpp>
 #include <QMarkEmptyDirsAPI/CommandLineInterface.hpp>
-#include <QMarkEmptyDirsAPI/Config.hpp>
-#include <QMarkEmptyDirsAPI/CleanCommand.hpp>
-#include <QMarkEmptyDirsAPI/HelpCommand.hpp>
-#include <QMarkEmptyDirsAPI/OverviewCommand.hpp>
-#include <QMarkEmptyDirsAPI/UpdateCommand.hpp>
+#include <QMarkEmptyDirsAPI/ICommand.hpp>
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -41,27 +38,10 @@ int main(int argc, char *argv[])
     QCoreApplication app(argc, argv);
 
     CommandLineInterface cli;
-
     const auto config = cli.createConfig(app.arguments());
 
-    std::unique_ptr<ICommand> pCmd;
-    switch (config.command())
-    {
-    case Config::CLEAN:
-        pCmd.reset(new CleanCommand);
-        break;
-    case Config::UPDATE:
-        pCmd.reset(new UpdateCommand);
-        break;
-    case Config::OVERVIEW:
-        pCmd.reset(new OverviewCommand);
-        break;
-    case Config::HELP:
-    default:
-        pCmd.reset(new HelpCommand(cli));
-        break;
-    }
-
+    CommandFactory factory;
+    auto pCmd = factory.createCommand(config);
     pCmd->init(config);
     pCmd->run();
 
