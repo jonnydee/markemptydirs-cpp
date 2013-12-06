@@ -69,6 +69,18 @@ const Config& FileSystemCrawler::config() const
     return m_config;
 }
 
+bool FileSystemCrawler::isDirExcluded(const QDir& dir) const
+{
+    foreach (const auto& excludeDir, config().excludeDirs())
+    {
+        auto exPath = excludeDir.dirName();
+        auto dirPath = dir.dirName();
+        if (excludeDir.dirName() == dir.dirName())
+            return true;
+    }
+    return false;
+}
+
 void FileSystemCrawler::run()
 {
     const QDir::Filters filter = QDir::Dirs | QDir::Files | QDir::Hidden | QDir::NoDotAndDotDot;
@@ -97,9 +109,13 @@ void FileSystemCrawler::run()
             auto childPath = child.canonicalFilePath();
             if (child.isDir())
             {
-                dirQueue.append(QDir(childPath));
-                dirDescr.incChildCount();
-                dirDescr.incSubDirCount();
+                const QDir subDir(childPath);
+                if (!isDirExcluded(subDir))
+                {
+                    dirQueue.append(subDir);
+                    dirDescr.incChildCount();
+                    dirDescr.incSubDirCount();
+                }
                 continue;
             }
             else if (child.isFile())

@@ -61,6 +61,8 @@ public:
     void setConfig(const Config& config);
     const Config& config() const;
 
+    bool isDirExcluded(const QDir& dir) const;
+
 protected:
     Logger& logger();
 
