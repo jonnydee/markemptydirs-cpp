@@ -106,7 +106,7 @@ void FileSystemCrawler::run()
         const auto children = dir.entryInfoList(filter);
         foreach (const auto child, children)
         {
-            if (child.isDir())
+            if ((config().resolveSymLinks() || !child.isSymLink()) && child.isDir())
             {
                 const auto childPath = child.canonicalFilePath();
                 const QDir subDir(childPath);
