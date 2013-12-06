@@ -50,14 +50,27 @@ HelpFormatter::HelpFormatter(int optionListIndent, int maxLineLength)
     }
 }
 
-QString HelpFormatter::format(const OptionList& options) const
+void HelpFormatter::addOptionListSection(const QString& title, const OptionList& options)
 {
-    auto detailList = formatOptionDetailList(options);
-    indent(detailList, m_optionListIndent);
-    return detailList.join('\n');
+    m_optionsListSections << OptionListSection(title, options);
 }
 
-QStringList HelpFormatter::formatOptionDetailList(const OptionList& options) const
+QString HelpFormatter::formatHelpText() const
+{
+    QStringList sections;
+    foreach (auto section, m_optionsListSections)
+        sections << formatOptionListSection(section);
+    return sections.join("\n\n");
+}
+
+QString HelpFormatter::formatOptionListSection(const OptionListSection& section) const
+{
+    return QString("%1:\n\n%2")
+            .arg(section.first)
+            .arg(formatOptions(section.second));
+}
+
+QString HelpFormatter::formatOptions(const OptionList& options) const
 {
     auto shortNamesColumn = formatShortOptionsColumn(options);
     const int shortNamesColumnWidth = adjustToMaxLen(shortNamesColumn);
@@ -74,7 +87,9 @@ QStringList HelpFormatter::formatOptionDetailList(const OptionList& options) con
     QStringList wrappedTextLines;
     foreach (const auto textLine, textLines)
         wrappedTextLines << wrapLine(textLine, m_maxLineLength, indent);
-    return wrappedTextLines;
+
+    indentLines(wrappedTextLines, m_optionListIndent);
+    return wrappedTextLines.join('\n');
 }
 
 QStringList HelpFormatter::formatShortOptionsColumn(const OptionList& options) const
@@ -148,7 +163,7 @@ int HelpFormatter::adjustToMaxLen(QStringList& strings) const
     return maxLen;
 }
 
-void HelpFormatter::indent(QStringList& strings, int count) const
+void HelpFormatter::indentLines(QStringList& strings, int count) const
 {
     const QString left(count , ' ');
     for (int i = 0; i < strings.size(); i++)

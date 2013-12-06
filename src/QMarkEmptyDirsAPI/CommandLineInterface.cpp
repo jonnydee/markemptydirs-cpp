@@ -237,8 +237,18 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
     // Set help text.
     {
         HelpFormatter formatter;
-        auto text = formatter.format(options());
-        config.setHelpText(text);
+
+        formatter.addOptionListSection(
+                    QObject::tr("Command options"),
+                    commandOptions());
+
+        formatter.addOptionListSection(
+                    QObject::tr("Other options"),
+                    otherOptions());
+
+        auto helpText = formatter.formatHelpText();
+
+        config.setHelpText(helpText);
     }
 
     return config;

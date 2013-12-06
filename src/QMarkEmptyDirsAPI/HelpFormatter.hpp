@@ -41,16 +41,21 @@ class HelpFormatter
 public:
     HelpFormatter(int optionListIndent = 2, int maxLineLength = 80);
 
-    QString format(const OptionList& options) const;
+    void addOptionListSection(const QString& title, const OptionList& options);
+
+    QString formatHelpText() const;
 
 protected:
-    QStringList formatOptionDetailList(const OptionList& options) const;
+    typedef QPair<QString, OptionList> OptionListSection;
+
+    QString formatOptionListSection(const OptionListSection& section) const;
+    QString formatOptions(const OptionList& options) const;
     QStringList formatShortOptionsColumn(const OptionList& options) const;
     QStringList formatLongOptionsColumn(const OptionList& options) const;
     QStringList formatDescriptionColumn(const OptionList& options) const;
 
     int adjustToMaxLen(QStringList& strings) const;
-    void indent(QStringList& strings, int count) const;
+    void indentLines(QStringList& strings, int count) const;
     QStringList joinColumns(const QList<QStringList>& columns, const QString& separator) const;
     void trimRight(QStringList& strings) const;
     QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0) const;
@@ -58,6 +63,8 @@ protected:
 private:
     int m_optionListIndent;
     int m_maxLineLength;
+
+    QList<OptionListSection> m_optionsListSections;
 };
 
 }
