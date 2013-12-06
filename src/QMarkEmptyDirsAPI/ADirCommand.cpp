@@ -55,7 +55,7 @@ ADirCommand::PathMap ADirCommand::crawlDir()
 
 bool ADirCommand::createMarker(const QDir& dir)
 {
-    QFileInfo markerFileInfo(dir, config().markerFileName());
+    QFileInfo markerFileInfo(dir, config().markerName());
     auto filePath = markerFileInfo.absoluteFilePath();
     QFile markerFile(filePath);
     if (config().dryRun() || markerFile.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -76,7 +76,7 @@ bool ADirCommand::createMarker(const QDir& dir)
 
 bool ADirCommand::deleteMarker(const QDir &dir)
 {
-    QFileInfo markerFileInfo(dir, config().markerFileName());
+    QFileInfo markerFileInfo(dir, config().markerName());
     auto filePath = markerFileInfo.canonicalFilePath();
     QFile markerFile(filePath);
     if (config().dryRun() || markerFile.remove())

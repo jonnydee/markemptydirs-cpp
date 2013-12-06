@@ -36,6 +36,7 @@
 
 #define DEFAULT_COMMAND             Config::UPDATE
 #define DEFAULT_EXCLUDE_DIRS        ((QStringList() << ".bzr" << "CVS" << ".git" << ".hg" << ".svn").join(PATH_LIST_SEPARATOR))
+#define DEFAULT_MARKER_CONTENT_FILENAME "marker.txt"
 #define DEFAULT_MARKER_FILENAME     ".emptydir"
 
 
@@ -81,9 +82,9 @@ CommandLineInterface::CommandLineInterface()
           QObject::tr("DIRS", "exclude"),
           DEFAULT_EXCLUDE_DIRS)
     , markerOpt(
-          QStringList() << "m" << "marker",
-          QObject::tr("use another name for marker files", "marker"),
-          QObject::tr("NAME", "marker"))
+          QStringList() << "m" << "marker-name",
+          QObject::tr("use another name for marker files", "marker-name"),
+          QObject::tr("NAME", "marker-name"))
     , textOpt(
           QStringList() << "text",
           QObject::tr("create marker files with the specified text as content", "text"),
@@ -91,7 +92,8 @@ CommandLineInterface::CommandLineInterface()
     , fileOpt(
           QStringList() << "F" << "file",
           QObject::tr("create marker files using the specified template file as content", "file"),
-          QObject::tr("NAME", "file"))
+          QObject::tr("NAME", "file"),
+          DEFAULT_MARKER_CONTENT_FILENAME)
     , substOpt(
           QStringList() << "subst",
           QObject::tr("use variable subsitution", "subst"))
@@ -179,7 +181,7 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         }
         else if (arg.isBasedOn(markerOpt))
         {
-            config.setMarkerFileName(arg.value);
+            config.setMarkerName(arg.value);
         }
         else if (arg.isBasedOn(followSymLinksOpt))
         {

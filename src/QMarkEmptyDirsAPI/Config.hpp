@@ -73,8 +73,8 @@ public:
     void setLogLevel(LogLevel logLevel);
     LogLevel logLevel() const;
 
-    void setMarkerFileName(const QString& fileName);
-    QString markerFileName() const;
+    void setMarkerName(const QString& fileName);
+    QString markerName() const;
 
     void setDereferenceSymLinks(bool dereference);
     bool dereferenceSymLinks() const;
@@ -96,7 +96,7 @@ private:
     DirList m_excludeDirs;
     QString m_helpText;
     LogLevel m_logLevel;
-    QString m_markerFileName;
+    QString m_markerName;
     bool m_dereferenceSymLinks;
     DirList m_rootDirs;
     bool m_shortMessages;

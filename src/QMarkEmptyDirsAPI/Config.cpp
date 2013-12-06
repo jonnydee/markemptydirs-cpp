@@ -30,8 +30,7 @@
 #include <QDebug>
 
 #define DEFAULT_COMMAND             Config::UPDATE
-#define DEFAULT_FILE_FILENAME       "marker.txt"
-#define DEFAULT_MARKER_FILENAME     ".emptydir"
+#define DEFAULT_MARKER_NAME         ".emptydir"
 #define DEFAULT_TEXT_CONTENT        ""
 
 
@@ -46,7 +45,7 @@ Config::Config()
     , m_dryRun(false)
     , m_excludeDirs()
     , m_logLevel(LogLevel::NONE)
-    , m_markerFileName(DEFAULT_MARKER_FILENAME)
+    , m_markerName(DEFAULT_MARKER_NAME)
     , m_dereferenceSymLinks(false)
     , m_shortMessages(false)
     , m_substituteVariables(true)
@@ -107,14 +106,14 @@ LogLevel Config::logLevel() const
     return m_logLevel;
 }
 
-void Config::setMarkerFileName(const QString& fileName)
+void Config::setMarkerName(const QString& fileName)
 {
-    m_markerFileName = fileName;
+    m_markerName = fileName;
 }
 
-QString Config::markerFileName() const
+QString Config::markerName() const
 {
-    return m_markerFileName;
+    return m_markerName;
 }
 
 void Config::setDereferenceSymLinks(bool dereference)
@@ -188,7 +187,7 @@ QString Config::toString() const
             << nameValueStr("dryRun", dryRun())
             << nameValueStr("excludeDirs", listValueStr(excludeDirs(), [](const QDir& dir) { return dir.path(); }))
             << nameValueStr("logLevel", logLevel())
-            << nameValueStr("markerFileName", valueStr(markerFileName()))
+            << nameValueStr("markerName", valueStr(markerName()))
             << nameValueStr("dereferenceSymLinks", dereferenceSymLinks())
             << nameValueStr("rootDirs", listValueStr(rootDirs(), [](const QDir& dir) { return dir.path(); }))
             << nameValueStr("shortMessages", shortMessages())

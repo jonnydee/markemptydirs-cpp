@@ -120,7 +120,7 @@ void FileSystemCrawler::run()
             }
             else if (child.isFile())
             {
-                if (child.fileName() == config().markerFileName())
+                if (child.fileName() == config().markerName())
                     dirDescr.setHasMarker();
                 else
                     dirDescr.incChildCount();
