@@ -91,11 +91,11 @@ void FileSystemCrawler::run()
 
     while (!dirQueue.isEmpty())
     {
-        auto dir = dirQueue.takeFirst();
+        const auto dir = dirQueue.takeFirst();
         if (!dir.exists())
             continue;
 
-        auto dirPath = dir.canonicalPath();
+        const auto dirPath = dir.canonicalPath();
 
         if (m_pathMap.contains(dirPath))
             continue;
@@ -103,12 +103,12 @@ void FileSystemCrawler::run()
         DirDescriptor dirDescr;
         dirDescr.setDir(dir);
 
-        auto children = dir.entryInfoList(filter);
-        foreach (auto child, children)
+        const auto children = dir.entryInfoList(filter);
+        foreach (const auto child, children)
         {
-            auto childPath = child.canonicalFilePath();
             if (child.isDir())
             {
+                const auto childPath = child.canonicalFilePath();
                 const QDir subDir(childPath);
                 if (!isDirExcluded(subDir))
                 {
