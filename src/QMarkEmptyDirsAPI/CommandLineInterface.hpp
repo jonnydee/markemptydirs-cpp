@@ -63,12 +63,15 @@ public:
 
     CommandLineInterface();
 
-    const OptionList& options() const;
+    OptionList options() const;
+    OptionList commandOptions() const;
+    OptionList otherOptions() const;
 
     Config createConfig(const QStringList& args) const;
 
 private:
-    OptionList m_options;
+    OptionList m_commandOptions;
+    OptionList m_otherOptions;
 };
 
 }

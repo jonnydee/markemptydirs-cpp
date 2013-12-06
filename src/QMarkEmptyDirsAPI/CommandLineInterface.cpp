@@ -116,16 +116,21 @@ CommandLineInterface::CommandLineInterface()
           QStringList() << "version",
           QObject::tr("Show version information.", "version"))
 {
-    m_options
+    m_commandOptions
+        << &cleanOpt
+        << &helpOpt
+        << &listOpt
+        << &purgeOpt
+        << &overviewOpt
+        << &updateOpt
+        << &versionOpt;
+
+    m_otherOptions
         << &dryRunOpt
         << &shortOpt
         << &verboseOpt
-        << &cleanOpt
-        << &helpOpt
         << &createHookOpt
         << &deleteHookOpt
-        << &listOpt
-        << &purgeOpt
         << &excludeOpt
         << &markerOpt
         << &fileOpt
@@ -133,10 +138,7 @@ CommandLineInterface::CommandLineInterface()
         << &noSubstOpt
         << &textOpt
         << &followSymLinksOpt
-        << &noFollowSymLinksOpt
-        << &overviewOpt
-        << &updateOpt
-        << &versionOpt;
+        << &noFollowSymLinksOpt;
 }
 
 Config CommandLineInterface::createConfig(const QStringList& args) const
@@ -241,9 +243,19 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
 
     return config;
 }
-const OptionList& CommandLineInterface::options() const
+OptionList CommandLineInterface::options() const
 {
-    return m_options;
+    return OptionList() << commandOptions() << otherOptions();
+}
+
+OptionList CommandLineInterface::commandOptions() const
+{
+    return m_commandOptions;
+}
+
+OptionList CommandLineInterface::otherOptions() const
+{
+    return m_otherOptions;
 }
 
 }
