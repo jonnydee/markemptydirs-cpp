@@ -148,9 +148,10 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
     parser.parse(args);
 
     Config config;
+    config.setExecutableFile(args[0]);
 
     const auto arguments = parser.arguments();
-    for (int i = 0; i < arguments.size(); i++)
+    for (int i = 1; i < arguments.size(); i++)
     {
         const auto& arg = arguments[i];
 
@@ -228,7 +229,7 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         {
             config.setCommand(Config::Command::VERSION);
         }
-        else if (i > 0)
+        else
         {
             config.addRootDir(QDir(arg.value));
         }
