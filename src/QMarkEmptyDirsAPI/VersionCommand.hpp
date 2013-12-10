@@ -24,13 +24,10 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "CommandFactory.hpp"
-#include "Config.hpp"
-#include "CleanCommand.hpp"
-#include "HelpCommand.hpp"
-#include "OverviewCommand.hpp"
-#include "UpdateCommand.hpp"
-#include "VersionCommand.hpp"
+#ifndef VERSIONCOMMAND_HPP
+#define VERSIONCOMMAND_HPP
+
+#include "ACommand.hpp"
 
 
 namespace MarkEmptyDirs
@@ -39,35 +36,16 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-CommandFactory::CommandFactory()
+class VersionCommand : public ACommand
 {
-}
+public:
+    VersionCommand();
 
-std::unique_ptr<ICommand> CommandFactory::createCommand(const Config& config) const
-{
-    std::unique_ptr<ICommand> pCmd;
-    switch (config.command())
-    {
-    case Config::CLEAN:
-        pCmd.reset(new CleanCommand);
-        break;
-    case Config::UPDATE:
-        pCmd.reset(new UpdateCommand);
-        break;
-    case Config::OVERVIEW:
-        pCmd.reset(new OverviewCommand);
-        break;
-    case Config::VERSION:
-        pCmd.reset(new VersionCommand);
-        break;
-    case Config::HELP:
-    default:
-        pCmd.reset(new HelpCommand);
-        break;
-    }
-    return pCmd;
-}
+    void run();
+};
 
 }
 
 }
+
+#endif // VERSIONCOMMAND_HPP

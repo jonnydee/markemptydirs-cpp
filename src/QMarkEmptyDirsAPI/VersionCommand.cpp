@@ -24,12 +24,6 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "CommandFactory.hpp"
-#include "Config.hpp"
-#include "CleanCommand.hpp"
-#include "HelpCommand.hpp"
-#include "OverviewCommand.hpp"
-#include "UpdateCommand.hpp"
 #include "VersionCommand.hpp"
 
 
@@ -39,33 +33,33 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-CommandFactory::CommandFactory()
+VersionCommand::VersionCommand()
 {
 }
 
-std::unique_ptr<ICommand> CommandFactory::createCommand(const Config& config) const
+void VersionCommand::run()
 {
-    std::unique_ptr<ICommand> pCmd;
-    switch (config.command())
+    const ApplicationInfo& appInfo = config().applicationInfo();
+
+    QString version;
+    if (!config().shortMessages())
     {
-    case Config::CLEAN:
-        pCmd.reset(new CleanCommand);
-        break;
-    case Config::UPDATE:
-        pCmd.reset(new UpdateCommand);
-        break;
-    case Config::OVERVIEW:
-        pCmd.reset(new OverviewCommand);
-        break;
-    case Config::VERSION:
-        pCmd.reset(new VersionCommand);
-        break;
-    case Config::HELP:
-    default:
-        pCmd.reset(new HelpCommand);
-        break;
+        QStringList lines;
+
+        lines << QString("%1 (version %2)").arg(appInfo.name).arg(appInfo.version.toString());
+        lines << QString("(%1)").arg(QObject::tr("see %1 for more information").arg(appInfo.site));
+        lines << QString();
+        lines << appInfo.copyright;
+        lines << appInfo.disclaimer;
+
+        version = lines.join("\n");
     }
-    return pCmd;
+    else
+    {
+        version = appInfo.version.toString();
+    }
+
+    logger().log(version, LogLevel::NONE);
 }
 
 }
