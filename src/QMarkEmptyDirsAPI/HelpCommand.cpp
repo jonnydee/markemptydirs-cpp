@@ -25,7 +25,6 @@
 // or implied, of Johann Duscher.
 
 #include "HelpCommand.hpp"
-#include "HelpFormatter.hpp"
 
 
 namespace MarkEmptyDirs
