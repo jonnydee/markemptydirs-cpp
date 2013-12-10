@@ -61,14 +61,14 @@ bool ADirCommand::createMarker(const QDir& dir)
     if (config().dryRun() || markerFile.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         const auto logMsg = config().shortMessages()
-                ? QString("%1: '%2'").arg(QObject::tr("Created")).arg(filePath)
-                : QString("%1: '%2'").arg(QObject::tr("Created marker")).arg(filePath);
+                ? filePath
+                : QObject::tr("Created marker: '%1'").arg(filePath);
         logger().log(logMsg, LogLevel::INFO);
         return true;
     }
     else
     {
-        logger().log(QString("%1: '%2' (%3)").arg(QObject::tr("Could not create marker")).arg(filePath).arg(markerFile.errorString()),
+        logger().log(QObject::tr("Could not create marker: '%1' (%2)").arg(filePath).arg(markerFile.errorString()),
                      LogLevel::ERROR);
         return false;
     }
@@ -83,13 +83,13 @@ bool ADirCommand::deleteMarker(const QDir &dir)
     {
         const auto logMsg = config().shortMessages()
                 ? filePath
-                : QString("%1: '%2'").arg(QObject::tr("Deleted marker")).arg(filePath);
+                : QObject::tr("Deleted marker: '%1'").arg(filePath);
         logger().log(logMsg, LogLevel::INFO);
         return true;
     }
     else
     {
-        logger().log(QString("%1: '%2' (%3)").arg(QObject::tr("Could not delete marker")).arg(filePath).arg(markerFile.errorString()),
+        logger().log(QObject::tr("Could not delete marker: '%1' (%2)").arg(filePath).arg(markerFile.errorString()),
                      LogLevel::ERROR);
         return false;
     }
