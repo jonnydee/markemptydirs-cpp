@@ -31,6 +31,7 @@
 #include "LogLevel.hpp"
 
 #include <QDir>
+#include <QFileInfo>
 #include <QList>
 #include <QString>
 
@@ -67,6 +68,9 @@ public:
     void setExcludeDirs(const DirList& excludeDirs);
     DirList excludeDirs() const;
 
+    void setExecutableFile(const QFileInfo& executableFile);
+    QFileInfo executableFile() const;
+
     void setHelpText(const QString& text);
     QString helpText() const;
 
@@ -94,6 +98,7 @@ private:
     Command m_command;
     bool m_dryRun;
     DirList m_excludeDirs;
+    QFileInfo m_executableFile;
     QString m_helpText;
     LogLevel m_logLevel;
     QString m_markerName;

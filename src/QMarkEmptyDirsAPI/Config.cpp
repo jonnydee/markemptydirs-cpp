@@ -86,6 +86,16 @@ Config::DirList Config::excludeDirs() const
     return m_excludeDirs;
 }
 
+void Config::setExecutableFile(const QFileInfo& executableFile)
+{
+    m_executableFile = executableFile;
+}
+
+QFileInfo Config::executableFile() const
+{
+    return m_executableFile;
+}
+
 void Config::setHelpText(const QString& text)
 {
     m_helpText = text;
@@ -186,6 +196,7 @@ QString Config::toString() const
             << nameValueStr("command", command())
             << nameValueStr("dryRun", dryRun())
             << nameValueStr("excludeDirs", listValueStr(excludeDirs(), [](const QDir& dir) { return dir.path(); }))
+            << nameValueStr("executableFile", executableFile().fileName())
             << nameValueStr("logLevel", logLevel())
             << nameValueStr("markerName", valueStr(markerName()))
             << nameValueStr("dereferenceSymLinks", dereferenceSymLinks())
