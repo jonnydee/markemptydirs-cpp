@@ -42,6 +42,30 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
+struct ApplicationInfo
+{
+    struct Version
+    {
+        quint16 major;
+        quint16 minor;
+        quint16 bugfix;
+        QString suffix;
+
+        QString toString() const;
+    };
+
+    QString copyright;
+    QString disclaimer;
+    QString license;
+    QString name;
+    QString site;
+    QString vendorEMail;
+    QString vendorName;
+    Version version;
+
+    QString toString() const;
+};
+
 class QMARKEMPTYDIRSAPISHARED_EXPORT Config
 {
 public:
@@ -58,6 +82,9 @@ public:
 
     Config();
     ~Config();
+
+    void setApplicationInfo(const ApplicationInfo& applicationInfo);
+    const ApplicationInfo& applicationInfo() const;
 
     void setCommand(Command command);
     Command command() const;
@@ -95,6 +122,7 @@ public:
     QString toString() const;
 
 private:
+    ApplicationInfo m_applicationInfo;
     Command m_command;
     bool m_dryRun;
     DirList m_excludeDirs;

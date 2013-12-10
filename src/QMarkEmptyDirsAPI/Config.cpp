@@ -66,6 +66,32 @@ static QString nameValueStr(const QString& name, const T& value)
 
 
 
+QString ApplicationInfo::Version::toString() const
+{
+    auto version = QString("%1.%2").arg(major).arg(minor);
+    if (bugfix > 0)
+        version += QString(".%1").arg(bugfix);
+    if (!suffix.isEmpty())
+        version += QString("-%1").arg(suffix);
+    return version;
+}
+QString ApplicationInfo::toString() const
+{
+    return QString("{%1}").arg(
+        (QStringList()
+            << nameValueStr("name", valueStr(name))
+            << nameValueStr("version", valueStr(version.toString()))
+            << nameValueStr("site", valueStr(site))
+            << nameValueStr("vendorEMail", valueStr(vendorEMail))
+            << nameValueStr("vendorName", valueStr(vendorName))
+            << nameValueStr("license", valueStr(license))
+            << nameValueStr("copyright", valueStr(copyright))
+            << nameValueStr("disclaimer", valueStr(disclaimer))
+        ).join(", "));
+}
+
+
+
 Config::Config()
     : m_command(DEFAULT_COMMAND)
     , m_dryRun(false)
@@ -80,6 +106,16 @@ Config::Config()
 
 Config::~Config()
 {
+}
+
+void Config::setApplicationInfo(const ApplicationInfo& applicationInfo)
+{
+    m_applicationInfo = applicationInfo;
+}
+
+const ApplicationInfo& Config::applicationInfo() const
+{
+    return m_applicationInfo;
 }
 
 void Config::setCommand(Command command)
