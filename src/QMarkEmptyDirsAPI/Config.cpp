@@ -40,6 +40,32 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
+template <typename T>
+static QString valueStr(const T& value)
+{
+    auto valueStr = QString("%1").arg(value);
+    valueStr = valueStr.replace(QChar('\"'), "\\\"");
+    valueStr = valueStr.replace(QChar('\n'), "\\n");
+    return QString("\"%1\"").arg(valueStr);
+}
+
+template <typename T>
+static QString listValueStr(const T& list, std::function<QString(const typename T::value_type&)> convert)
+{
+    QStringList strValues;
+    foreach (const auto& value, list)
+        strValues << valueStr(convert(value));
+    return QString("[%1]").arg(strValues.join(", "));
+}
+
+template <typename T>
+static QString nameValueStr(const QString& name, const T& value)
+{
+    return QString("%1: %2").arg(valueStr(name)).arg(value);
+}
+
+
+
 Config::Config()
     : m_command(DEFAULT_COMMAND)
     , m_dryRun(false)
@@ -166,37 +192,15 @@ bool Config::substituteVariables() const
     return m_substituteVariables;
 }
 
-template <typename T>
-static QString valueStr(const T& value)
-{
-    auto valueStr = QString("%1").arg(value);
-    valueStr = valueStr.replace(QChar('\"'), "\\\"");
-    return QString("\"%1\"").arg(valueStr);
-}
-
-template <typename T>
-static QString listValueStr(const T& list, std::function<QString(const typename T::value_type&)> convert)
-{
-    QStringList strValues;
-    foreach (const auto& value, list)
-        strValues << valueStr(convert(value));
-    return QString("[%1]").arg(strValues.join(", "));
-}
-
-template <typename T>
-static QString nameValueStr(const QString& name, const T& value)
-{
-    return QString("%1: %2").arg(name).arg(value);
-}
-
 QString Config::toString() const
 {
-    return QString("[%1]").arg(
+    return QString("{%1}").arg(
         (QStringList()
+            << nameValueStr("applicationInfo", applicationInfo().toString())
             << nameValueStr("command", command())
             << nameValueStr("dryRun", dryRun())
             << nameValueStr("excludeDirs", listValueStr(excludeDirs(), [](const QDir& dir) { return dir.path(); }))
-            << nameValueStr("executableFile", executableFile().fileName())
+            << nameValueStr("executableFile", valueStr(executableFile().fileName()))
             << nameValueStr("logLevel", logLevel())
             << nameValueStr("markerName", valueStr(markerName()))
             << nameValueStr("dereferenceSymLinks", dereferenceSymLinks())
