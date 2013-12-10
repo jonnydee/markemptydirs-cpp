@@ -239,6 +239,7 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
     {
         HelpFormatter formatter;
 
+        formatter.addUsageSection(config.executableFile().fileName(), "[COMMAND] [OPTION]... DIR...");
         formatter.addOptionListSection(
                     QObject::tr("Command options"),
                     commandOptions());
