@@ -28,6 +28,19 @@
 #include "HelpFormatter.hpp"
 #include "OptionParser.hpp"
 
+#define APPLICATION_DISCLAIMER          "This is free software; see the source for copying conditions. There is NO" "\n" \
+                                        "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+#define APPLICATION_LICENSE             "BSD"
+#define APPLICATION_NAME                "MarkEmptyDirs"
+#define APPLICATION_SITE                "https://github.com/jonnydee/markemptydirs"
+#define APPLICATION_VERSION_MAJOR       2
+#define APPLICATION_VERSION_MINOR       0
+#define APPLICATION_VERSION_BUGFIX      0
+#define APPLICATION_VERSION_SUFFIX      "beta1"
+#define APPLICATION_VENDOR_NAME         "Johann Duscher (a.k.a. Jonny Dee)"
+#define APPLICATION_VENDOR_EMAIL        "jonny.dee@gmx.net"
+#define APPLICATION_COPYRIGHT           "Copyright (C) 2013 " APPLICATION_VENDOR_NAME
+
 #ifdef Q_OS_WIN32
  #define PATH_LIST_SEPARATOR        ';'
 #else
@@ -147,7 +160,21 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
     parser.addOptions(options());
     parser.parse(args);
 
+    ApplicationInfo appInfo;
+    appInfo.copyright = APPLICATION_COPYRIGHT;
+    appInfo.disclaimer = APPLICATION_DISCLAIMER;
+    appInfo.license = APPLICATION_LICENSE;
+    appInfo.name = APPLICATION_NAME;
+    appInfo.site = APPLICATION_SITE;
+    appInfo.vendorEMail = APPLICATION_VENDOR_EMAIL;
+    appInfo.vendorName = APPLICATION_VENDOR_NAME;
+    appInfo.version.major = APPLICATION_VERSION_MAJOR;
+    appInfo.version.minor = APPLICATION_VERSION_MINOR;
+    appInfo.version.bugfix = APPLICATION_VERSION_BUGFIX;
+    appInfo.version.suffix = APPLICATION_VERSION_SUFFIX;
+
     Config config;
+    config.setApplicationInfo(appInfo);
     config.setExecutableFile(args[0]);
 
     const auto arguments = parser.arguments();
