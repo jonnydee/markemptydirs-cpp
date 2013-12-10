@@ -36,9 +36,14 @@ using namespace MarkEmptyDirs::Api;
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
+    auto args = app.arguments();
 
     CommandLineInterface cli;
-    const auto config = cli.createConfig(app.arguments());
+    const auto config = cli.createConfig(args);
+
+    app.setApplicationName(config.applicationInfo().name);
+    app.setApplicationVersion(config.applicationInfo().version.toString());
+    app.setOrganizationName(config.applicationInfo().vendorName);
 
     CommandFactory factory;
     auto pCmd = factory.createCommand(config);
