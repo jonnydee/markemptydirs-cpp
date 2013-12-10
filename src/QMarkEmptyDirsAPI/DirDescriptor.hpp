@@ -44,31 +44,36 @@ class QMARKEMPTYDIRSAPISHARED_EXPORT DirDescriptor
 public:
     DirDescriptor()
         : m_dir()
-        , m_childCount(0)
         , m_hasMarker(false)
-        , m_subDirCount(0)
     {
     }
 
     void setDir(const QDir& dir) { m_dir = dir; }
     QDir dir() const { return m_dir; }
 
-    void incChildCount() { ++m_childCount; }
-    int childCount() const { return m_childCount; }
-    bool hasChildren() const { return m_childCount > 0; }
+    QFileInfoList& children() { return m_children; }
+    const QFileInfoList& children() const { return m_children; }
+
+    int childCount() const { return m_children.size(); }
+    bool hasChildren() const { return childCount() > 0; }
 
     void setHasMarker() { m_hasMarker = true; }
     bool hasMarker() const { return m_hasMarker; }
 
-    void incSubDirCount() { ++m_subDirCount; }
-    int subDirCount() const { return m_subDirCount; }
-    bool hasSubDirs() const { return m_subDirCount > 0; }
+    int subDirCount() const
+    {
+        int count = 0;
+        foreach (const auto& child, m_children)
+            if (child.isDir())
+                ++count;
+        return count;
+    }
+    bool hasSubDirs() const { return subDirCount() > 0; }
 
 private:
     QDir m_dir;
-    int m_childCount;
+    QFileInfoList m_children;
     bool m_hasMarker;
-    int m_subDirCount;
 };
 
 }

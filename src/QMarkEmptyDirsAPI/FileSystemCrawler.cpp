@@ -110,23 +110,18 @@ void FileSystemCrawler::run()
             {
                 const auto childPath = child.canonicalFilePath();
                 const QDir subDir(childPath);
-                if (!isDirExcluded(subDir))
-                {
-                    dirQueue.append(subDir);
-                    dirDescr.incChildCount();
-                    dirDescr.incSubDirCount();
-                }
+                if (isDirExcluded(subDir))
+                    continue;
+
+                dirQueue.append(subDir);
+            }
+            else if (child.fileName() == config().markerName() && child.isFile())
+            {
+                dirDescr.setHasMarker();
                 continue;
             }
-            else if (child.isFile())
-            {
-                if (child.fileName() == config().markerName())
-                    dirDescr.setHasMarker();
-                else
-                    dirDescr.incChildCount();
-            }
-            else
-                dirDescr.incChildCount();
+
+            dirDescr.children() << child;
         }
 
         m_pathMap[dirPath] = dirDescr;
