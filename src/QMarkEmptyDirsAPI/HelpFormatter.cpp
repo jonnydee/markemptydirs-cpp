@@ -50,6 +50,12 @@ HelpFormatter::HelpFormatter(int optionListIndent, int maxLineLength)
     }
 }
 
+void HelpFormatter::addUsageSection(const QString& executableFileName, const QString& customUsage)
+{
+    m_executableFileName = executableFileName;
+    m_customUsage = customUsage;
+}
+
 void HelpFormatter::addOptionListSection(const QString& title, const OptionList& options)
 {
     m_optionsListSections << OptionListSection(title, options);
@@ -58,9 +64,19 @@ void HelpFormatter::addOptionListSection(const QString& title, const OptionList&
 QString HelpFormatter::formatHelpText() const
 {
     QStringList sections;
+    sections << formatUsageSection();
     foreach (auto section, m_optionsListSections)
         sections << formatOptionListSection(section);
     return sections.join("\n\n");
+}
+
+QString HelpFormatter::formatUsageSection() const
+{
+    auto usageArgs = m_customUsage.isNull()
+            ? "*** TODO ***" //formatGenericUsageArgs()
+            : m_customUsage;
+
+    return QString("%1: %2 %3").arg(QObject::tr("USAGE")).arg(m_executableFileName).arg(usageArgs);
 }
 
 QString HelpFormatter::formatOptionListSection(const OptionListSection& section) const

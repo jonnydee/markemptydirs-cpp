@@ -41,6 +41,8 @@ class HelpFormatter
 public:
     HelpFormatter(int optionListIndent = 2, int maxLineLength = 80);
 
+    void addUsageSection(const QString& executableFileName, const QString& customUsage = QString());
+
     void addOptionListSection(const QString& title, const OptionList& options);
 
     QString formatHelpText() const;
@@ -48,6 +50,7 @@ public:
 protected:
     typedef QPair<QString, OptionList> OptionListSection;
 
+    QString formatUsageSection() const;
     QString formatOptionListSection(const OptionListSection& section) const;
     QString formatOptions(const OptionList& options) const;
     QStringList formatShortOptionsColumn(const OptionList& options) const;
@@ -65,6 +68,8 @@ private:
     int m_maxLineLength;
 
     QList<OptionListSection> m_optionsListSections;
+    QString m_executableFileName;
+    QString m_customUsage;
 };
 
 }
