@@ -23,6 +23,7 @@ SOURCES += main.cpp \
     ../QMarkEmptyDirsAPI/UpdateCommand.cpp \
     ../QMarkEmptyDirsAPI/ADirCommand.cpp \
     ../QMarkEmptyDirsAPI/OverviewCommand.cpp \
+    ../QMarkEmptyDirsAPI/PurgeCommand.cpp \
     ../QMarkEmptyDirsAPI/VersionCommand.cpp \
     ../QMarkEmptyDirsAPI/CleanCommand.cpp \
     ../QMarkEmptyDirsAPI/Logger.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     ../QMarkEmptyDirsAPI/UpdateCommand.hpp \
     ../QMarkEmptyDirsAPI/ADirCommand.hpp \
     ../QMarkEmptyDirsAPI/OverviewCommand.hpp \
+    ../QMarkEmptyDirsAPI/PurgeCommand.hpp \
     ../QMarkEmptyDirsAPI/VersionCommand.hpp \
     ../QMarkEmptyDirsAPI/CleanCommand.hpp \
     ../QMarkEmptyDirsAPI/Logger.hpp \

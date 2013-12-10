@@ -24,14 +24,10 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "CommandFactory.hpp"
-#include "Config.hpp"
-#include "CleanCommand.hpp"
-#include "HelpCommand.hpp"
-#include "OverviewCommand.hpp"
-#include "PurgeCommand.hpp"
-#include "UpdateCommand.hpp"
-#include "VersionCommand.hpp"
+#ifndef PURGECOMMAND_HPP
+#define PURGECOMMAND_HPP
+
+#include "ADirCommand.hpp"
 
 
 namespace MarkEmptyDirs
@@ -40,38 +36,19 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-CommandFactory::CommandFactory()
+class PurgeCommand : public ADirCommand
 {
-}
+    typedef ADirCommand super;
 
-std::unique_ptr<ICommand> CommandFactory::createCommand(const Config& config) const
-{
-    std::unique_ptr<ICommand> pCmd;
-    switch (config.command())
-    {
-    case Config::CLEAN:
-        pCmd.reset(new CleanCommand);
-        break;
-    case Config::UPDATE:
-        pCmd.reset(new UpdateCommand);
-        break;
-    case Config::OVERVIEW:
-        pCmd.reset(new OverviewCommand);
-        break;
-    case Config::PURGE:
-        pCmd.reset(new PurgeCommand);
-        break;
-    case Config::VERSION:
-        pCmd.reset(new VersionCommand);
-        break;
-    case Config::HELP:
-    default:
-        pCmd.reset(new HelpCommand);
-        break;
-    }
-    return pCmd;
-}
+public:
+    PurgeCommand();
+
+protected:
+    void run(const PathMap& pathMap);
+};
 
 }
 
 }
+
+#endif // PURGECOMMAND_HPP

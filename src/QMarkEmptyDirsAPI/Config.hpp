@@ -75,6 +75,7 @@ public:
         UPDATE,
         CLEAN,
         OVERVIEW,
+        PURGE,
         VERSION
     };
 

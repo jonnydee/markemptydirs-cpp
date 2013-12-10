@@ -252,6 +252,10 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         {
             config.setCommand(Config::Command::OVERVIEW);
         }
+        else if (arg.isBasedOn(purgeOpt))
+        {
+            config.setCommand(Config::Command::PURGE);
+        }
         else if (arg.isBasedOn(versionOpt))
         {
             config.setCommand(Config::Command::VERSION);
