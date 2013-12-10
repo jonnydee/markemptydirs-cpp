@@ -65,7 +65,7 @@ QString HelpFormatter::formatHelpText() const
 
 QString HelpFormatter::formatOptionListSection(const OptionListSection& section) const
 {
-    return QString("%1:\n\n%2")
+    return QString("%1:\n%2")
             .arg(section.first)
             .arg(formatOptions(section.second));
 }
