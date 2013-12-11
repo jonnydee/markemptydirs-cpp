@@ -90,6 +90,12 @@ public:
     void setCommand(Command command);
     Command command() const;
 
+    void setCreateHookCommand(const QString& cmd);
+    QString createHookCommand() const;
+
+    void setDeleteHookCommand(const QString& cmd);
+    QString deleteHookCommand() const;
+
     void setDryRun(bool dryRun);
     bool dryRun() const;
 
@@ -125,6 +131,8 @@ public:
 private:
     ApplicationInfo m_applicationInfo;
     Command m_command;
+    QString m_createHookCommand;
+    QString m_deleteHookCommand;
     bool m_dryRun;
     DirList m_excludeDirs;
     QFileInfo m_executableFile;

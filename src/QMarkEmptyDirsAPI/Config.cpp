@@ -118,6 +118,26 @@ const ApplicationInfo& Config::applicationInfo() const
     return m_applicationInfo;
 }
 
+void Config::setCreateHookCommand(const QString& cmd)
+{
+    m_createHookCommand = cmd;
+}
+
+QString Config::createHookCommand() const
+{
+    return m_createHookCommand;
+}
+
+void Config::setDeleteHookCommand(const QString& cmd)
+{
+    m_deleteHookCommand = cmd;
+}
+
+QString Config::deleteHookCommand() const
+{
+    return m_deleteHookCommand;
+}
+
 void Config::setCommand(Command command)
 {
     m_command = command;
@@ -234,6 +254,8 @@ QString Config::toString() const
         (QStringList()
             << nameValueStr("applicationInfo", applicationInfo().toString())
             << nameValueStr("command", command())
+            << nameValueStr("createHookCommand", valueStr(createHookCommand()))
+            << nameValueStr("deleteHookCommand", valueStr(deleteHookCommand()))
             << nameValueStr("dryRun", dryRun())
             << nameValueStr("excludeDirs", listValueStr(excludeDirs(), [](const QDir& dir) { return dir.path(); }))
             << nameValueStr("executableFile", valueStr(executableFile().fileName()))
