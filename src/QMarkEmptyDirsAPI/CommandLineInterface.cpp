@@ -186,6 +186,14 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         {
             config.setDryRun(true);
         }
+        else if (arg.isBasedOn(createHookOpt))
+        {
+            config.setCreateHookCommand(arg.value);
+        }
+        else if (arg.isBasedOn(deleteHookOpt))
+        {
+            config.setDeleteHookCommand(arg.value);
+        }
         else if (arg.isBasedOn(excludeOpt))
         {
             Config::DirList dirs;
