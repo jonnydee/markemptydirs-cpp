@@ -24,58 +24,52 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef OPTIONPARSER_P_HPP
-#define OPTIONPARSER_P_HPP
+#pragma once
+#ifndef ARGUMENTTOOLS_HELPFORMATTER_HPP
+#define ARGUMENTTOOLS_HELPFORMATTER_HPP
 
-#include <QList>
-#include <QString>
+#include "ArgumentTools/Option.hpp"
 
 
-namespace MarkEmptyDirs
+namespace ArgumentTools
 {
 
-namespace Api
-{
-
-struct Token
-{
-    enum Type
-    {
-        LONGNAME,
-        SHORTNAME,
-        ASSIGN,
-        OTHER
-    };
-
-    Type type;
-    QString payload;
-
-    Token(Type aType, const QString& aPayload = QString::null)
-        : type(aType), payload(aPayload)
-    {}
-};
-typedef QList<Token> TokenList;
-
-class Scanner
+class HelpFormatter
 {
 public:
-    Scanner();
+    HelpFormatter(int optionListIndent = 2, int maxLineLength = 80);
 
-    void scan(const QStringList& args);
+    void addUsageSection(const QString& executableFileName, const QString& customUsage = QString());
 
-    TokenList tokens() const;
+    void addOptionListSection(const QString& title, const OptionList& options);
+
+    QString formatHelpText() const;
 
 protected:
-    int scanShortOptions(const QStringList& args, int startIndex);
-    int scanLongOption(const QStringList& args, int startIndex);
-    int scanOther(const QStringList& args, int startIndex);
+    typedef QPair<QString, OptionList> OptionListSection;
+
+    QString formatUsageSection() const;
+    QString formatOptionListSection(const OptionListSection& section) const;
+    QString formatOptions(const OptionList& options) const;
+    QStringList formatShortOptionsColumn(const OptionList& options) const;
+    QStringList formatLongOptionsColumn(const OptionList& options) const;
+    QStringList formatDescriptionColumn(const OptionList& options) const;
+
+    int adjustToMaxLen(QStringList& strings) const;
+    void indentLines(QStringList& strings, int count) const;
+    QStringList joinColumns(const QList<QStringList>& columns, const QString& separator) const;
+    void trimRight(QStringList& strings) const;
+    QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0) const;
 
 private:
-    TokenList m_tokens;
+    int m_optionListIndent;
+    int m_maxLineLength;
+
+    QList<OptionListSection> m_optionsListSections;
+    QString m_executableFileName;
+    QString m_customUsage;
 };
 
 }
 
-}
-
-#endif // OPTIONPARSER_P_HPP
+#endif // ARGUMENTTOOLS_HELPFORMATTER_HPP

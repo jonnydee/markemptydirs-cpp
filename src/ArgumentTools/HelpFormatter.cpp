@@ -31,10 +31,8 @@
 #define OPTION_COLUMN_PADDING_SIZE          1
 #define DESCRIPTION_COLUMN_PADDING_SIZE     2
 
-namespace MarkEmptyDirs
-{
 
-namespace Api
+namespace ArgumentTools
 {
 
 HelpFormatter::HelpFormatter(int optionListIndent, int maxLineLength)
@@ -244,8 +242,6 @@ QStringList HelpFormatter::wrapLine(const QString& line, int maxLength, int newL
     wrappedLines << currentLine;
 
     return wrappedLines;
-}
-
 }
 
 }

@@ -25,8 +25,9 @@
 // or implied, of Johann Duscher.
 
 #include "CommandLineInterface.hpp"
-#include "HelpFormatter.hpp"
-#include "OptionParser.hpp"
+
+#include <ArgumentTools/HelpFormatter.hpp>
+#include <ArgumentTools/OptionParser.hpp>
 
 #define APPLICATION_DISCLAIMER          "This is free software; see the source for copying conditions. There is NO" "\n" \
                                         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
@@ -52,6 +53,8 @@
 #define DEFAULT_MARKER_CONTENT_FILENAME "marker.txt"
 #define DEFAULT_MARKER_FILENAME     ".emptydir"
 
+
+using namespace ArgumentTools;
 
 namespace MarkEmptyDirs
 {

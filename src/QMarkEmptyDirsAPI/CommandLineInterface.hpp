@@ -28,7 +28,8 @@
 #define COMMANDLINEINTERFACE_HPP
 
 #include "Config.hpp"
-#include "Option.hpp"
+
+#include <ArgumentTools/Option.hpp>
 
 
 namespace MarkEmptyDirs
@@ -40,38 +41,38 @@ namespace Api
 class CommandLineInterface
 {
 public:
-    const Option dryRunOpt;
-    const Option shortOpt;
-    const Option verboseOpt;
-    const Option cleanOpt;
-    const Option helpOpt;
-    const Option createHookOpt;
-    const Option deleteHookOpt;
-    const Option listOpt;
-    const Option purgeOpt;
-    const Option excludeOpt;
-    const Option markerOpt;
-    const Option textOpt;
-    const Option fileOpt;
-    const Option substOpt;
-    const Option noSubstOpt;
-    const Option followSymLinksOpt;
-    const Option noFollowSymLinksOpt;
-    const Option overviewOpt;
-    const Option updateOpt;
-    const Option versionOpt;
+    const ArgumentTools::Option dryRunOpt;
+    const ArgumentTools::Option shortOpt;
+    const ArgumentTools::Option verboseOpt;
+    const ArgumentTools::Option cleanOpt;
+    const ArgumentTools::Option helpOpt;
+    const ArgumentTools::Option createHookOpt;
+    const ArgumentTools::Option deleteHookOpt;
+    const ArgumentTools::Option listOpt;
+    const ArgumentTools::Option purgeOpt;
+    const ArgumentTools::Option excludeOpt;
+    const ArgumentTools::Option markerOpt;
+    const ArgumentTools::Option textOpt;
+    const ArgumentTools::Option fileOpt;
+    const ArgumentTools::Option substOpt;
+    const ArgumentTools::Option noSubstOpt;
+    const ArgumentTools::Option followSymLinksOpt;
+    const ArgumentTools::Option noFollowSymLinksOpt;
+    const ArgumentTools::Option overviewOpt;
+    const ArgumentTools::Option updateOpt;
+    const ArgumentTools::Option versionOpt;
 
     CommandLineInterface();
 
-    OptionList options() const;
-    OptionList commandOptions() const;
-    OptionList otherOptions() const;
+    ArgumentTools::OptionList options() const;
+    ArgumentTools::OptionList commandOptions() const;
+    ArgumentTools::OptionList otherOptions() const;
 
     Config createConfig(const QStringList& args) const;
 
 private:
-    OptionList m_commandOptions;
-    OptionList m_otherOptions;
+    ArgumentTools::OptionList m_commandOptions;
+    ArgumentTools::OptionList m_otherOptions;
 };
 
 }

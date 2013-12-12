@@ -24,45 +24,66 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef OPTION_HPP
-#define OPTION_HPP
-
-#include <QList>
-#include <QString>
-#include <QStringList>
+#include "Option.hpp"
 
 
-namespace MarkEmptyDirs
+namespace ArgumentTools
 {
 
-namespace Api
+Option::Option(const QStringList& names, const QString& description, const QString& valueName, const QString& defaultValue)
+    : m_names(names)
+    , m_description(description)
+    , m_valueName(valueName)
+    , m_defaultValue(defaultValue)
 {
+}
 
-class Option
+QStringList Option::names() const
 {
-public:
-    Option(const QStringList& names, const QString& description = QString::null, const QString& valueName = QString::null, const QString& defaultValue = QString::null);
+    return m_names;
+}
 
-    QString defaultValue() const;
-    QString description() const;
-    bool hasValue() const;
-    bool isValueMandatory() const;
-    QStringList longNames() const;
-    QStringList names() const;
-    QString valueName() const;
-    QList<QChar> shortNames() const;
+QString Option::defaultValue() const
+{
+    return m_defaultValue;
+}
 
-private:
-    QStringList m_names;
-    QString m_description;
-    QString m_valueName;
-    QString m_defaultValue;
-};
+bool Option::hasValue() const
+{
+    return !m_valueName.isNull();
+}
 
-typedef QList<const Option*> OptionList;
+bool Option::isValueMandatory() const
+{
+    return hasValue() && m_defaultValue.isNull();
+}
 
+QString Option::description() const
+{
+    return m_description;
+}
+
+QString Option::valueName() const
+{
+    return m_valueName;
+}
+
+QList<QChar> Option::shortNames() const
+{
+    QList<QChar> foundNames;
+    foreach (auto name, names())
+        if (name.length() == 1)
+            foundNames.push_back(name[0]);
+    return foundNames;
+}
+
+QStringList Option::longNames() const
+{
+    QStringList foundNames;
+    foreach (auto name, names())
+        if (name.length() > 1)
+            foundNames.push_back(name);
+    return foundNames;
 }
 
 }
-
-#endif // OPTION_HPP

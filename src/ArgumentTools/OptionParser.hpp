@@ -24,56 +24,66 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef HELPFORMATTER_HPP
-#define HELPFORMATTER_HPP
+#pragma once
+#ifndef ARGUMENTTOOLS_OPTIONPARSER_HPP
+#define ARGUMENTTOOLS_OPTIONPARSER_HPP
 
-#include "Option.hpp"
+#include "ArgumentTools/Option.hpp"
+
+#include <QList>
+#include <QString>
+#include <QStringList>
 
 
-namespace MarkEmptyDirs
+namespace ArgumentTools
 {
 
-namespace Api
+struct Argument
 {
+    const Option* option;
+    QString name;
+    QString value;
+    QString errorMessage;
 
-class HelpFormatter
+    Argument() : option(nullptr) {}
+
+    bool isKnown() const { return nullptr != option; }
+    bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
+    bool isBasedOn(const Option& opt) const { return &opt == option; }
+};
+typedef QList<Argument> ArgumentList;
+
+struct Token;
+typedef QList<Token> TokenList;
+
+class OptionParser
 {
 public:
-    HelpFormatter(int optionListIndent = 2, int maxLineLength = 80);
+    OptionParser();
 
-    void addUsageSection(const QString& executableFileName, const QString& customUsage = QString());
+    void addOption(const Option& option);
+    void addOptions(const OptionList& options);
 
-    void addOptionListSection(const QString& title, const OptionList& options);
+    ArgumentList arguments() const;
+    Argument findUnknownArgument() const;
+    Argument findArgument(const Option& option) const;
+    ArgumentList findUnknownArguments() const;
+    ArgumentList findArguments(const Option& option) const;
 
-    QString formatHelpText() const;
+    OptionList options() const;
+
+    void parse(const QStringList& args);
 
 protected:
-    typedef QPair<QString, OptionList> OptionListSection;
-
-    QString formatUsageSection() const;
-    QString formatOptionListSection(const OptionListSection& section) const;
-    QString formatOptions(const OptionList& options) const;
-    QStringList formatShortOptionsColumn(const OptionList& options) const;
-    QStringList formatLongOptionsColumn(const OptionList& options) const;
-    QStringList formatDescriptionColumn(const OptionList& options) const;
-
-    int adjustToMaxLen(QStringList& strings) const;
-    void indentLines(QStringList& strings, int count) const;
-    QStringList joinColumns(const QList<QStringList>& columns, const QString& separator) const;
-    void trimRight(QStringList& strings) const;
-    QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0) const;
+    int parseShortOption(const TokenList& tokens, int startIndex);
+    int parseLongOption(const TokenList& tokens, int startIndex);
+    int parseOther(const TokenList& tokens, int startIndex);
 
 private:
-    int m_optionListIndent;
-    int m_maxLineLength;
-
-    QList<OptionListSection> m_optionsListSections;
-    QString m_executableFileName;
-    QString m_customUsage;
+    OptionList m_options;
+    ArgumentList m_arguments;
 };
 
 }
 
-}
-
-#endif // HELPFORMATTER_HPP
+#endif // ARGUMENTTOOLS_OPTIONPARSER_HPP

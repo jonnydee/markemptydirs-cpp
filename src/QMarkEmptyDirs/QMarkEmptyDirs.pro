@@ -18,6 +18,9 @@ QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++ -mmacosx-version-min=10.7
 CONFIG += c++11
 
 SOURCES += main.cpp \
+    ../ArgumentTools/HelpFormatter.cpp \
+    ../ArgumentTools/Option.cpp \
+    ../ArgumentTools/OptionParser.cpp \
     ../QMarkEmptyDirsAPI/FileSystemCrawler.cpp \
     ../QMarkEmptyDirsAPI/Config.cpp \
     ../QMarkEmptyDirsAPI/UpdateCommand.cpp \
@@ -27,13 +30,10 @@ SOURCES += main.cpp \
     ../QMarkEmptyDirsAPI/VersionCommand.cpp \
     ../QMarkEmptyDirsAPI/CleanCommand.cpp \
     ../QMarkEmptyDirsAPI/Logger.cpp \
-    ../QMarkEmptyDirsAPI/OptionParser.cpp \
     ../QMarkEmptyDirsAPI/ACommand.cpp \
     ../QMarkEmptyDirsAPI/HelpCommand.cpp \
-    ../QMarkEmptyDirsAPI/HelpFormatter.cpp \
     ../QMarkEmptyDirsAPI/CommandFactory.cpp \
-    ../QMarkEmptyDirsAPI/CommandLineInterface.cpp \
-    ../QMarkEmptyDirsAPI/Option.cpp
+    ../QMarkEmptyDirsAPI/CommandLineInterface.cpp
 
 INCLUDEPATH += \
     ..
@@ -45,6 +45,9 @@ INCLUDEPATH += \
 #    -lQMarkEmptyDirsAPI
 
 HEADERS += \
+    ../ArgumentTools/HelpFormatter.hpp \
+    ../ArgumentTools/Option.hpp \
+    ../ArgumentTools/OptionParser.hpp \
     ../QMarkEmptyDirsAPI/qmarkemptydirsapi_global.hpp \
     ../QMarkEmptyDirsAPI/FileSystemCrawler.hpp \
     ../QMarkEmptyDirsAPI/Config.hpp \
@@ -55,10 +58,7 @@ HEADERS += \
     ../QMarkEmptyDirsAPI/VersionCommand.hpp \
     ../QMarkEmptyDirsAPI/CleanCommand.hpp \
     ../QMarkEmptyDirsAPI/Logger.hpp \
-    ../QMarkEmptyDirsAPI/OptionParser.hpp \
     ../QMarkEmptyDirsAPI/ACommand.hpp \
     ../QMarkEmptyDirsAPI/HelpCommand.hpp \
-    ../QMarkEmptyDirsAPI/HelpFormatter.hpp \
     ../QMarkEmptyDirsAPI/CommandFactory.hpp \
-    ../QMarkEmptyDirsAPI/CommandLineInterface.hpp \
-    ../QMarkEmptyDirsAPI/Option.hpp
+    ../QMarkEmptyDirsAPI/CommandLineInterface.hpp

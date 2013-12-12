@@ -27,10 +27,8 @@
 #include "OptionParser.hpp"
 #include "OptionParser_p.hpp"
 
-namespace MarkEmptyDirs
-{
 
-namespace Api
+namespace ArgumentTools
 {
 
 Scanner::Scanner()
@@ -326,8 +324,6 @@ int OptionParser::parseOther(const TokenList& tokens, int startIndex)
     m_arguments.push_back(other);
 
     return 1;
-}
-
 }
 
 }

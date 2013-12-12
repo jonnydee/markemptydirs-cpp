@@ -24,71 +24,54 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Option.hpp"
+#pragma once
+#ifndef ARGUMENTTOOLS_OPTIONPARSER_P_HPP
+#define ARGUMENTTOOLS_OPTIONPARSER_P_HPP
+
+#include <QList>
+#include <QString>
 
 
-namespace MarkEmptyDirs
+namespace ArgumentTools
 {
 
-namespace Api
+struct Token
 {
+    enum Type
+    {
+        LONGNAME,
+        SHORTNAME,
+        ASSIGN,
+        OTHER
+    };
 
-Option::Option(const QStringList& names, const QString& description, const QString& valueName, const QString& defaultValue)
-    : m_names(names)
-    , m_description(description)
-    , m_valueName(valueName)
-    , m_defaultValue(defaultValue)
-{
-}
+    Type type;
+    QString payload;
 
-QStringList Option::names() const
-{
-    return m_names;
-}
+    Token(Type aType, const QString& aPayload = QString::null)
+        : type(aType), payload(aPayload)
+    {}
+};
+typedef QList<Token> TokenList;
 
-QString Option::defaultValue() const
+class Scanner
 {
-    return m_defaultValue;
-}
+public:
+    Scanner();
 
-bool Option::hasValue() const
-{
-    return !m_valueName.isNull();
-}
+    void scan(const QStringList& args);
 
-bool Option::isValueMandatory() const
-{
-    return hasValue() && m_defaultValue.isNull();
-}
+    TokenList tokens() const;
 
-QString Option::description() const
-{
-    return m_description;
-}
+protected:
+    int scanShortOptions(const QStringList& args, int startIndex);
+    int scanLongOption(const QStringList& args, int startIndex);
+    int scanOther(const QStringList& args, int startIndex);
 
-QString Option::valueName() const
-{
-    return m_valueName;
-}
-
-QList<QChar> Option::shortNames() const
-{
-    QList<QChar> foundNames;
-    foreach (auto name, names())
-        if (name.length() == 1)
-            foundNames.push_back(name[0]);
-    return foundNames;
-}
-
-QStringList Option::longNames() const
-{
-    QStringList foundNames;
-    foreach (auto name, names())
-        if (name.length() > 1)
-            foundNames.push_back(name);
-    return foundNames;
-}
+private:
+    TokenList m_tokens;
+};
 
 }
 
-}
+#endif // ARGUMENTTOOLS_OPTIONPARSER_P_HPP
