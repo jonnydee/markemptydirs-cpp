@@ -25,7 +25,6 @@
 // or implied, of Johann Duscher.
 
 #include "Config.hpp"
-#include "OptionParser.hpp"
 
 #include <QDebug>
 
