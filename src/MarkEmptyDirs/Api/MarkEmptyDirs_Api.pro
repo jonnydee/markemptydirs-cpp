@@ -6,13 +6,22 @@
 
 QT       -= gui
 
-TARGET = QMarkEmptyDirsAPI
+TARGET = MarkEmptyDirsApi
+VERSION = 2.0.0
+DESTDIR = $$_PRO_FILE_PWD_/../../../bin
+
 TEMPLATE = lib
+CONFIG += staticlib
 
 QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++ -mmacosx-version-min=10.7
 CONFIG += c++11
 
-DEFINES += QMARKEMPTYDIRSAPI_LIBRARY
+CONFIG   += debug_and_release
+CONFIG(debug, debug|release) {
+     TARGET = $$join(TARGET,,,_debug)
+}
+
+DEFINES += MARKEMPTYDIRSAPI_LIBRARY
 
 SOURCES += \
     ../../ArgumentTools/ArgumentParser.cpp \
