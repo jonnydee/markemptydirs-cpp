@@ -14,7 +14,7 @@ CONFIG += c++11
 
 DEFINES += QMARKEMPTYDIRSAPI_LIBRARY
 
-SOURCES += QMarkEmptyDirsAPI.cpp \
+SOURCES += \
     ../ArgumentTools/HelpFormatter.cpp \
     ../ArgumentTools/Option.cpp \
     ../ArgumentTools/OptionParser.cpp \
@@ -32,7 +32,7 @@ SOURCES += QMarkEmptyDirsAPI.cpp \
     CommandFactory.cpp \
     CommandLineInterface.cpp
 
-HEADERS += QMarkEmptyDirsAPI.hpp \
+HEADERS += \
     ../ArgumentTools/HelpFormatter.hpp \
     ../ArgumentTools/Option.hpp \
     ../ArgumentTools/OptionParser.hpp \
