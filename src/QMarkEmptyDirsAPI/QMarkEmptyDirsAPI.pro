@@ -33,6 +33,7 @@ SOURCES += \
     CommandLineInterface.cpp
 
 HEADERS += \
+    ../ArgumentTools/Argument.hpp \
     ../ArgumentTools/HelpFormatter.hpp \
     ../ArgumentTools/Option.hpp \
     ../ArgumentTools/OptionParser.hpp \

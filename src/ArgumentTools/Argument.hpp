@@ -25,56 +25,31 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef ARGUMENTTOOLS_OPTIONPARSER_HPP
-#define ARGUMENTTOOLS_OPTIONPARSER_HPP
+#ifndef ARGUMENTTOOLS_ARGUMENT_HPP
+#define ARGUMENTTOOLS_ARGUMENT_HPP
 
-#include "ArgumentTools/Argument.hpp"
-
-#include <QList>
 #include <QString>
 
-
-class QStringList;
 
 namespace ArgumentTools
 {
 
-struct Token;
-typedef QList<Token> TokenList;
-
 class Option;
-typedef QList<const Option*> OptionList;
 
-typedef QList<Argument> ArgumentList;
-
-class OptionParser
+struct Argument
 {
-public:
-    OptionParser();
+    const Option* option;
+    QString name;
+    QString value;
+    QString errorMessage;
 
-    void addOption(const Option& option);
-    void addOptions(const OptionList& options);
+    Argument() : option(nullptr) {}
 
-    ArgumentList arguments() const;
-    Argument findUnknownArgument() const;
-    Argument findArgument(const Option& option) const;
-    ArgumentList findUnknownArguments() const;
-    ArgumentList findArguments(const Option& option) const;
-
-    OptionList options() const;
-
-    void parse(const QStringList& args);
-
-protected:
-    int parseShortOption(const TokenList& tokens, int startIndex);
-    int parseLongOption(const TokenList& tokens, int startIndex);
-    int parseOther(const TokenList& tokens, int startIndex);
-
-private:
-    OptionList m_options;
-    ArgumentList m_arguments;
+    bool isKnown() const { return nullptr != option; }
+    bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
+    bool isBasedOn(const Option& opt) const { return &opt == option; }
 };
 
 }
 
-#endif // ARGUMENTTOOLS_OPTIONPARSER_HPP
+#endif // ARGUMENTTOOLS_ARGUMENT_HPP

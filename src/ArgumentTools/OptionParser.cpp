@@ -24,8 +24,11 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
+#include "Option.hpp"
 #include "OptionParser.hpp"
 #include "OptionParser_p.hpp"
+
+#include <QStringList>
 
 
 namespace ArgumentTools
