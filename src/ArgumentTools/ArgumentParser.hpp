@@ -24,31 +24,70 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef PURGECOMMAND_HPP
-#define PURGECOMMAND_HPP
+#pragma once
+#ifndef ARGUMENTTOOLS_ARGUMENTPARSER_HPP
+#define ARGUMENTTOOLS_ARGUMENTPARSER_HPP
 
-#include "ADirCommand.hpp"
+#include <QList>
+#include <QString>
 
 
-namespace MarkEmptyDirs
+class QStringList;
+
+namespace ArgumentTools
 {
 
-namespace Api
-{
+struct Token;
+typedef QList<Token> TokenList;
 
-class PurgeCommand : public ADirCommand
-{
-    typedef ADirCommand super;
+class Option;
+typedef QList<const Option*> OptionList;
 
+
+struct Argument
+{
+    const Option* option;
+    QString name;
+    QString value;
+    QString errorMessage;
+
+    Argument() : option(nullptr) {}
+
+    bool isKnown() const { return nullptr != option; }
+    bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
+    bool isBasedOn(const Option& opt) const { return &opt == option; }
+};
+typedef QList<Argument> ArgumentList;
+
+
+class ArgumentParser
+{
 public:
-    PurgeCommand();
+    ArgumentParser();
+
+    void addOption(const Option& option);
+    void addOptions(const OptionList& options);
+
+    ArgumentList arguments() const;
+    Argument findUnknownArgument() const;
+    Argument findArgument(const Option& option) const;
+    ArgumentList findUnknownArguments() const;
+    ArgumentList findArguments(const Option& option) const;
+
+    OptionList options() const;
+
+    void parse(const QStringList& args);
 
 protected:
-    void run(const PathMap& pathMap);
+    int parseShortOption(const TokenList& tokens, int startIndex);
+    int parseLongOption(const TokenList& tokens, int startIndex);
+    int parseOther(const TokenList& tokens, int startIndex);
+
+private:
+    OptionList m_options;
+    ArgumentList m_arguments;
 };
 
 }
 
-}
-
-#endif // PURGECOMMAND_HPP
+#endif // ARGUMENTTOOLS_ARGUMENTPARSER_HPP

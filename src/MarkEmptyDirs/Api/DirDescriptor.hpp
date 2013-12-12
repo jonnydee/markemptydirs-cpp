@@ -24,10 +24,14 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef VERSIONCOMMAND_HPP
-#define VERSIONCOMMAND_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_API_DIRDESCRIPTOR_HPP
+#define MARKEMPTYDIRS_API_DIRDESCRIPTOR_HPP
 
-#include "ACommand.hpp"
+#include "markemptydirsapi_global.hpp"
+
+#include <QDir>
+#include <QString>
 
 
 namespace MarkEmptyDirs
@@ -36,16 +40,45 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class VersionCommand : public ACommand
+class MARKEMPTYDIRSAPISHARED_EXPORT DirDescriptor
 {
 public:
-    VersionCommand();
+    DirDescriptor()
+        : m_dir()
+        , m_hasMarker(false)
+    {
+    }
 
-    void run();
+    void setDir(const QDir& dir) { m_dir = dir; }
+    QDir dir() const { return m_dir; }
+
+    QFileInfoList& children() { return m_children; }
+    const QFileInfoList& children() const { return m_children; }
+
+    int childCount() const { return m_children.size(); }
+    bool hasChildren() const { return childCount() > 0; }
+
+    void setHasMarker() { m_hasMarker = true; }
+    bool hasMarker() const { return m_hasMarker; }
+
+    int subDirCount() const
+    {
+        int count = 0;
+        foreach (const auto& child, m_children)
+            if (child.isDir())
+                ++count;
+        return count;
+    }
+    bool hasSubDirs() const { return subDirCount() > 0; }
+
+private:
+    QDir m_dir;
+    QFileInfoList m_children;
+    bool m_hasMarker;
 };
 
 }
 
 }
 
-#endif // VERSIONCOMMAND_HPP
+#endif // MARKEMPTYDIRS_API_DIRDESCRIPTOR_HPP

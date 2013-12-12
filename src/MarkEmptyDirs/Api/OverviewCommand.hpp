@@ -25,31 +25,32 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef ARGUMENTTOOLS_ARGUMENT_HPP
-#define ARGUMENTTOOLS_ARGUMENT_HPP
+#ifndef MARKEMPTYDIRS_API_OVERVIEWCOMMAND_HPP
+#define MARKEMPTYDIRS_API_OVERVIEWCOMMAND_HPP
 
-#include <QString>
+#include "markemptydirsapi_global.hpp"
+#include "ADirCommand.hpp"
 
 
-namespace ArgumentTools
+namespace MarkEmptyDirs
 {
 
-class Option;
-
-struct Argument
+namespace Api
 {
-    const Option* option;
-    QString name;
-    QString value;
-    QString errorMessage;
 
-    Argument() : option(nullptr) {}
+class MARKEMPTYDIRSAPISHARED_EXPORT OverviewCommand : public ADirCommand
+{
+    typedef ADirCommand super;
 
-    bool isKnown() const { return nullptr != option; }
-    bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
-    bool isBasedOn(const Option& opt) const { return &opt == option; }
+public:
+    OverviewCommand();
+
+protected:
+    void run(const PathMap& pathMap);
 };
 
 }
 
-#endif // ARGUMENTTOOLS_ARGUMENT_HPP
+}
+
+#endif // MARKEMPTYDIRS_API_OVERVIEWCOMMAND_HPP

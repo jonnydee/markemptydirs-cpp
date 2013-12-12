@@ -24,15 +24,47 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef QMARKEMPTYDIRSAPI_GLOBAL_HPP
-#define QMARKEMPTYDIRSAPI_GLOBAL_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_API_ADIRCOMMAND_HPP
+#define MARKEMPTYDIRS_API_ADIRCOMMAND_HPP
 
-#include <QtCore/qglobal.h>
+#include "markemptydirsapi_global.hpp"
+#include "ACommand.hpp"
 
-#if defined(QMARKEMPTYDIRSAPI_LIBRARY)
-#  define QMARKEMPTYDIRSAPISHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define QMARKEMPTYDIRSAPISHARED_EXPORT Q_DECL_IMPORT
-#endif
+#include <QMap>
 
-#endif // QMARKEMPTYDIRSAPI_GLOBAL_HPP
+
+class QString;
+
+namespace MarkEmptyDirs
+{
+
+namespace Api
+{
+
+class DirDescriptor;
+
+class MARKEMPTYDIRSAPISHARED_EXPORT ADirCommand : public ACommand
+{
+    typedef ACommand super;
+
+public:
+    void run();
+
+protected:
+    typedef QMap<QString, DirDescriptor> PathMap;
+
+    virtual PathMap crawlDir();
+
+    virtual void run(const PathMap& pathMap) = 0;
+
+    bool createMarker(const QDir& dir);
+    bool deleteMarker(const QDir& dir);
+    bool executeCommand(const QString& cmd, QString* pError);
+};
+
+}
+
+}
+
+#endif // MARKEMPTYDIRS_API_ADIRCOMMAND_HPP

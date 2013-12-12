@@ -24,9 +24,11 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef CLEANCOMMAND_HPP
-#define CLEANCOMMAND_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_API_UPDATECOMMAND_HPP
+#define MARKEMPTYDIRS_API_UPDATECOMMAND_HPP
 
+#include "markemptydirsapi_global.hpp"
 #include "ADirCommand.hpp"
 
 
@@ -36,12 +38,12 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class CleanCommand : public ADirCommand
+class MARKEMPTYDIRSAPISHARED_EXPORT UpdateCommand : public ADirCommand
 {
     typedef ADirCommand super;
 
 public:
-    CleanCommand();
+    UpdateCommand();
 
 protected:
     void run(const PathMap& pathMap);
@@ -51,4 +53,4 @@ protected:
 
 }
 
-#endif // CLEANCOMMAND_HPP
+#endif // MARKEMPTYDIRS_API_UPDATECOMMAND_HPP

@@ -24,12 +24,12 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef COMMANDLINEINTERFACE_HPP
-#define COMMANDLINEINTERFACE_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_API_CLEANCOMMAND_HPP
+#define MARKEMPTYDIRS_API_CLEANCOMMAND_HPP
 
-#include "Config.hpp"
-
-#include <ArgumentTools/Option.hpp>
+#include "markemptydirsapi_global.hpp"
+#include "ADirCommand.hpp"
 
 
 namespace MarkEmptyDirs
@@ -38,45 +38,19 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class CommandLineInterface
+class MARKEMPTYDIRSAPISHARED_EXPORT CleanCommand : public ADirCommand
 {
+    typedef ADirCommand super;
+
 public:
-    const ArgumentTools::Option dryRunOpt;
-    const ArgumentTools::Option shortOpt;
-    const ArgumentTools::Option verboseOpt;
-    const ArgumentTools::Option cleanOpt;
-    const ArgumentTools::Option helpOpt;
-    const ArgumentTools::Option createHookOpt;
-    const ArgumentTools::Option deleteHookOpt;
-    const ArgumentTools::Option listOpt;
-    const ArgumentTools::Option purgeOpt;
-    const ArgumentTools::Option excludeOpt;
-    const ArgumentTools::Option markerOpt;
-    const ArgumentTools::Option textOpt;
-    const ArgumentTools::Option fileOpt;
-    const ArgumentTools::Option substOpt;
-    const ArgumentTools::Option noSubstOpt;
-    const ArgumentTools::Option followSymLinksOpt;
-    const ArgumentTools::Option noFollowSymLinksOpt;
-    const ArgumentTools::Option overviewOpt;
-    const ArgumentTools::Option updateOpt;
-    const ArgumentTools::Option versionOpt;
+    CleanCommand();
 
-    CommandLineInterface();
-
-    ArgumentTools::OptionList options() const;
-    ArgumentTools::OptionList commandOptions() const;
-    ArgumentTools::OptionList otherOptions() const;
-
-    Config createConfig(const QStringList& args) const;
-
-private:
-    ArgumentTools::OptionList m_commandOptions;
-    ArgumentTools::OptionList m_otherOptions;
+protected:
+    void run(const PathMap& pathMap);
 };
 
 }
 
 }
 
-#endif // COMMANDLINEINTERFACE_HPP
+#endif // MARKEMPTYDIRS_API_CLEANCOMMAND_HPP

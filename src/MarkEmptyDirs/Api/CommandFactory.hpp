@@ -24,10 +24,13 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef UPDATECOMMAND_HPP
-#define UPDATECOMMAND_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_API_COMMANDFACTORY_HPP
+#define MARKEMPTYDIRS_API_COMMANDFACTORY_HPP
 
-#include "ADirCommand.hpp"
+#include "markemptydirsapi_global.hpp"
+
+#include <memory>
 
 
 namespace MarkEmptyDirs
@@ -36,19 +39,19 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class UpdateCommand : public ADirCommand
+class ICommand;
+class Config;
+
+class MARKEMPTYDIRSAPISHARED_EXPORT CommandFactory
 {
-    typedef ADirCommand super;
-
 public:
-    UpdateCommand();
+    CommandFactory();
 
-protected:
-    void run(const PathMap& pathMap);
+    std::unique_ptr<ICommand> createCommand(const Config& config) const;
 };
 
 }
 
 }
 
-#endif // UPDATECOMMAND_HPP
+#endif // MARKEMPTYDIRS_API_COMMANDFACTORY_HPP

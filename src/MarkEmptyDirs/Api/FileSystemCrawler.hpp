@@ -24,32 +24,57 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include <QMarkEmptyDirsAPI/CommandFactory.hpp>
-#include <QMarkEmptyDirsAPI/CommandLineInterface.hpp>
-#include <QMarkEmptyDirsAPI/ICommand.hpp>
+#pragma once
+#ifndef MARKEMPTYDIRS_API_FILESYSTEMCRAWLER_HPP
+#define MARKEMPTYDIRS_API_FILESYSTEMCRAWLER_HPP
 
-#include <QCoreApplication>
-#include <QDebug>
+#include "markemptydirsapi_global.hpp"
+#include "Config.hpp"
+#include "Logger.hpp"
 
-using namespace MarkEmptyDirs::Api;
+#include <QMap>
+#include <QObject>
 
-int main(int argc, char *argv[])
+
+namespace MarkEmptyDirs
 {
-    QCoreApplication app(argc, argv);
-    auto args = app.arguments();
 
-    CommandLineInterface cli;
-    const auto config = cli.createConfig(args);
+namespace Api
+{
 
-    app.setApplicationName(config.applicationInfo().name);
-    app.setApplicationVersion(config.applicationInfo().version.toString());
-    app.setOrganizationName(config.applicationInfo().vendorName);
+class DirDescriptor;
 
-    CommandFactory factory;
-    auto pCmd = factory.createCommand(config);
-    pCmd->init(config);
-    pCmd->run();
+class MARKEMPTYDIRSAPISHARED_EXPORT FileSystemCrawler : public QObject
+{
+    Q_OBJECT
 
-    return 0;
-//    return app.exec();
+public:
+    typedef QMap<QString, DirDescriptor> PathMap;
+
+    explicit FileSystemCrawler(QObject* pParent = 0);
+
+    ~FileSystemCrawler();
+
+    PathMap pathMap() const;
+
+    void run();
+
+    void setConfig(const Config& config);
+    const Config& config() const;
+
+    bool isDirExcluded(const QDir& dir) const;
+
+protected:
+    Logger& logger();
+
+private:
+    Config m_config;
+    Logger m_logger;
+    PathMap m_pathMap;
+};
+
 }
+
+}
+
+#endif // MARKEMPTYDIRS_API_FILESYSTEMCRAWLER_HPP

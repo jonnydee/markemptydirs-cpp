@@ -24,45 +24,33 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef ADIRCOMMAND_HPP
-#define ADIRCOMMAND_HPP
+#include "CommandLineInterface.hpp"
 
-#include "ACommand.hpp"
+#include <MarkEmptyDirs/Api/CommandFactory.hpp>
+#include <MarkEmptyDirs/Api/ICommand.hpp>
 
-#include <QMap>
+#include <QCoreApplication>
+#include <QDebug>
 
+using namespace MarkEmptyDirs;
 
-class QString;
-
-namespace MarkEmptyDirs
+int main(int argc, char *argv[])
 {
+    QCoreApplication app(argc, argv);
+    auto args = app.arguments();
 
-namespace Api
-{
+    Cli::CommandLineInterface cli;
+    const auto config = cli.createConfig(args);
 
-class DirDescriptor;
+    app.setApplicationName(config.applicationInfo().name);
+    app.setApplicationVersion(config.applicationInfo().version.toString());
+    app.setOrganizationName(config.applicationInfo().vendorName);
 
-class ADirCommand : public ACommand
-{
-    typedef ACommand super;
+    Api::CommandFactory factory;
+    auto pCmd = factory.createCommand(config);
+    pCmd->init(config);
+    pCmd->run();
 
-public:
-    void run();
-
-protected:
-    typedef QMap<QString, DirDescriptor> PathMap;
-
-    virtual PathMap crawlDir();
-
-    virtual void run(const PathMap& pathMap) = 0;
-
-    bool createMarker(const QDir& dir);
-    bool deleteMarker(const QDir& dir);
-    bool executeCommand(const QString& cmd, QString* pError);
-};
-
+    return 0;
+//    return app.exec();
 }
-
-}
-
-#endif // ADIRCOMMAND_HPP

@@ -24,15 +24,11 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef FILESYSTEMCRAWLER_HPP
-#define FILESYSTEMCRAWLER_HPP
+#pragma once
+#ifndef LOGLEVEL_HPP
+#define LOGLEVEL_HPP
 
-#include "qmarkemptydirsapi_global.hpp"
-#include "Config.hpp"
-#include "Logger.hpp"
-
-#include <QMap>
-#include <QObject>
+#include "markemptydirsapi_global.hpp"
 
 
 namespace MarkEmptyDirs
@@ -41,39 +37,16 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class DirDescriptor;
-
-class QMARKEMPTYDIRSAPISHARED_EXPORT FileSystemCrawler : public QObject
+enum MARKEMPTYDIRSAPISHARED_EXPORT LogLevel
 {
-    Q_OBJECT
-
-public:
-    typedef QMap<QString, DirDescriptor> PathMap;
-
-    explicit FileSystemCrawler(QObject* pParent = 0);
-
-    ~FileSystemCrawler();
-
-    PathMap pathMap() const;
-
-    void run();
-
-    void setConfig(const Config& config);
-    const Config& config() const;
-
-    bool isDirExcluded(const QDir& dir) const;
-
-protected:
-    Logger& logger();
-
-private:
-    Config m_config;
-    Logger m_logger;
-    PathMap m_pathMap;
+    ERROR = -1,
+    NONE,
+    INFO,
+    DEBUG
 };
 
 }
 
 }
 
-#endif // FILESYSTEMCRAWLER_HPP
+#endif // LOGLEVEL_HPP

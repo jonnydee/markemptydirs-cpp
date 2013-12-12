@@ -24,10 +24,11 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef OVERVIEWCOMMAND_HPP
-#define OVERVIEWCOMMAND_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_API_ICOMMAND_HPP
+#define MARKEMPTYDIRS_API_ICOMMAND_HPP
 
-#include "ADirCommand.hpp"
+#include "markemptydirsapi_global.hpp"
 
 
 namespace MarkEmptyDirs
@@ -36,19 +37,21 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class OverviewCommand : public ADirCommand
+class Config;
+
+class MARKEMPTYDIRSAPISHARED_EXPORT ICommand
 {
-    typedef ADirCommand super;
-
 public:
-    OverviewCommand();
+    virtual ~ICommand() = 0;
 
-protected:
-    void run(const PathMap& pathMap);
+    virtual void init(const Config& config) = 0;
+
+    virtual void run() = 0;
 };
+inline ICommand::~ICommand() {}
 
 }
 
 }
 
-#endif // OVERVIEWCOMMAND_HPP
+#endif // MARKEMPTYDIRS_API_ICOMMAND_HPP

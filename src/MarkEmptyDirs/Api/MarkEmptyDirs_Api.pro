@@ -15,9 +15,10 @@ CONFIG += c++11
 DEFINES += QMARKEMPTYDIRSAPI_LIBRARY
 
 SOURCES += \
-    ../ArgumentTools/HelpFormatter.cpp \
-    ../ArgumentTools/Option.cpp \
-    ../ArgumentTools/OptionParser.cpp \
+    ../../ArgumentTools/ArgumentParser.cpp \
+    ../../ArgumentTools/ArgumentScanner.cpp \
+    ../../ArgumentTools/HelpFormatter.cpp \
+    ../../ArgumentTools/Option.cpp \
     FileSystemCrawler.cpp \
     ADirCommand.cpp \
     Config.cpp \
@@ -29,16 +30,14 @@ SOURCES += \
     Logger.cpp \
     ACommand.cpp \
     HelpCommand.cpp \
-    CommandFactory.cpp \
-    CommandLineInterface.cpp
+    CommandFactory.cpp
 
 HEADERS += \
-    ../ArgumentTools/Argument.hpp \
-    ../ArgumentTools/HelpFormatter.hpp \
-    ../ArgumentTools/Option.hpp \
-    ../ArgumentTools/OptionParser.hpp \
-    ../ArgumentTools/OptionParser_p.hpp \
-    qmarkemptydirsapi_global.hpp \
+    ../../ArgumentTools/ArgumentParser.hpp \
+    ../../ArgumentTools/ArgumentScanner.hpp \
+    ../../ArgumentTools/HelpFormatter.hpp \
+    ../../ArgumentTools/Option.hpp \
+    markemptydirsapi_global.hpp \
     FileSystemCrawler.hpp \
     ADirCommand.hpp \
     DirDescriptor.hpp \
@@ -53,11 +52,10 @@ HEADERS += \
     ICommand.hpp \
     ACommand.hpp \
     HelpCommand.hpp \
-    CommandFactory.hpp \
-    CommandLineInterface.hpp
+    CommandFactory.hpp
 
 INCLUDEPATH += \
-    ..
+    ../..
 
 unix:!symbian {
     maemo5 {

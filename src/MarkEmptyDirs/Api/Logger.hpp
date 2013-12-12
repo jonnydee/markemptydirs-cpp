@@ -24,10 +24,11 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef LOGGER_HPP
-#define LOGGER_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_API_LOGGER_HPP
+#define MARKEMPTYDIRS_API_LOGGER_HPP
 
-#include "qmarkemptydirsapi_global.hpp"
+#include "markemptydirsapi_global.hpp"
 #include "Config.hpp"
 #include "LogLevel.hpp"
 
@@ -40,7 +41,7 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class QMARKEMPTYDIRSAPISHARED_EXPORT Logger
+class MARKEMPTYDIRSAPISHARED_EXPORT Logger
 {
 public:
     Logger();
@@ -63,4 +64,4 @@ private:
 
 }
 
-#endif // LOGGER_HPP
+#endif // MARKEMPTYDIRS_API_LOGGER_HPP

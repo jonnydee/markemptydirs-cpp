@@ -24,54 +24,58 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#pragma once
-#ifndef ARGUMENTTOOLS_OPTIONPARSER_P_HPP
-#define ARGUMENTTOOLS_OPTIONPARSER_P_HPP
+#ifndef COMMANDLINEINTERFACE_HPP
+#define COMMANDLINEINTERFACE_HPP
 
-#include <QList>
-#include <QString>
+#include <ArgumentTools/Option.hpp>
+#include <MarkEmptyDirs/Api/Config.hpp>
 
 
-namespace ArgumentTools
+namespace MarkEmptyDirs
 {
 
-struct Token
+namespace Cli
 {
-    enum Type
-    {
-        LONGNAME,
-        SHORTNAME,
-        ASSIGN,
-        OTHER
-    };
 
-    Type type;
-    QString payload;
-
-    Token(Type aType, const QString& aPayload = QString::null)
-        : type(aType), payload(aPayload)
-    {}
-};
-typedef QList<Token> TokenList;
-
-class Scanner
+class CommandLineInterface
 {
 public:
-    Scanner();
+    const ArgumentTools::Option dryRunOpt;
+    const ArgumentTools::Option shortOpt;
+    const ArgumentTools::Option verboseOpt;
+    const ArgumentTools::Option cleanOpt;
+    const ArgumentTools::Option helpOpt;
+    const ArgumentTools::Option createHookOpt;
+    const ArgumentTools::Option deleteHookOpt;
+    const ArgumentTools::Option listOpt;
+    const ArgumentTools::Option purgeOpt;
+    const ArgumentTools::Option excludeOpt;
+    const ArgumentTools::Option markerOpt;
+    const ArgumentTools::Option textOpt;
+    const ArgumentTools::Option fileOpt;
+    const ArgumentTools::Option substOpt;
+    const ArgumentTools::Option noSubstOpt;
+    const ArgumentTools::Option followSymLinksOpt;
+    const ArgumentTools::Option noFollowSymLinksOpt;
+    const ArgumentTools::Option overviewOpt;
+    const ArgumentTools::Option updateOpt;
+    const ArgumentTools::Option versionOpt;
 
-    void scan(const QStringList& args);
+    CommandLineInterface();
 
-    TokenList tokens() const;
+    ArgumentTools::OptionList options() const;
+    ArgumentTools::OptionList commandOptions() const;
+    ArgumentTools::OptionList otherOptions() const;
 
-protected:
-    int scanShortOptions(const QStringList& args, int startIndex);
-    int scanLongOption(const QStringList& args, int startIndex);
-    int scanOther(const QStringList& args, int startIndex);
+    Api::Config createConfig(const QStringList& args) const;
 
 private:
-    TokenList m_tokens;
+    ArgumentTools::OptionList m_commandOptions;
+    ArgumentTools::OptionList m_otherOptions;
 };
 
 }
 
-#endif // ARGUMENTTOOLS_OPTIONPARSER_P_HPP
+}
+
+#endif // COMMANDLINEINTERFACE_HPP

@@ -27,7 +27,7 @@
 #include "CommandLineInterface.hpp"
 
 #include <ArgumentTools/HelpFormatter.hpp>
-#include <ArgumentTools/OptionParser.hpp>
+#include <ArgumentTools/ArgumentParser.hpp>
 
 #define APPLICATION_DISCLAIMER          "This is free software; see the source for copying conditions. There is NO" "\n" \
                                         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
@@ -55,11 +55,12 @@
 
 
 using namespace ArgumentTools;
+using namespace MarkEmptyDirs::Api;
 
 namespace MarkEmptyDirs
 {
 
-namespace Api
+namespace Cli
 {
 
 CommandLineInterface::CommandLineInterface()
@@ -159,7 +160,7 @@ CommandLineInterface::CommandLineInterface()
 
 Config CommandLineInterface::createConfig(const QStringList& args) const
 {
-    OptionParser parser;
+    ArgumentParser parser;
     parser.addOptions(options());
     parser.parse(args);
 

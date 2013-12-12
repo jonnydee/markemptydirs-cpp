@@ -25,8 +25,8 @@
 // or implied, of Johann Duscher.
 
 #include "Option.hpp"
-#include "OptionParser.hpp"
-#include "OptionParser_p.hpp"
+#include "ArgumentParser.hpp"
+#include "ArgumentScanner.hpp"
 
 #include <QStringList>
 
@@ -34,119 +34,26 @@
 namespace ArgumentTools
 {
 
-Scanner::Scanner()
+ArgumentParser::ArgumentParser()
 {
 }
 
-TokenList Scanner::tokens() const
-{
-    return m_tokens;
-}
-
-void Scanner::scan(const QStringList& args)
-{
-    int i = 0;
-    while (i < args.length())
-    {
-        if (int argsConsumed = scanLongOption(args, i))
-        {
-            i += argsConsumed;
-            continue;
-        }
-
-        if (int argsConsumed = scanShortOptions(args, i))
-        {
-            i += argsConsumed;
-            continue;
-        }
-
-        i += scanOther(args, i);
-    }
-}
-
-int Scanner::scanShortOptions(const QStringList& args, int startIndex)
-{
-    const auto& arg = args[startIndex];
-    if (arg.length() < 2 || '-' != arg[0] || '-' == arg[1])
-        return 0;
-
-    for (int i = 1; i < arg.length(); i++)
-    {
-        auto& name = arg[i];
-
-        Token shortName(Token::SHORTNAME, name);
-        m_tokens.push_back(shortName);
-    }
-
-    return 1;
-}
-
-int Scanner::scanLongOption(const QStringList& args, int startIndex)
-{
-    const auto& arg = args[startIndex];
-    if (arg.length() < 4 || !arg.startsWith("--") || '-' == arg[2])
-        return 0;
-
-    auto name = arg.mid(2);
-    QString val = QString::null;
-
-    int assignIndex = name.indexOf('=');
-    if (assignIndex >= 0)
-    {
-        val = name.mid(assignIndex + 1);
-        name = name.left(assignIndex);
-    }
-    if (name.length() < 2)
-        return 0;
-
-    Token longName(Token::LONGNAME, name);
-    m_tokens.push_back(longName);
-
-    if (assignIndex < 0)
-        return 1;
-
-    Token assign(Token::ASSIGN);
-    m_tokens.push_back(assign);
-
-    Token value(Token::OTHER, val);
-    m_tokens.push_back(value);
-
-    return 1;
-}
-
-int Scanner::scanOther(const QStringList& args, int startIndex)
-{
-    const auto& arg = args[startIndex];
-
-    Token other(Token::OTHER, arg);
-    m_tokens.push_back(other);
-
-    return 1;
-}
-
-
-
-
-OptionParser::OptionParser()
-{
-}
-
-void OptionParser::addOption(const Option& option)
+void ArgumentParser::addOption(const Option& option)
 {
     m_options.push_back(&option);
 }
 
-void OptionParser::addOptions(const OptionList& options)
+void ArgumentParser::addOptions(const OptionList& options)
 {
     m_options << options;
 }
 
-ArgumentList OptionParser::arguments() const
+ArgumentList ArgumentParser::arguments() const
 {
     return m_arguments;
 }
 
-Argument OptionParser::findUnknownArgument() const
+Argument ArgumentParser::findUnknownArgument() const
 {
     foreach (auto& arg, m_arguments)
         if (!arg.isKnown())
@@ -154,7 +61,7 @@ Argument OptionParser::findUnknownArgument() const
     return Argument();
 }
 
-Argument OptionParser::findArgument(const Option& option) const
+Argument ArgumentParser::findArgument(const Option& option) const
 {
     foreach (auto& arg, m_arguments)
         if (&option == arg.option)
@@ -162,7 +69,7 @@ Argument OptionParser::findArgument(const Option& option) const
     return Argument();
 }
 
-ArgumentList OptionParser::findUnknownArguments() const
+ArgumentList ArgumentParser::findUnknownArguments() const
 {
     ArgumentList args;
     foreach (auto& arg, m_arguments)
@@ -171,7 +78,7 @@ ArgumentList OptionParser::findUnknownArguments() const
     return args;
 }
 
-ArgumentList OptionParser::findArguments(const Option& option) const
+ArgumentList ArgumentParser::findArguments(const Option& option) const
 {
     ArgumentList args;
     foreach (auto& arg, m_arguments)
@@ -180,14 +87,14 @@ ArgumentList OptionParser::findArguments(const Option& option) const
     return args;
 }
 
-OptionList OptionParser::options() const
+OptionList ArgumentParser::options() const
 {
     return m_options;
 }
 
-void OptionParser::parse(const QStringList& args)
+void ArgumentParser::parse(const QStringList& args)
 {
-    Scanner scanner;
+    ArgumentScanner scanner;
     scanner.scan(args);
     const auto tokens = scanner.tokens();
 
@@ -210,7 +117,7 @@ void OptionParser::parse(const QStringList& args)
     }
 }
 
-int OptionParser::parseShortOption(const TokenList& tokens, int startIndex)
+int ArgumentParser::parseShortOption(const TokenList& tokens, int startIndex)
 {
     Q_ASSERT(startIndex < tokens.size());
 
@@ -259,7 +166,7 @@ int OptionParser::parseShortOption(const TokenList& tokens, int startIndex)
     return 1 + int(nextArgConsumed);
 }
 
-int OptionParser::parseLongOption(const TokenList& tokens, int startIndex)
+int ArgumentParser::parseLongOption(const TokenList& tokens, int startIndex)
 {
     Q_ASSERT(startIndex < tokens.size());
 
@@ -311,7 +218,7 @@ int OptionParser::parseLongOption(const TokenList& tokens, int startIndex)
     return tokensConsumed;
 }
 
-int OptionParser::parseOther(const TokenList& tokens, int startIndex)
+int ArgumentParser::parseOther(const TokenList& tokens, int startIndex)
 {
     Q_ASSERT(startIndex < tokens.size());
 

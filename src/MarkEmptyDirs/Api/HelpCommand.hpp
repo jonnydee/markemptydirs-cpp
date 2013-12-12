@@ -24,8 +24,13 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef ICOMMAND_HPP
-#define ICOMMAND_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_API_HELPCOMMAND_HPP
+#define MARKEMPTYDIRS_API_HELPCOMMAND_HPP
+
+#include "markemptydirsapi_global.hpp"
+#include "ACommand.hpp"
+
 
 namespace MarkEmptyDirs
 {
@@ -33,21 +38,16 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class Config;
-
-class ICommand
+class MARKEMPTYDIRSAPISHARED_EXPORT HelpCommand : public ACommand
 {
 public:
-    virtual ~ICommand() = 0;
+    HelpCommand();
 
-    virtual void init(const Config& config) = 0;
-
-    virtual void run() = 0;
+    void run();
 };
-inline ICommand::~ICommand() {}
 
 }
 
 }
 
-#endif // ICOMMAND_HPP
+#endif // MARKEMPTYDIRS_API_HELPCOMMAND_HPP

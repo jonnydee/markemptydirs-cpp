@@ -25,56 +25,29 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef ARGUMENTTOOLS_OPTIONPARSER_HPP
-#define ARGUMENTTOOLS_OPTIONPARSER_HPP
+#ifndef MARKEMPTYDIRS_API_VERSIONCOMMAND_HPP
+#define MARKEMPTYDIRS_API_VERSIONCOMMAND_HPP
 
-#include "ArgumentTools/Argument.hpp"
-
-#include <QList>
-#include <QString>
+#include "markemptydirsapi_global.hpp"
+#include "ACommand.hpp"
 
 
-class QStringList;
-
-namespace ArgumentTools
+namespace MarkEmptyDirs
 {
 
-struct Token;
-typedef QList<Token> TokenList;
+namespace Api
+{
 
-class Option;
-typedef QList<const Option*> OptionList;
-
-typedef QList<Argument> ArgumentList;
-
-class OptionParser
+class MARKEMPTYDIRSAPISHARED_EXPORT VersionCommand : public ACommand
 {
 public:
-    OptionParser();
+    VersionCommand();
 
-    void addOption(const Option& option);
-    void addOptions(const OptionList& options);
-
-    ArgumentList arguments() const;
-    Argument findUnknownArgument() const;
-    Argument findArgument(const Option& option) const;
-    ArgumentList findUnknownArguments() const;
-    ArgumentList findArguments(const Option& option) const;
-
-    OptionList options() const;
-
-    void parse(const QStringList& args);
-
-protected:
-    int parseShortOption(const TokenList& tokens, int startIndex);
-    int parseLongOption(const TokenList& tokens, int startIndex);
-    int parseOther(const TokenList& tokens, int startIndex);
-
-private:
-    OptionList m_options;
-    ArgumentList m_arguments;
+    void run();
 };
 
 }
 
-#endif // ARGUMENTTOOLS_OPTIONPARSER_HPP
+}
+
+#endif // MARKEMPTYDIRS_API_VERSIONCOMMAND_HPP

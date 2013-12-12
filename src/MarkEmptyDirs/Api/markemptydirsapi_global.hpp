@@ -24,31 +24,16 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef COMMANDFACTORY_HPP
-#define COMMANDFACTORY_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_API_GLOBAL_HPP
+#define MARKEMPTYDIRS_API_GLOBAL_HPP
 
-#include <memory>
+#include <QtCore/qglobal.h>
 
+#if defined(MARKEMPTYDIRSAPI_LIBRARY)
+#  define MARKEMPTYDIRSAPISHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define MARKEMPTYDIRSAPISHARED_EXPORT Q_DECL_IMPORT
+#endif
 
-namespace MarkEmptyDirs
-{
-
-namespace Api
-{
-
-class ICommand;
-class Config;
-
-class CommandFactory
-{
-public:
-    CommandFactory();
-
-    std::unique_ptr<ICommand> createCommand(const Config& config) const;
-};
-
-}
-
-}
-
-#endif // COMMANDFACTORY_HPP
+#endif // MARKEMPTYDIRS_API_GLOBAL_HPP

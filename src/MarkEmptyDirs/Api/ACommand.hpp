@@ -24,10 +24,14 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef HELPCOMMAND_HPP
-#define HELPCOMMAND_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_API_ACOMMAND_HPP
+#define MARKEMPTYDIRS_API_ACOMMAND_HPP
 
-#include "ACommand.hpp"
+#include "markemptydirsapi_global.hpp"
+#include "Config.hpp"
+#include "ICommand.hpp"
+#include "Logger.hpp"
 
 
 namespace MarkEmptyDirs
@@ -36,16 +40,29 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class HelpCommand : public ACommand
+class MARKEMPTYDIRSAPISHARED_EXPORT ACommand : public ICommand
 {
-public:
-    HelpCommand();
+    typedef ICommand super;
 
-    void run();
+public:
+    ~ACommand();
+
+    void init(const Config& config);
+
+protected:
+    ACommand();
+
+    const Config& config() const;
+
+    Logger& logger();
+
+private:
+    Config m_config;
+    Logger m_logger;
 };
 
 }
 
 }
 
-#endif // HELPCOMMAND_HPP
+#endif // MARKEMPTYDIRS_API_ACOMMAND_HPP

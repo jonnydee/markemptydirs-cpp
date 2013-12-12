@@ -24,60 +24,56 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef DIRDESCRIPTOR_HPP
-#define DIRDESCRIPTOR_HPP
+#pragma once
+#ifndef ARGUMENTTOOLS_ARGUMENTSCANNER_HPP
+#define ARGUMENTTOOLS_ARGUMENTSCANNER_HPP
 
-#include "qmarkemptydirsapi_global.hpp"
-
-#include <QDir>
+#include <QList>
 #include <QString>
 
 
-namespace MarkEmptyDirs
+class QStringList;
+
+namespace ArgumentTools
 {
 
-namespace Api
+struct Token
 {
+    enum Type
+    {
+        LONGNAME,
+        SHORTNAME,
+        ASSIGN,
+        OTHER
+    };
 
-class QMARKEMPTYDIRSAPISHARED_EXPORT DirDescriptor
+    Type type;
+    QString payload;
+
+    Token(Type aType, const QString& aPayload = QString())
+        : type(aType), payload(aPayload)
+    {}
+};
+typedef QList<Token> TokenList;
+
+class ArgumentScanner
 {
 public:
-    DirDescriptor()
-        : m_dir()
-        , m_hasMarker(false)
-    {
-    }
+    ArgumentScanner();
 
-    void setDir(const QDir& dir) { m_dir = dir; }
-    QDir dir() const { return m_dir; }
+    void scan(const QStringList& args);
 
-    QFileInfoList& children() { return m_children; }
-    const QFileInfoList& children() const { return m_children; }
+    TokenList tokens() const;
 
-    int childCount() const { return m_children.size(); }
-    bool hasChildren() const { return childCount() > 0; }
-
-    void setHasMarker() { m_hasMarker = true; }
-    bool hasMarker() const { return m_hasMarker; }
-
-    int subDirCount() const
-    {
-        int count = 0;
-        foreach (const auto& child, m_children)
-            if (child.isDir())
-                ++count;
-        return count;
-    }
-    bool hasSubDirs() const { return subDirCount() > 0; }
+protected:
+    int scanShortOptions(const QStringList& args, int startIndex);
+    int scanLongOption(const QStringList& args, int startIndex);
+    int scanOther(const QStringList& args, int startIndex);
 
 private:
-    QDir m_dir;
-    QFileInfoList m_children;
-    bool m_hasMarker;
+    TokenList m_tokens;
 };
 
 }
 
-}
-
-#endif // DIRDESCRIPTOR_HPP
+#endif // ARGUMENTTOOLS_ARGUMENTSCANNER_HPP

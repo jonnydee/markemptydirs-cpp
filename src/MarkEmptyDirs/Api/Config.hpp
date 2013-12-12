@@ -24,10 +24,11 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef CONFIG_HPP
-#define CONFIG_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_API_CONFIG_HPP
+#define MARKEMPTYDIRS_API_CONFIG_HPP
 
-#include "qmarkemptydirsapi_global.hpp"
+#include "markemptydirsapi_global.hpp"
 #include "LogLevel.hpp"
 
 #include <QDir>
@@ -42,7 +43,7 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-struct ApplicationInfo
+struct MARKEMPTYDIRSAPISHARED_EXPORT ApplicationInfo
 {
     struct Version
     {
@@ -66,7 +67,7 @@ struct ApplicationInfo
     QString toString() const;
 };
 
-class QMARKEMPTYDIRSAPISHARED_EXPORT Config
+class MARKEMPTYDIRSAPISHARED_EXPORT Config
 {
 public:
     enum Command
@@ -149,4 +150,4 @@ private:
 
 }
 
-#endif // CONFIG_HPP
+#endif // MARKEMPTYDIRS_API_CONFIG_HPP
