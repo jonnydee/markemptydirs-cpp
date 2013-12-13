@@ -30,7 +30,8 @@ QMAKE_LIBDIR += \
     $$_PRO_FILE_PWD_/../../../bin
 
 LIBS += \
-    -lMarkEmptyDirsApi
+    -lMarkEmptyDirsApi \
+    -lArgumentTools
 
 HEADERS += \
     CommandLineInterface.hpp

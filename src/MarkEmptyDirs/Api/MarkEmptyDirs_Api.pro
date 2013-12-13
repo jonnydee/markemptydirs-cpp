@@ -24,10 +24,6 @@ CONFIG(debug, debug|release) {
 DEFINES += MARKEMPTYDIRSAPI_LIBRARY
 
 SOURCES += \
-    ../../ArgumentTools/ArgumentParser.cpp \
-    ../../ArgumentTools/ArgumentScanner.cpp \
-    ../../ArgumentTools/HelpFormatter.cpp \
-    ../../ArgumentTools/Option.cpp \
     FileSystemCrawler.cpp \
     ADirCommand.cpp \
     Config.cpp \
@@ -42,10 +38,6 @@ SOURCES += \
     CommandFactory.cpp
 
 HEADERS += \
-    ../../ArgumentTools/ArgumentParser.hpp \
-    ../../ArgumentTools/ArgumentScanner.hpp \
-    ../../ArgumentTools/HelpFormatter.hpp \
-    ../../ArgumentTools/Option.hpp \
     markemptydirsapi_global.hpp \
     FileSystemCrawler.hpp \
     ADirCommand.hpp \

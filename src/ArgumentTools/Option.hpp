@@ -28,6 +28,8 @@
 #ifndef ARGUMENTTOOLS_OPTION_HPP
 #define ARGUMENTTOOLS_OPTION_HPP
 
+#include "argumenttools_global.hpp"
+
 #include <QList>
 #include <QString>
 #include <QStringList>
@@ -36,7 +38,7 @@
 namespace ArgumentTools
 {
 
-class Option
+class ARGUMENTTOOLSSHARED_EXPORT Option
 {
 public:
     Option(const QStringList& names, const QString& description = QString::null, const QString& valueName = QString::null, const QString& defaultValue = QString::null);

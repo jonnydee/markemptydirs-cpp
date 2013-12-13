@@ -28,13 +28,14 @@
 #ifndef ARGUMENTTOOLS_HELPFORMATTER_HPP
 #define ARGUMENTTOOLS_HELPFORMATTER_HPP
 
-#include "ArgumentTools/Option.hpp"
+#include "argumenttools_global.hpp"
+#include "Option.hpp"
 
 
 namespace ArgumentTools
 {
 
-class HelpFormatter
+class ARGUMENTTOOLSSHARED_EXPORT HelpFormatter
 {
 public:
     HelpFormatter(int optionListIndent = 2, int maxLineLength = 80);

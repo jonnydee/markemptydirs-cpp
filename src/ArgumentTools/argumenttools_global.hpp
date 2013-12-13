@@ -25,71 +25,15 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef ARGUMENTTOOLS_ARGUMENTPARSER_HPP
-#define ARGUMENTTOOLS_ARGUMENTPARSER_HPP
+#ifndef ARGUMENTTOOLS_GLOBAL_HPP
+#define ARGUMENTTOOLS_GLOBAL_HPP
 
-#include "argumenttools_global.hpp"
+#include <QtCore/qglobal.h>
 
-#include <QList>
-#include <QString>
+#if defined(ARGUMENTTOOLS_LIBRARY)
+#  define ARGUMENTTOOLSSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define ARGUMENTTOOLSSHARED_EXPORT Q_DECL_IMPORT
+#endif
 
-
-class QStringList;
-
-namespace ArgumentTools
-{
-
-struct Token;
-typedef QList<Token> TokenList;
-
-class Option;
-typedef QList<const Option*> OptionList;
-
-
-struct ARGUMENTTOOLSSHARED_EXPORT Argument
-{
-    const Option* option;
-    QString name;
-    QString value;
-    QString errorMessage;
-
-    Argument() : option(nullptr) {}
-
-    bool isKnown() const { return nullptr != option; }
-    bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
-    bool isBasedOn(const Option& opt) const { return &opt == option; }
-};
-typedef QList<Argument> ArgumentList;
-
-
-class ARGUMENTTOOLSSHARED_EXPORT ArgumentParser
-{
-public:
-    ArgumentParser();
-
-    void addOption(const Option& option);
-    void addOptions(const OptionList& options);
-
-    ArgumentList arguments() const;
-    Argument findUnknownArgument() const;
-    Argument findArgument(const Option& option) const;
-    ArgumentList findUnknownArguments() const;
-    ArgumentList findArguments(const Option& option) const;
-
-    OptionList options() const;
-
-    void parse(const QStringList& args);
-
-protected:
-    int parseShortOption(const TokenList& tokens, int startIndex);
-    int parseLongOption(const TokenList& tokens, int startIndex);
-    int parseOther(const TokenList& tokens, int startIndex);
-
-private:
-    OptionList m_options;
-    ArgumentList m_arguments;
-};
-
-}
-
-#endif // ARGUMENTTOOLS_ARGUMENTPARSER_HPP
+#endif // ARGUMENTTOOLS_GLOBAL_HPP
