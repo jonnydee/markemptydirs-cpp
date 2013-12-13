@@ -58,6 +58,12 @@ HEADERS += \
 INCLUDEPATH += \
     ../..
 
+QMAKE_LIBDIR += \
+    $$_PRO_FILE_PWD_/../../../bin
+
+LIBS += \
+    -lStringTemplate
+
 unix:!symbian {
     maemo5 {
         target.path = /opt/usr/lib
