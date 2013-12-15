@@ -12,6 +12,7 @@ DESTDIR = $$_PRO_FILE_PWD_/../../../bin
 
 TEMPLATE = lib
 CONFIG += staticlib
+CONFIG += static
 
 QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++ -mmacosx-version-min=10.7
 CONFIG += c++11
@@ -61,8 +62,14 @@ INCLUDEPATH += \
 QMAKE_LIBDIR += \
     $$_PRO_FILE_PWD_/../../../bin
 
-LIBS += \
-    -lStringTemplate
+CONFIG(debug, debug|release) {
+    LIBS += \
+        -lStringTemplate_debug
+}
+CONFIG(release, debug|release) {
+    LIBS += \
+        -lStringTemplate
+}
 
 unix:!symbian {
     maemo5 {

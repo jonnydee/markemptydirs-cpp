@@ -7,7 +7,13 @@
 QT       += core
 QT       -= gui
 
-TARGET = markemptydirs
+CONFIG(debug, debug|release) {
+    TARGET = markemptydirs_debug
+}
+CONFIG(release, debug|release) {
+    TARGET = markemptydirs
+}
+
 VERSION = 2.0.0
 DESTDIR = $$_PRO_FILE_PWD_/../../../bin
 
@@ -29,9 +35,16 @@ INCLUDEPATH += \
 QMAKE_LIBDIR += \
     $$_PRO_FILE_PWD_/../../../bin
 
-LIBS += \
-    -lMarkEmptyDirsApi \
-    -lArgumentTools
+CONFIG(debug, debug|release) {
+    LIBS += \
+        -lMarkEmptyDirsApi_debug \
+        -lArgumentTools_debug
+}
+CONFIG(release, debug|release) {
+    LIBS += \
+        -lMarkEmptyDirsApi \
+        -lArgumentTools
+}
 
 HEADERS += \
     CommandLineInterface.hpp
