@@ -24,24 +24,49 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#pragma once
-#ifndef STRINGTEMPLATE_ENGINE_HPP
-#define STRINGTEMPLATE_ENGINE_HPP
+#include "Variable.hpp"
 
-#include "stringtemplate_global.hpp"
+#include <QDebug>
+#include <QRegExp>
 
-#include <QString>
+
+#define PATTERN     QString("§%1(?:(\\:)([^§]*))?§")
 
 
 namespace StringTemplate
 {
 
-class STRINGTEMPLATESHARED_EXPORT Engine
+Variable::Variable(const QString& name)
+    : m_name(name)
+    , m_pattern(PATTERN.arg(name))
 {
-public:
-    Engine();
-};
-
 }
 
-#endif // STRINGTEMPLATE_ENGINE_HPP
+QString Variable::name() const
+{
+    return m_name;
+}
+
+void Variable::expand(QString& str, const EvalFn& eval) const
+{
+    int count = 0;
+    int index = m_pattern.indexIn(str, 0, QRegExp::CaretAtOffset);
+    while (index >= 0)
+    {
+        auto components = m_pattern.capturedTexts();
+        const auto& match = components[0];
+        if (!components[1].isEmpty() && components[2].isNull())
+            components[2] = "";
+        const auto& argument = components[2];
+
+        const Context ctx(str, index, match, ++count, m_name, argument);
+        const auto value = eval(ctx);
+
+        str.replace(index, match.length(), value);
+        index += value.length();
+
+        index = m_pattern.indexIn(str, index, QRegExp::CaretAtOffset);
+    }
+}
+
+}

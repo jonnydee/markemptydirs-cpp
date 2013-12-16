@@ -26,10 +26,12 @@ DEFINES += STRINGTEMPLATE_LIBRARY
 
 SOURCES += \
     stringtemplate_global.hpp \
-    Engine.cpp
+    Engine.cpp \
+    Variable.cpp
 
 HEADERS += \
-    Engine.hpp
+    Engine.hpp \
+    Variable.hpp
 
 INCLUDEPATH += \
     ../..

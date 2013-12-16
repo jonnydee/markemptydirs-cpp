@@ -25,23 +25,61 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef STRINGTEMPLATE_ENGINE_HPP
-#define STRINGTEMPLATE_ENGINE_HPP
+#ifndef STRINGTEMPLATE_VARIABLE_HPP
+#define STRINGTEMPLATE_VARIABLE_HPP
 
 #include "stringtemplate_global.hpp"
 
+#include <QRegExp>
 #include <QString>
+
+#include <functional>
 
 
 namespace StringTemplate
 {
 
-class STRINGTEMPLATESHARED_EXPORT Engine
+class STRINGTEMPLATESHARED_EXPORT Variable
 {
 public:
-    Engine();
+    struct Context;
+
+    typedef std::function<QString(const Context&)> EvalFn;
+
+    Variable(const QString& name);
+
+    QString name() const;
+
+    void expand(QString& str, const EvalFn& eval) const;
+
+private:
+    QString m_name;
+    QRegExp m_pattern;
+};
+
+struct STRINGTEMPLATESHARED_EXPORT Variable::Context
+{
+    Context(const QString& text_,
+            int index_, const QString& match_,
+            int count_,
+            const QString& name_, const QString& argument_)
+        : text(text_)
+        , index(index_)
+        , match(match_)
+        , count(count_)
+        , name(name_)
+        , argument(argument_)
+    {}
+
+    const QString& text;
+    int index;
+    const QString& match;
+    int length;
+    int count;
+    const QString& name;
+    const QString& argument;
 };
 
 }
 
-#endif // STRINGTEMPLATE_ENGINE_HPP
+#endif // STRINGTEMPLATE_VARIABLE_HPP

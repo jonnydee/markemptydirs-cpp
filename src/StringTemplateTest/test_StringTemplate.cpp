@@ -24,24 +24,60 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#pragma once
-#ifndef STRINGTEMPLATE_ENGINE_HPP
-#define STRINGTEMPLATE_ENGINE_HPP
-
-#include "stringtemplate_global.hpp"
-
 #include <QString>
+#include <QtTest>
 
+#include <StringTemplate/Variable.hpp>
 
-namespace StringTemplate
+using namespace StringTemplate;
+
+class StringTemplateTest : public QObject
 {
+    Q_OBJECT
 
-class STRINGTEMPLATESHARED_EXPORT Engine
-{
 public:
-    Engine();
+    StringTemplateTest();
+
+private slots:
+    void initTestCase();
+    void cleanupTestCase();
+
+    void testCase_Variable_1();
 };
 
+StringTemplateTest::StringTemplateTest()
+{
 }
 
-#endif // STRINGTEMPLATE_ENGINE_HPP
+void StringTemplateTest::initTestCase()
+{
+}
+
+void StringTemplateTest::cleanupTestCase()
+{
+}
+
+void StringTemplateTest::testCase_Variable_1()
+{
+    const Variable sut("var");
+
+    QString text("This is a §var:test case§ with a §var§ and an §var:§ variable.");
+    sut.expand(text,
+        [](const Variable::Context& ctx) -> QString
+        {
+            if (1 == ctx.count)
+                return ctx.argument;
+            else if (ctx.argument.isNull())
+                return QString("null");
+            else if (ctx.argument.isEmpty())
+                return QString("empty");
+            else
+                return QString("FAIL");
+        });
+    qDebug() << text;
+    QVERIFY2(text == "This is a test case with a null and an empty variable.", "Failure");
+}
+
+QTEST_APPLESS_MAIN(StringTemplateTest)
+
+#include "test_StringTemplate.moc"

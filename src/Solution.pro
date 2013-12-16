@@ -4,5 +4,6 @@ CONFIG += ordered
 
 SUBDIRS = \
     StringTemplate \
+    StringTemplateTest \
     ArgumentTools \
     MarkEmptyDirs
