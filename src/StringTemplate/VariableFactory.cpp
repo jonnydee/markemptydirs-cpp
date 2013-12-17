@@ -28,6 +28,7 @@
 #include "VariableFactory.hpp"
 
 #include <QObject>
+#include <QUuid>
 
 
 namespace StringTemplate
@@ -35,6 +36,17 @@ namespace StringTemplate
 
 VariableFactory::VariableFactory()
 {
+}
+
+Variable* VariableFactory::createGuidVariable() const
+{
+    auto pVariable = new Variable("guid",
+        [](const Variable::Context&)
+        {
+            return QUuid::createUuid().toString();
+        });
+    pVariable->setDescription(QObject::tr("get a new globally unique identifier"));
+    return pVariable;
 }
 
 }

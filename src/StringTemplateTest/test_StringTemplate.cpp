@@ -24,10 +24,15 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
+#include <QRegExp>
 #include <QString>
 #include <QtTest>
 
 #include <StringTemplate/Variable.hpp>
+#include <StringTemplate/VariableFactory.hpp>
+
+#define GUID_PATTERN    "\\{[a-fA-F\\d]{8}-[a-fA-F\\d]{4}-[a-fA-F\\d]{4}-[a-fA-F\\d]{4}-[a-fA-F\\d]{12}\\}"
+
 
 using namespace StringTemplate;
 
@@ -43,6 +48,7 @@ private slots:
     void cleanupTestCase();
 
     void test_Variable_custom_expand();
+    void test_Variable_guid_expand();
 };
 
 StringTemplateTest::StringTemplateTest()
@@ -78,6 +84,19 @@ void StringTemplateTest::test_Variable_custom_expand()
     qDebug() << "EXPANDED:" << text;
 
     QVERIFY2(text == "This is a test case with a null and an empty variable.", "Failure");
+}
+
+void StringTemplateTest::test_Variable_guid_expand()
+{
+    std::unique_ptr<const Variable> pSut(VariableFactory().createGuidVariable());
+
+    QString text("This is a §guid§ variable.");
+    qDebug() << "ORIGINAL:" << text;
+    pSut->expand(text);
+    qDebug() << "EXPANDED:" << text;
+
+    const QRegExp guidRegExp("This is a " GUID_PATTERN " variable.");
+    QVERIFY2(guidRegExp.indexIn(text) == 0, "Failure");
 }
 
 QTEST_APPLESS_MAIN(StringTemplateTest)

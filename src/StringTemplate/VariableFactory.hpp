@@ -38,6 +38,7 @@ class VariableFactory
 public:
     VariableFactory();
 
+    Variable* createGuidVariable() const;
 };
 
 }
