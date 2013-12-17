@@ -46,14 +46,15 @@ public:
 
     typedef std::function<QString(const Context&)> EvalFn;
 
-    Variable(const QString& name);
+    Variable(const QString& name, const EvalFn& eval);
 
     QString name() const;
 
-    void expand(QString& str, const EvalFn& eval) const;
+    void expand(QString& str) const;
 
 private:
     QString m_name;
+    EvalFn m_eval;
     QRegExp m_pattern;
 };
 

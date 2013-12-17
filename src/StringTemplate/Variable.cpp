@@ -36,9 +36,10 @@
 namespace StringTemplate
 {
 
-Variable::Variable(const QString& name)
+Variable::Variable(const QString& name, const EvalFn& eval)
     : m_name(name)
     , m_pattern(PATTERN.arg(name))
+    , m_eval(eval)
 {
 }
 
@@ -47,7 +48,7 @@ QString Variable::name() const
     return m_name;
 }
 
-void Variable::expand(QString& str, const EvalFn& eval) const
+void Variable::expand(QString& str) const
 {
     int count = 0;
     int index = m_pattern.indexIn(str, 0, QRegExp::CaretAtOffset);
@@ -60,7 +61,7 @@ void Variable::expand(QString& str, const EvalFn& eval) const
         const auto& argument = components[2];
 
         const Context ctx(str, index, match, ++count, m_name, argument);
-        const auto value = eval(ctx);
+        const auto value = m_eval ? m_eval(ctx) : match;
 
         str.replace(index, match.length(), value);
         index += value.length();

@@ -42,7 +42,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void testCase_Variable_1();
+    void test_Variable_custom_expand();
 };
 
 StringTemplateTest::StringTemplateTest()
@@ -57,12 +57,9 @@ void StringTemplateTest::cleanupTestCase()
 {
 }
 
-void StringTemplateTest::testCase_Variable_1()
+void StringTemplateTest::test_Variable_custom_expand()
 {
-    const Variable sut("var");
-
-    QString text("This is a §var:test case§ with a §var§ and an §var:§ variable.");
-    sut.expand(text,
+    const Variable sut("var",
         [](const Variable::Context& ctx) -> QString
         {
             if (1 == ctx.count)
