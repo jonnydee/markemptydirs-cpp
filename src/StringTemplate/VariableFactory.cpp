@@ -38,6 +38,20 @@ VariableFactory::VariableFactory()
 {
 }
 
+Variable* VariableFactory::createEnvironmentVariable() const
+{
+    auto pVariable = new Variable("env",
+        [](const Variable::Context& ctx)
+        {
+            const auto varName = ctx.argument.trimmed().toUtf8().append('\0');
+            const auto varValue = qgetenv(varName.constData());
+            return QString::fromUtf8(varValue);
+        });
+    pVariable->setArgumentSpec("env-var-name");
+    pVariable->setDescription(QObject::tr("get the value from an environment variable"));
+    return pVariable;
+}
+
 Variable* VariableFactory::createGuidVariable() const
 {
     auto pVariable = new Variable("guid",

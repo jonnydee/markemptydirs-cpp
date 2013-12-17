@@ -48,6 +48,7 @@ private slots:
     void cleanupTestCase();
 
     void test_Variable_custom_expand();
+    void test_Variable_env_expand();
     void test_Variable_guid_expand();
 };
 
@@ -84,6 +85,20 @@ void StringTemplateTest::test_Variable_custom_expand()
     qDebug() << "EXPANDED:" << text;
 
     QVERIFY2(text == "This is a test case with a null and an empty variable.", "Failure");
+}
+
+void StringTemplateTest::test_Variable_env_expand()
+{
+    std::unique_ptr<const Variable> pSut(VariableFactory().createEnvironmentVariable());
+
+    qputenv("STRINGTEMPLATE_VARIABLE_ENV", "environment");
+
+    QString text("This is a §env : STRINGTEMPLATE_VARIABLE_ENV § variable.");
+    qDebug() << "ORIGINAL:" << text;
+    pSut->expand(text);
+    qDebug() << "EXPANDED:" << text;
+
+    QVERIFY2(text == "This is a environment variable.", "Failure");
 }
 
 void StringTemplateTest::test_Variable_guid_expand()
