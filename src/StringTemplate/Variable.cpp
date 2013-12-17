@@ -81,22 +81,47 @@ QString Variable::name() const
 void Variable::expand(QString& str) const
 {
     int count = 0;
+    // Look for variable occurences and replace them by values provided
+    // by m_eval function.
     int index = m_pattern.indexIn(str, 0, QRegExp::CaretAtOffset);
     while (index >= 0)
     {
         auto components = m_pattern.capturedTexts();
         Q_ASSERT(components.size() == 3);
+
+        // Get matched part.
         const auto& match = components[0];
-        if (!components[1].isEmpty() && components[2].isNull())
-            components[2] = "";
-        const auto& argument = components[2];
 
+        // Get argument part.
+        auto& argument = components[2];
+        {
+            const bool separatorPresent = !components[1].isEmpty();
+            // If variable name is followed by a separator make sure the argument part is not null.
+            if (separatorPresent && argument.isNull())
+                argument = "";
+            // If argument part is null initialize it with default argument (which may again be null).
+            if (argument.isNull())
+                argument = defaultArgument();
+        }
+
+        // Create variable context and call evaluation function.
         const Context ctx(str, index, match, ++count, m_name, argument);
-        const auto value = m_eval ? m_eval(ctx) : match;
+        const auto value = m_eval ? m_eval(ctx) : QString();
 
-        str.replace(index, match.length(), value);
-        index += value.length();
+        if (!value.isNull())
+        {
+            // Replace matched part by non-null value returned by m_eval function.
+            str.replace(index, match.length(), value);
+            index += value.length();
+        }
+        else
+        {
+            // m_eval function returned null value, so don't replace anything and
+            // skip matched part.
+            index += match.length();
+        }
 
+        // Look for next variable occurence.
         index = m_pattern.indexIn(str, index, QRegExp::CaretAtOffset);
     }
 }
