@@ -31,7 +31,11 @@
 #include <StringTemplate/Variable.hpp>
 #include <StringTemplate/VariableFactory.hpp>
 
-#define GUID_PATTERN    "\\{[a-fA-F\\d]{8}-[a-fA-F\\d]{4}-[a-fA-F\\d]{4}-[a-fA-F\\d]{4}-[a-fA-F\\d]{12}\\}"
+#define GUID_PATTERN        "\\{[a-fA-F\\d]{8}-[a-fA-F\\d]{4}-[a-fA-F\\d]{4}-[a-fA-F\\d]{4}-[a-fA-F\\d]{12}\\}"
+
+#define DATE_PATTERN        "\\d{4}-\\d{2}-\\d{2}"
+#define TIME_PATTERN        "\\d{2}\\:\\d{2}\\:\\d{2}"
+#define DATETIME_PATTERN    DATE_PATTERN "T" TIME_PATTERN "Z"
 
 
 using namespace StringTemplate;
@@ -48,6 +52,7 @@ private slots:
     void cleanupTestCase();
 
     void test_Variable_custom_expand();
+    void test_Variable_datetime_expand();
     void test_Variable_env_expand();
     void test_Variable_guid_expand();
     void test_Variable_lf_expand();
@@ -87,6 +92,19 @@ void StringTemplateTest::test_Variable_custom_expand()
     qDebug() << "EXPANDED:" << text;
 
     QVERIFY2(text == "This is a test case with a null and an empty variable.", "Failure");
+}
+
+void StringTemplateTest::test_Variable_datetime_expand()
+{
+    std::unique_ptr<const Variable> pSut(VariableFactory().createDateTimeVariable());
+
+    QString text("Now we have §datetime§, or shorter §datetime:yyyy-MM-dd§, or wrong §datetime:§.");
+    qDebug() << "ORIGINAL:" << text;
+    pSut->expand(text);
+    qDebug() << "EXPANDED:" << text;
+
+    const QRegExp timeRegExp("Now we have " DATETIME_PATTERN ", or shorter " DATE_PATTERN ", or wrong §datetime:§.");
+    QVERIFY2(timeRegExp.indexIn(text) == 0, "Failure");
 }
 
 void StringTemplateTest::test_Variable_env_expand()

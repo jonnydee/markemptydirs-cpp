@@ -38,6 +38,7 @@ class VariableFactory
 public:
     VariableFactory();
 
+    Variable* createDateTimeVariable() const;
     Variable* createEnvironmentVariable() const;
     Variable* createGuidVariable() const;
     Variable* createLinefeedVariable() const;

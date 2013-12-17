@@ -27,6 +27,7 @@
 #include "Variable.hpp"
 #include "VariableFactory.hpp"
 
+#include <QDateTime>
 #include <QObject>
 #include <QUuid>
 
@@ -51,6 +52,20 @@ Variable* VariableFactory::createCharRepeaterVariable(const QString& name, QChar
     pVariable->setArgumentSpec("count");
     pVariable->setDefaultArgument("1");
     pVariable->setDescription(description);
+    return pVariable;
+}
+
+Variable* VariableFactory::createDateTimeVariable() const
+{
+    auto pVariable = new Variable("datetime",
+        [](const Variable::Context& ctx)
+        {
+            const auto currentDateTime = QDateTime::currentDateTimeUtc();
+            return currentDateTime.toString(ctx.argument);
+        });
+    pVariable->setArgumentSpec("format-pattern");
+    pVariable->setDefaultArgument("yyyy-MM-ddThh:mm:ssZ");
+    pVariable->setDescription(QObject::tr("get UTC time"));
     return pVariable;
 }
 
