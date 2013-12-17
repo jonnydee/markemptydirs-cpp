@@ -92,7 +92,7 @@ void StringTemplateTest::test_Variable_custom_expand()
     qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
 
     QVERIFY(expansionCount == 3);
-    QVERIFY2(text == "This is a test case with a null and an empty variable.", "Failure");
+    QVERIFY(text == "This is a test case with a null and an empty variable.");
 }
 
 void StringTemplateTest::test_Variable_datetime_expand()
@@ -106,7 +106,7 @@ void StringTemplateTest::test_Variable_datetime_expand()
 
     QVERIFY(expansionCount == 2);
     const QRegExp timeRegExp("Now we have " DATETIME_PATTERN ", or shorter " DATE_PATTERN ", or wrong §datetime:§.");
-    QVERIFY2(timeRegExp.indexIn(text) == 0, "Failure");
+    QVERIFY(timeRegExp.indexIn(text) == 0);
 }
 
 void StringTemplateTest::test_Variable_env_expand()
@@ -121,7 +121,7 @@ void StringTemplateTest::test_Variable_env_expand()
     qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
 
     QVERIFY(expansionCount == 1);
-    QVERIFY2(text == "This is a environment variable.", "Failure");
+    QVERIFY(text == "This is a environment variable.");
 }
 
 void StringTemplateTest::test_Variable_guid_expand()
@@ -135,7 +135,7 @@ void StringTemplateTest::test_Variable_guid_expand()
 
     QVERIFY(expansionCount == 1);
     const QRegExp guidRegExp("This is a " GUID_PATTERN " variable.");
-    QVERIFY2(guidRegExp.indexIn(text) == 0, "Failure");
+    QVERIFY(guidRegExp.indexIn(text) == 0);
 }
 
 void StringTemplateTest::test_Variable_lf_expand()
@@ -148,7 +148,7 @@ void StringTemplateTest::test_Variable_lf_expand()
     qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
 
     QVERIFY(expansionCount == 2);
-    QVERIFY2(text == "Line 1\nLine 2\n\nLine 4§lf :  §.", "Failure");
+    QVERIFY(text == "Line 1\nLine 2\n\nLine 4§lf :  §.");
 }
 
 void StringTemplateTest::test_Variable_sp_expand()
@@ -161,7 +161,7 @@ void StringTemplateTest::test_Variable_sp_expand()
     qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
 
     QVERIFY(expansionCount == 2);
-    QVERIFY2(text == "123 56  9§sp :  §.", "Failure");
+    QVERIFY(text == "123 56  9§sp :  §.");
 }
 
 QTEST_APPLESS_MAIN(StringTemplateTest)
