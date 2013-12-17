@@ -85,6 +85,7 @@ void Variable::expand(QString& str) const
     while (index >= 0)
     {
         auto components = m_pattern.capturedTexts();
+        Q_ASSERT(components.size() == 3);
         const auto& match = components[0];
         if (!components[1].isEmpty() && components[2].isNull())
             components[2] = "";
