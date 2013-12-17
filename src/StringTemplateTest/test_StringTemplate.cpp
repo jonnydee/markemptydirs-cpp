@@ -71,7 +71,12 @@ void StringTemplateTest::test_Variable_custom_expand()
             else
                 return QString("FAIL");
         });
-    qDebug() << text;
+
+    QString text("This is a §var:test case§ with a §var§ and an §var:§ variable.");
+    qDebug() << "ORIGINAL:" << text;
+    sut.expand(text);
+    qDebug() << "EXPANDED:" << text;
+
     QVERIFY2(text == "This is a test case with a null and an empty variable.", "Failure");
 }
 
