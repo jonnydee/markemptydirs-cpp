@@ -30,7 +30,7 @@
 #include <QRegExp>
 
 
-#define PATTERN     QString("§%1(?:(\\:)([^§]*))?§")
+#define PATTERN     QString("§%1\\s*(?:(\\:)([^§]*))?§")
 
 
 namespace StringTemplate
