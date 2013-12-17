@@ -63,11 +63,11 @@ public:
 
 private:
     QString m_name;
+    QRegExp m_pattern;
     EvalFn m_eval;
     QString m_argumentSpec;
     QString m_defaultArgument;
     QString m_description;
-    QRegExp m_pattern;
 };
 
 struct STRINGTEMPLATESHARED_EXPORT Variable::Context
