@@ -38,6 +38,22 @@ VariableFactory::VariableFactory()
 {
 }
 
+Variable* VariableFactory::createCharRepeaterVariable(const QString& name, QChar ch, const QString& description) const
+{
+    auto pVariable = new Variable(name,
+        [ch](const Variable::Context& ctx)
+        {
+            bool ok;
+            const auto countStr = ctx.argument.trimmed();
+            const auto count = countStr.toUInt(&ok);
+            return ok ? QString(count, ch) : QString();
+        });
+    pVariable->setArgumentSpec("count");
+    pVariable->setDefaultArgument("1");
+    pVariable->setDescription(description);
+    return pVariable;
+}
+
 Variable* VariableFactory::createEnvironmentVariable() const
 {
     auto pVariable = new Variable("env",
@@ -65,18 +81,9 @@ Variable* VariableFactory::createGuidVariable() const
 
 Variable* VariableFactory::createLinefeedVariable() const
 {
-    auto pVariable = new Variable("lf",
-        [](const Variable::Context& ctx)
-        {
-            bool ok;
-            const auto countStr = ctx.argument.trimmed();
-            const auto count = countStr.toUInt(&ok);
-            return ok ? QString(count, '\n') : QString();
-        });
-    pVariable->setArgumentSpec("count");
-    pVariable->setDefaultArgument("1");
-    pVariable->setDescription(QObject::tr("get line feed character(s)"));
-    return pVariable;
+    return createCharRepeaterVariable(
+        "lf", '\n',
+        QObject::tr("get line feed character(s)"));
 }
 
 }
