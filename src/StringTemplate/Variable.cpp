@@ -78,9 +78,9 @@ QString Variable::name() const
     return m_name;
 }
 
-void Variable::expand(QString& str) const
+int Variable::expand(QString& str) const
 {
-    int count = 0;
+    int expansionCount = 0;
     // Look for variable occurences and replace them by values provided
     // by m_eval function.
     int index = m_pattern.indexIn(str, 0, QRegExp::CaretAtOffset);
@@ -105,14 +105,19 @@ void Variable::expand(QString& str) const
         }
 
         // Create variable context and call evaluation function.
-        const Context ctx(str, index, match, ++count, m_name, argument);
-        const auto value = m_eval ? m_eval(ctx) : QString();
+        QString value;
+        if (m_eval)
+        {
+            const Context ctx(str, index, match, expansionCount + 1, m_name, argument);
+            value = m_eval(ctx);
+        }
 
         if (!value.isNull())
         {
             // Replace matched part by non-null value returned by m_eval function.
             str.replace(index, match.length(), value);
             index += value.length();
+            ++expansionCount;
         }
         else
         {
@@ -124,6 +129,7 @@ void Variable::expand(QString& str) const
         // Look for next variable occurence.
         index = m_pattern.indexIn(str, index, QRegExp::CaretAtOffset);
     }
+    return expansionCount;
 }
 
 }

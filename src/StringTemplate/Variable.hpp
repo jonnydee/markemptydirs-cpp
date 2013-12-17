@@ -59,7 +59,7 @@ public:
 
     QString name() const;
 
-    void expand(QString& str) const;
+    int expand(QString& str) const;
 
 private:
     QString m_name;

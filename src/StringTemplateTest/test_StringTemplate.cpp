@@ -88,9 +88,10 @@ void StringTemplateTest::test_Variable_custom_expand()
 
     QString text("This is a§var: test case§ with a §var § and an §var :§ variable.");
     qDebug() << "ORIGINAL:" << text;
-    sut.expand(text);
-    qDebug() << "EXPANDED:" << text;
+    const auto expansionCount = sut.expand(text);
+    qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
 
+    QVERIFY(expansionCount == 3);
     QVERIFY2(text == "This is a test case with a null and an empty variable.", "Failure");
 }
 
@@ -100,9 +101,10 @@ void StringTemplateTest::test_Variable_datetime_expand()
 
     QString text("Now we have §datetime§, or shorter §datetime:yyyy-MM-dd§, or wrong §datetime:§.");
     qDebug() << "ORIGINAL:" << text;
-    pSut->expand(text);
-    qDebug() << "EXPANDED:" << text;
+    const auto expansionCount = pSut->expand(text);
+    qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
 
+    QVERIFY(expansionCount == 2);
     const QRegExp timeRegExp("Now we have " DATETIME_PATTERN ", or shorter " DATE_PATTERN ", or wrong §datetime:§.");
     QVERIFY2(timeRegExp.indexIn(text) == 0, "Failure");
 }
@@ -115,9 +117,10 @@ void StringTemplateTest::test_Variable_env_expand()
 
     QString text("This is a §env : STRINGTEMPLATE_VARIABLE_ENV § variable.");
     qDebug() << "ORIGINAL:" << text;
-    pSut->expand(text);
-    qDebug() << "EXPANDED:" << text;
+    const auto expansionCount = pSut->expand(text);
+    qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
 
+    QVERIFY(expansionCount == 1);
     QVERIFY2(text == "This is a environment variable.", "Failure");
 }
 
@@ -127,9 +130,10 @@ void StringTemplateTest::test_Variable_guid_expand()
 
     QString text("This is a §guid§ variable.");
     qDebug() << "ORIGINAL:" << text;
-    pSut->expand(text);
-    qDebug() << "EXPANDED:" << text;
+    const auto expansionCount = pSut->expand(text);
+    qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
 
+    QVERIFY(expansionCount == 1);
     const QRegExp guidRegExp("This is a " GUID_PATTERN " variable.");
     QVERIFY2(guidRegExp.indexIn(text) == 0, "Failure");
 }
@@ -140,9 +144,10 @@ void StringTemplateTest::test_Variable_lf_expand()
 
     QString text("Line 1§lf§Line 2§lf:2§Line 4§lf :  §.");
     qDebug() << "ORIGINAL:" << text;
-    pSut->expand(text);
-    qDebug() << "EXPANDED:" << text;
+    const auto expansionCount = pSut->expand(text);
+    qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
 
+    QVERIFY(expansionCount == 2);
     QVERIFY2(text == "Line 1\nLine 2\n\nLine 4§lf :  §.", "Failure");
 }
 
@@ -152,9 +157,10 @@ void StringTemplateTest::test_Variable_sp_expand()
 
     QString text("123§sp§56§sp:2§9§sp :  §.");
     qDebug() << "ORIGINAL:" << text;
-    pSut->expand(text);
-    qDebug() << "EXPANDED:" << text;
+    const auto expansionCount = pSut->expand(text);
+    qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
 
+    QVERIFY(expansionCount == 2);
     QVERIFY2(text == "123 56  9§sp :  §.", "Failure");
 }
 
