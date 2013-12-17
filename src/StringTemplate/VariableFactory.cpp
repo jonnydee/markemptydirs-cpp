@@ -63,4 +63,20 @@ Variable* VariableFactory::createGuidVariable() const
     return pVariable;
 }
 
+Variable* VariableFactory::createLinefeedVariable() const
+{
+    auto pVariable = new Variable("lf",
+        [](const Variable::Context& ctx)
+        {
+            bool ok;
+            const auto countStr = ctx.argument.trimmed();
+            const auto count = countStr.toUInt(&ok);
+            return ok ? QString(count, '\n') : QString();
+        });
+    pVariable->setArgumentSpec("count");
+    pVariable->setDefaultArgument("1");
+    pVariable->setDescription(QObject::tr("get line feed character(s)"));
+    return pVariable;
+}
+
 }

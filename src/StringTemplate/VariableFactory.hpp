@@ -40,6 +40,7 @@ public:
 
     Variable* createEnvironmentVariable() const;
     Variable* createGuidVariable() const;
+    Variable* createLinefeedVariable() const;
 };
 
 }

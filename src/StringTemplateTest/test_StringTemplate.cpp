@@ -50,6 +50,7 @@ private slots:
     void test_Variable_custom_expand();
     void test_Variable_env_expand();
     void test_Variable_guid_expand();
+    void test_Variable_lf_expand();
 };
 
 StringTemplateTest::StringTemplateTest()
@@ -112,6 +113,18 @@ void StringTemplateTest::test_Variable_guid_expand()
 
     const QRegExp guidRegExp("This is a " GUID_PATTERN " variable.");
     QVERIFY2(guidRegExp.indexIn(text) == 0, "Failure");
+}
+
+void StringTemplateTest::test_Variable_lf_expand()
+{
+    std::unique_ptr<const Variable> pSut(VariableFactory().createLinefeedVariable());
+
+    QString text("Line 1§lf§Line 2§lf:2§Line 4§lf :  §.");
+    qDebug() << "ORIGINAL:" << text;
+    pSut->expand(text);
+    qDebug() << "EXPANDED:" << text;
+
+    QVERIFY2(text == "Line 1\nLine 2\n\nLine 4§lf :  §.", "Failure");
 }
 
 QTEST_APPLESS_MAIN(StringTemplateTest)
