@@ -43,6 +43,36 @@ Variable::Variable(const QString& name, const EvalFn& eval)
 {
 }
 
+void Variable::setArgumentSpec(const QString& argumentSpec)
+{
+    m_argumentSpec = argumentSpec;
+}
+
+QString Variable::argumentSpec() const
+{
+    return m_argumentSpec;
+}
+
+void Variable::setDefaultArgument(const QString& defaultArgument)
+{
+    m_defaultArgument = defaultArgument;
+}
+
+QString Variable::defaultArgument() const
+{
+    return m_defaultArgument;
+}
+
+void Variable::setDescription(const QString& description)
+{
+    m_description = description;
+}
+
+QString Variable::description() const
+{
+    return m_description;
+}
+
 QString Variable::name() const
 {
     return m_name;
