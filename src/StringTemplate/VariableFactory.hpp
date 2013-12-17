@@ -41,6 +41,7 @@ public:
     Variable* createEnvironmentVariable() const;
     Variable* createGuidVariable() const;
     Variable* createLinefeedVariable() const;
+    Variable* createSpaceVariable() const;
 
 protected:
     Variable* createCharRepeaterVariable(const QString& name, QChar ch, const QString& description) const;

@@ -86,4 +86,11 @@ Variable* VariableFactory::createLinefeedVariable() const
         QObject::tr("get line feed character(s)"));
 }
 
+Variable* VariableFactory::createSpaceVariable() const
+{
+    return createCharRepeaterVariable(
+        "sp", ' ',
+        QObject::tr("get space character(s)"));
+}
+
 }

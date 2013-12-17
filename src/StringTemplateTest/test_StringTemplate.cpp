@@ -51,6 +51,7 @@ private slots:
     void test_Variable_env_expand();
     void test_Variable_guid_expand();
     void test_Variable_lf_expand();
+    void test_Variable_sp_expand();
 };
 
 StringTemplateTest::StringTemplateTest()
@@ -125,6 +126,18 @@ void StringTemplateTest::test_Variable_lf_expand()
     qDebug() << "EXPANDED:" << text;
 
     QVERIFY2(text == "Line 1\nLine 2\n\nLine 4§lf :  §.", "Failure");
+}
+
+void StringTemplateTest::test_Variable_sp_expand()
+{
+    std::unique_ptr<const Variable> pSut(VariableFactory().createSpaceVariable());
+
+    QString text("123§sp§56§sp:2§9§sp :  §.");
+    qDebug() << "ORIGINAL:" << text;
+    pSut->expand(text);
+    qDebug() << "EXPANDED:" << text;
+
+    QVERIFY2(text == "123 56  9§sp :  §.", "Failure");
 }
 
 QTEST_APPLESS_MAIN(StringTemplateTest)
