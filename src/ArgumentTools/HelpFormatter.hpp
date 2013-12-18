@@ -31,6 +31,9 @@
 #include "argumenttools_global.hpp"
 #include "Option.hpp"
 
+#include <QList>
+#include <QPair>
+
 
 namespace ArgumentTools
 {
@@ -40,18 +43,35 @@ class ARGUMENTTOOLSSHARED_EXPORT HelpFormatter
 public:
     HelpFormatter(int optionListIndent = 2, int maxLineLength = 80);
 
-    void addUsageSection(const QString& executableFileName, const QString& customUsage = QString());
+    void setExecutableFileName(const QString& fileName);
 
     void addOptionListSection(const QString& title, const OptionList& options);
+
+    void addTextSection(const QString& title, const QString& paragraph);
+    void addTextSection(const QString& title, const QStringList& paragraphs);
+
+    void addUsageSection(const QString& customUsage = QString());
 
     QString formatHelpText() const;
 
 protected:
-    typedef QPair<QString, OptionList> OptionListSection;
+    enum SectionType
+    {
+        SectionOptionList,
+        SectionUsage,
+        SectionText
+    };
 
-    QString formatUsageSection() const;
+    typedef QPair<SectionType, int> SectionItem;
+    typedef QPair<QString, OptionList> OptionListSection;
+    typedef QPair<int, QString> TextSectionParagraph;
+    typedef QPair<QString, QList<TextSectionParagraph>> TextSection;
+    typedef QString UsageSection;
+
     QString formatOptionListSection(const OptionListSection& section) const;
     QString formatOptions(const OptionList& options) const;
+    QString formatUsageSection(const UsageSection& section) const;
+    QString formatTextSection(const TextSection& section) const;
     QStringList formatShortOptionsColumn(const OptionList& options) const;
     QStringList formatLongOptionsColumn(const OptionList& options) const;
     QStringList formatDescriptionColumn(const OptionList& options) const;
@@ -60,15 +80,16 @@ protected:
     void indentLines(QStringList& strings, int count) const;
     QStringList joinColumns(const QList<QStringList>& columns, const QString& separator) const;
     void trimRight(QStringList& strings) const;
-    QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0) const;
+    QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0, int firstLineIdent = 0) const;
 
 private:
-    int m_optionListIndent;
-    int m_maxLineLength;
-
-    QList<OptionListSection> m_optionsListSections;
     QString m_executableFileName;
-    QString m_customUsage;
+    int m_maxLineLength;
+    int m_sectionIndent;
+    QList<OptionListSection> m_optionsListSections;
+    QList<SectionItem> m_sectionList;
+    QList<TextSection> m_textSections;
+    QList<UsageSection> m_usageSections;
 };
 
 }

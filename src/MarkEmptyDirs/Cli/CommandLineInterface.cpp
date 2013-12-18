@@ -282,7 +282,10 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
     {
         HelpFormatter formatter;
 
-        formatter.addUsageSection(config.executableFile().fileName(), "[COMMAND] [OPTION]... DIR...");
+        formatter.setExecutableFileName(config.executableFile().fileName());
+
+        formatter.addUsageSection("[COMMAND] [OPTION]... DIR...");
+
         formatter.addOptionListSection(
                     QObject::tr("Command options"),
                     commandOptions());
@@ -290,6 +293,9 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         formatter.addOptionListSection(
                     QObject::tr("Other options"),
                     otherOptions());
+
+        formatter.addTextSection("Template vairables", QStringList()
+                                 << "*** TODO ***");
 
         auto helpText = formatter.formatHelpText();
 

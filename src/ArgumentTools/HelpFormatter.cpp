@@ -35,53 +35,106 @@
 namespace ArgumentTools
 {
 
-HelpFormatter::HelpFormatter(int optionListIndent, int maxLineLength)
-    : m_optionListIndent(optionListIndent)
-    , m_maxLineLength(maxLineLength)
+HelpFormatter::HelpFormatter(int sectionIndent, int maxLineLength)
+    : m_maxLineLength(maxLineLength)
+    , m_sectionIndent(sectionIndent)
 {
-    if (m_maxLineLength - m_optionListIndent < WRAPPED_LINE_MIN_LENGTH)
+    if (m_maxLineLength - m_sectionIndent < WRAPPED_LINE_MIN_LENGTH)
     {
-        m_optionListIndent = 0;
+        m_sectionIndent = 0;
 
         if (m_maxLineLength < WRAPPED_LINE_MIN_LENGTH)
             m_maxLineLength = std::numeric_limits<int>::max();
     }
 }
 
-void HelpFormatter::addUsageSection(const QString& executableFileName, const QString& customUsage)
+void HelpFormatter::setExecutableFileName(const QString& executableFileName)
 {
     m_executableFileName = executableFileName;
-    m_customUsage = customUsage;
 }
 
 void HelpFormatter::addOptionListSection(const QString& title, const OptionList& options)
 {
     m_optionsListSections << OptionListSection(title, options);
+    m_sectionList << SectionItem(SectionOptionList, m_optionsListSections.size() - 1);
+}
+
+void HelpFormatter::addTextSection(const QString& title, const QString& paragraph)
+{
+    addTextSection(title, QStringList() << paragraph);
+}
+
+void HelpFormatter::addTextSection(const QString& title, const QStringList& paragraphs)
+{
+    QList<TextSectionParagraph> paras;
+    foreach (const auto& pararaph, paragraphs)
+        for (int i = 0; i < pararaph.length(); i++)
+            if (' ' != pararaph[i])
+            {
+                paras << TextSectionParagraph(i, pararaph.mid(i));
+                break;
+            }
+
+    m_textSections << TextSection(title, paras);
+    m_sectionList << SectionItem(SectionText, m_textSections.size() - 1);
+}
+
+void HelpFormatter::addUsageSection(const QString& customUsage)
+{
+    m_usageSections << UsageSection(customUsage);
+    m_sectionList << SectionItem(SectionUsage, m_usageSections.size() - 1);
 }
 
 QString HelpFormatter::formatHelpText() const
 {
     QStringList sections;
-    sections << formatUsageSection();
-    foreach (auto section, m_optionsListSections)
-        sections << formatOptionListSection(section);
+    foreach (const auto& item, m_sectionList)
+    {
+        const auto& type = item.first;
+        const auto& index = item.second;
+        switch (type)
+        {
+        case SectionOptionList:
+            sections << formatOptionListSection(m_optionsListSections[index]);
+            break;
+        case SectionUsage:
+            sections << formatUsageSection(m_usageSections[index]);
+            break;
+        case SectionText:
+            sections << formatTextSection(m_textSections[index]);
+            break;
+        default:
+            break;
+        }
+    }
     return sections.join("\n\n");
 }
 
-QString HelpFormatter::formatUsageSection() const
+QString HelpFormatter::formatUsageSection(const UsageSection& section) const
 {
-    auto usageArgs = m_customUsage.isNull()
+    auto usageArgs = section.isNull()
             ? "*** TODO ***" //formatGenericUsageArgs()
-            : m_customUsage;
+            : section;
 
     return QString("%1: %2 %3").arg(QObject::tr("USAGE")).arg(m_executableFileName).arg(usageArgs);
 }
 
 QString HelpFormatter::formatOptionListSection(const OptionListSection& section) const
 {
-    return QString("%1:\n%2")
-            .arg(section.first)
-            .arg(formatOptions(section.second));
+    const auto& title = section.first;
+    const auto& options = section.second;
+
+    QStringList wrappedTextLines;
+
+    if (!title.isEmpty())
+    {
+        wrappedTextLines << wrapLine(title + ":", m_maxLineLength);
+        wrappedTextLines << QString();
+    }
+
+    wrappedTextLines << formatOptions(options);
+
+    return wrappedTextLines.join('\n');
 }
 
 QString HelpFormatter::formatOptions(const OptionList& options) const
@@ -102,7 +155,32 @@ QString HelpFormatter::formatOptions(const OptionList& options) const
     foreach (const auto textLine, textLines)
         wrappedTextLines << wrapLine(textLine, m_maxLineLength, indent);
 
-    indentLines(wrappedTextLines, m_optionListIndent);
+    indentLines(wrappedTextLines, m_sectionIndent);
+    return wrappedTextLines.join('\n');
+}
+
+QString HelpFormatter::formatTextSection(const TextSection& section) const
+{
+    const auto& title = section.first;
+    const auto& paragraphs = section.second;
+
+    QStringList wrappedTextLines;
+
+    if (!title.isEmpty())
+    {
+        wrappedTextLines << wrapLine(title + ":", m_maxLineLength);
+        wrappedTextLines << QString();
+    }
+
+    foreach (const auto& paragraph, paragraphs)
+    {
+        const auto& indent = paragraph.first;
+        const auto& text = paragraph.second;
+
+        foreach (const auto line, text.split('\n'))
+            wrappedTextLines << wrapLine(line, m_maxLineLength, m_sectionIndent + indent, m_sectionIndent + indent);
+    }
+
     return wrappedTextLines.join('\n');
 }
 
@@ -222,11 +300,11 @@ void HelpFormatter::trimRight(QStringList& strings) const
         strTrimRight(strings[i]);
 }
 
-QStringList HelpFormatter::wrapLine(const QString& line, int maxLength, int newLineIndent) const
+QStringList HelpFormatter::wrapLine(const QString& line, int maxLength, int newLineIndent, int firstLineIdent) const
 {
     QStringList wrappedLines;
 
-    auto currentLine = line;
+    auto currentLine = QString(firstLineIdent, ' ') + line;
     while (currentLine.length() > maxLength)
     {
         int i = maxLength;
