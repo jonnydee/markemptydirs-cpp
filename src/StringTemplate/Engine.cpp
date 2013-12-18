@@ -25,6 +25,7 @@
 // or implied, of Johann Duscher.
 
 #include "Engine.hpp"
+#include "Variable.hpp"
 
 
 namespace StringTemplate
@@ -32,6 +33,29 @@ namespace StringTemplate
 
 Engine::Engine()
 {
+}
+
+void Engine::addVariable(const Variable& variable)
+{
+    m_variables << &variable;
+}
+
+int Engine::process(QString& str) const
+{
+    int expansionCount = 0;
+
+    foreach (const auto pVariable, variables())
+    {
+        Q_ASSERT(pVariable);
+        expansionCount += pVariable->expand(str);
+    }
+
+    return expansionCount;
+}
+
+const VariableList& Engine::variables() const
+{
+    return m_variables;
 }
 
 }

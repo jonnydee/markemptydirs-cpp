@@ -30,16 +30,28 @@
 
 #include "stringtemplate_global.hpp"
 
+#include <QList>
 #include <QString>
 
 
 namespace StringTemplate
 {
 
+class Variable;
+typedef QList<const Variable*> VariableList;
+
 class STRINGTEMPLATESHARED_EXPORT Engine
 {
 public:
     Engine();
+
+    void addVariable(const Variable& variable);
+    const VariableList& variables() const;
+
+    int process(QString& str) const;
+
+private:
+    VariableList m_variables;
 };
 
 }

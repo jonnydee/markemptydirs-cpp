@@ -28,6 +28,7 @@
 #include <QString>
 #include <QtTest>
 
+#include <StringTemplate/Engine.hpp>
 #include <StringTemplate/Variable.hpp>
 #include <StringTemplate/VariableFactory.hpp>
 
@@ -57,6 +58,8 @@ private slots:
     void test_Variable_guid_expand();
     void test_Variable_lf_expand();
     void test_Variable_sp_expand();
+
+    void test_Engine_process();
 };
 
 StringTemplateTest::StringTemplateTest()
@@ -162,6 +165,34 @@ void StringTemplateTest::test_Variable_sp_expand()
 
     QVERIFY(expansionCount == 2);
     QVERIFY(text == "123 56  9§sp :  §.");
+}
+
+void StringTemplateTest::test_Engine_process()
+{
+    VariableFactory factory;
+    std::unique_ptr<Variable> pDateTimeVariable(factory.createDateTimeVariable());
+    std::unique_ptr<Variable> pEnvVariable(factory.createEnvironmentVariable());
+    std::unique_ptr<Variable> pGuidVariable(factory.createGuidVariable());
+    std::unique_ptr<Variable> pLfVariable(factory.createLinefeedVariable());
+    std::unique_ptr<Variable> pSpVariable(factory.createSpaceVariable());
+
+    qputenv("STRINGTEMPLATE_AUTHOR", "Jonny Dee");
+
+    Engine sut;
+    sut.addVariable(*pDateTimeVariable);
+    sut.addVariable(*pEnvVariable);
+    sut.addVariable(*pGuidVariable);
+    sut.addVariable(*pLfVariable);
+    sut.addVariable(*pSpVariable);
+
+    QString text("Id: §guid§§lf:2§§sp:4§Created on: §datetime:yyyy-MM-dd§§lf§§sp:4§Created by: §env:STRINGTEMPLATE_AUTHOR§§lf:2§§sp:4§File: .emptydir");
+    qDebug() << "ORIGINAL:" << text;
+    const auto expansionCount = sut.process(text);
+    qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
+
+    QVERIFY(expansionCount == 9);
+    const QRegExp guidRegExp("Id: " GUID_PATTERN "\n\n    Created on: " DATE_PATTERN "\n    Created by: Jonny Dee\n\n    File: .emptydir");
+    QVERIFY(guidRegExp.indexIn(text) == 0);
 }
 
 QTEST_APPLESS_MAIN(StringTemplateTest)
