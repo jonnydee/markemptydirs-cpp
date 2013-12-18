@@ -24,38 +24,38 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Engine.hpp"
-#include "Variable.hpp"
+#pragma once
+#ifndef STRINGMAGIC_TEMPLATE_VARIABLEFACTORY_HPP
+#define STRINGMAGIC_TEMPLATE_VARIABLEFACTORY_HPP
+
+#include "../stringmagic_global.hpp"
 
 
-namespace StringTemplate
+namespace StringMagic
 {
 
-Engine::Engine()
+namespace Template
 {
-}
 
-void Engine::addVariable(const Variable& variable)
+class Variable;
+
+class STRINGMAGICSHARED_EXPORT VariableFactory
 {
-    m_variables << &variable;
-}
+public:
+    VariableFactory();
 
-int Engine::process(QString& str) const
-{
-    int expansionCount = 0;
+    Variable* createDateTimeVariable() const;
+    Variable* createEnvironmentVariable() const;
+    Variable* createGuidVariable() const;
+    Variable* createLinefeedVariable() const;
+    Variable* createSpaceVariable() const;
 
-    foreach (const auto pVariable, variables())
-    {
-        Q_ASSERT(pVariable);
-        expansionCount += pVariable->expand(str);
-    }
+protected:
+    Variable* createCharRepeaterVariable(const QString& name, QChar ch, const QString& description) const;
+};
 
-    return expansionCount;
-}
-
-const VariableList& Engine::variables() const
-{
-    return m_variables;
 }
 
 }
+
+#endif // STRINGMAGIC_TEMPLATE_VARIABLEFACTORY_HPP

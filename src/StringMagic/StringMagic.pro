@@ -6,7 +6,7 @@
 
 QT       -= gui
 
-TARGET = StringTemplate
+TARGET = StringMagic
 VERSION = 0.1.0
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 
@@ -22,21 +22,21 @@ CONFIG(debug, debug|release) {
      TARGET = $$join(TARGET,,,_debug)
 }
 
-DEFINES += STRINGTEMPLATE_LIBRARY
+DEFINES += STRINGMAGIC_LIBRARY
 
 SOURCES += \
-    stringtemplate_global.hpp \
-    Engine.cpp \
-    Variable.cpp \
-    VariableFactory.cpp
+    Template/Engine.cpp \
+    Template/Variable.cpp \
+    Template/VariableFactory.cpp
 
 HEADERS += \
-    Engine.hpp \
-    Variable.hpp \
-    VariableFactory.hpp
+    stringmagic_global.hpp \
+    Template/Engine.hpp \
+    Template/Variable.hpp \
+    Template/VariableFactory.hpp
 
 INCLUDEPATH += \
-    ../..
+    $$_PRO_FILE_PWD_/../../src
 
 unix:!symbian {
     maemo5 {

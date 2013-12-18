@@ -33,7 +33,10 @@
 #define PATTERN     QString("§%1\\s*(?:(\\:)([^§]*))?§")
 
 
-namespace StringTemplate
+namespace StringMagic
+{
+
+namespace Template
 {
 
 Variable::Variable(const QString& name, const EvalFn& eval)
@@ -130,6 +133,8 @@ int Variable::expand(QString& str) const
         index = m_pattern.indexIn(str, index, QRegExp::CaretAtOffset);
     }
     return expansionCount;
+}
+
 }
 
 }

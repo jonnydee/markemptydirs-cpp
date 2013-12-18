@@ -64,11 +64,11 @@ QMAKE_LIBDIR += \
 
 CONFIG(debug, debug|release) {
     LIBS += \
-        -lStringTemplate_debug
+        -lStringMagic_debug
 }
 CONFIG(release, debug|release) {
     LIBS += \
-        -lStringTemplate
+        -lStringMagic
 }
 
 unix:!symbian {

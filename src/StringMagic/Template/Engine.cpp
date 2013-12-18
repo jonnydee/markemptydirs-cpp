@@ -24,36 +24,43 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#pragma once
-#ifndef STRINGTEMPLATE_ENGINE_HPP
-#define STRINGTEMPLATE_ENGINE_HPP
-
-#include "stringtemplate_global.hpp"
-
-#include <QList>
-#include <QString>
+#include "Engine.hpp"
+#include "Variable.hpp"
 
 
-namespace StringTemplate
+namespace StringMagic
 {
 
-class Variable;
-typedef QList<const Variable*> VariableList;
-
-class STRINGTEMPLATESHARED_EXPORT Engine
+namespace Template
 {
-public:
-    Engine();
 
-    void addVariable(const Variable& variable);
-    const VariableList& variables() const;
+Engine::Engine()
+{
+}
 
-    int process(QString& str) const;
+void Engine::addVariable(const Variable& variable)
+{
+    m_variables << &variable;
+}
 
-private:
-    VariableList m_variables;
-};
+int Engine::process(QString& str) const
+{
+    int expansionCount = 0;
+
+    foreach (const auto pVariable, variables())
+    {
+        Q_ASSERT(pVariable);
+        expansionCount += pVariable->expand(str);
+    }
+
+    return expansionCount;
+}
+
+const VariableList& Engine::variables() const
+{
+    return m_variables;
+}
 
 }
 
-#endif // STRINGTEMPLATE_ENGINE_HPP
+}

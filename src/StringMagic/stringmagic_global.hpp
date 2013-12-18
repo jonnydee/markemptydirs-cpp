@@ -25,74 +25,15 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef STRINGTEMPLATE_VARIABLE_HPP
-#define STRINGTEMPLATE_VARIABLE_HPP
+#ifndef STRINGMAGIC_GLOBAL_HPP
+#define STRINGMAGIC_GLOBAL_HPP
 
-#include "stringtemplate_global.hpp"
+#include <QtCore/qglobal.h>
 
-#include <QRegExp>
-#include <QString>
+#if defined(STRINGMAGIC_LIBRARY)
+#  define STRINGMAGICSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define STRINGMAGICSHARED_EXPORT Q_DECL_IMPORT
+#endif
 
-#include <functional>
-
-
-namespace StringTemplate
-{
-
-class STRINGTEMPLATESHARED_EXPORT Variable
-{
-public:
-    struct Context;
-
-    typedef std::function<QString(const Context&)> EvalFn;
-
-    Variable(const QString& name, const EvalFn& eval);
-
-    void setArgumentSpec(const QString& argumentSpec);
-    QString argumentSpec() const;
-
-    void setDefaultArgument(const QString& defaultArgument);
-    QString defaultArgument() const;
-
-    void setDescription(const QString& description);
-    QString description() const;
-
-    QString name() const;
-
-    int expand(QString& str) const;
-
-private:
-    QString m_name;
-    QRegExp m_pattern;
-    EvalFn m_eval;
-    QString m_argumentSpec;
-    QString m_defaultArgument;
-    QString m_description;
-};
-
-struct STRINGTEMPLATESHARED_EXPORT Variable::Context
-{
-    Context(const QString& text_,
-            int index_, const QString& match_,
-            int count_,
-            const QString& name_, const QString& argument_)
-        : text(text_)
-        , index(index_)
-        , match(match_)
-        , count(count_)
-        , name(name_)
-        , argument(argument_)
-    {}
-
-    const QString& text;
-    int index;
-    const QString& match;
-    int length;
-    int count;
-    const QString& name;
-    const QString& argument;
-};
-
-}
-
-#endif // STRINGTEMPLATE_VARIABLE_HPP
+#endif // STRINGMAGIC_GLOBAL_HPP

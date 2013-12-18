@@ -25,29 +25,40 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef STRINGTEMPLATE_VARIABLEFACTORY_HPP
-#define STRINGTEMPLATE_VARIABLEFACTORY_HPP
+#ifndef STRINGMAGIC_TEMPLATE_ENGINE_HPP
+#define STRINGMAGIC_TEMPLATE_ENGINE_HPP
 
-namespace StringTemplate
+#include "../stringmagic_global.hpp"
+
+#include <QList>
+#include <QString>
+
+
+namespace StringMagic
+{
+
+namespace Template
 {
 
 class Variable;
+typedef QList<const Variable*> VariableList;
 
-class VariableFactory
+class STRINGMAGICSHARED_EXPORT Engine
 {
 public:
-    VariableFactory();
+    Engine();
 
-    Variable* createDateTimeVariable() const;
-    Variable* createEnvironmentVariable() const;
-    Variable* createGuidVariable() const;
-    Variable* createLinefeedVariable() const;
-    Variable* createSpaceVariable() const;
+    void addVariable(const Variable& variable);
+    const VariableList& variables() const;
 
-protected:
-    Variable* createCharRepeaterVariable(const QString& name, QChar ch, const QString& description) const;
+    int process(QString& str) const;
+
+private:
+    VariableList m_variables;
 };
 
 }
 
-#endif // STRINGTEMPLATE_VARIABLEFACTORY_HPP
+}
+
+#endif // STRINGMAGIC_TEMPLATE_ENGINE_HPP

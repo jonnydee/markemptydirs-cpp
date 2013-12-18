@@ -32,7 +32,10 @@
 #include <QUuid>
 
 
-namespace StringTemplate
+namespace StringMagic
+{
+
+namespace Template
 {
 
 VariableFactory::VariableFactory()
@@ -106,6 +109,8 @@ Variable* VariableFactory::createSpaceVariable() const
     return createCharRepeaterVariable(
         "sp", ' ',
         QObject::tr("get space character(s)"));
+}
+
 }
 
 }

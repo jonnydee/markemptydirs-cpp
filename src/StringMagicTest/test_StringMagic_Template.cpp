@@ -28,9 +28,9 @@
 #include <QString>
 #include <QtTest>
 
-#include <StringTemplate/Engine.hpp>
-#include <StringTemplate/Variable.hpp>
-#include <StringTemplate/VariableFactory.hpp>
+#include <StringMagic/Template/Engine.hpp>
+#include <StringMagic/Template/Variable.hpp>
+#include <StringMagic/Template/VariableFactory.hpp>
 
 #define GUID_PATTERN        "\\{[a-fA-F\\d]{8}-[a-fA-F\\d]{4}-[a-fA-F\\d]{4}-[a-fA-F\\d]{4}-[a-fA-F\\d]{12}\\}"
 
@@ -39,14 +39,14 @@
 #define DATETIME_PATTERN    DATE_PATTERN "T" TIME_PATTERN "Z"
 
 
-using namespace StringTemplate;
+using namespace StringMagic::Template;
 
-class StringTemplateTest : public QObject
+class StringMagic_Template_Test : public QObject
 {
     Q_OBJECT
 
 public:
-    StringTemplateTest();
+    StringMagic_Template_Test();
 
 private slots:
     void initTestCase();
@@ -62,19 +62,19 @@ private slots:
     void test_Engine_process();
 };
 
-StringTemplateTest::StringTemplateTest()
+StringMagic_Template_Test::StringMagic_Template_Test()
 {
 }
 
-void StringTemplateTest::initTestCase()
+void StringMagic_Template_Test::initTestCase()
 {
 }
 
-void StringTemplateTest::cleanupTestCase()
+void StringMagic_Template_Test::cleanupTestCase()
 {
 }
 
-void StringTemplateTest::test_Variable_custom_expand()
+void StringMagic_Template_Test::test_Variable_custom_expand()
 {
     const Variable sut("var",
         [](const Variable::Context& ctx) -> QString
@@ -98,7 +98,7 @@ void StringTemplateTest::test_Variable_custom_expand()
     QVERIFY(text == "This is a test case with a null and an empty variable.");
 }
 
-void StringTemplateTest::test_Variable_datetime_expand()
+void StringMagic_Template_Test::test_Variable_datetime_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createDateTimeVariable());
 
@@ -112,7 +112,7 @@ void StringTemplateTest::test_Variable_datetime_expand()
     QVERIFY(timeRegExp.indexIn(text) == 0);
 }
 
-void StringTemplateTest::test_Variable_env_expand()
+void StringMagic_Template_Test::test_Variable_env_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createEnvironmentVariable());
 
@@ -127,7 +127,7 @@ void StringTemplateTest::test_Variable_env_expand()
     QVERIFY(text == "This is a environment variable.");
 }
 
-void StringTemplateTest::test_Variable_guid_expand()
+void StringMagic_Template_Test::test_Variable_guid_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createGuidVariable());
 
@@ -141,7 +141,7 @@ void StringTemplateTest::test_Variable_guid_expand()
     QVERIFY(guidRegExp.indexIn(text) == 0);
 }
 
-void StringTemplateTest::test_Variable_lf_expand()
+void StringMagic_Template_Test::test_Variable_lf_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createLinefeedVariable());
 
@@ -154,7 +154,7 @@ void StringTemplateTest::test_Variable_lf_expand()
     QVERIFY(text == "Line 1\nLine 2\n\nLine 4§lf :  §.");
 }
 
-void StringTemplateTest::test_Variable_sp_expand()
+void StringMagic_Template_Test::test_Variable_sp_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createSpaceVariable());
 
@@ -167,7 +167,7 @@ void StringTemplateTest::test_Variable_sp_expand()
     QVERIFY(text == "123 56  9§sp :  §.");
 }
 
-void StringTemplateTest::test_Engine_process()
+void StringMagic_Template_Test::test_Engine_process()
 {
     VariableFactory factory;
     std::unique_ptr<Variable> pDateTimeVariable(factory.createDateTimeVariable());
@@ -195,6 +195,6 @@ void StringTemplateTest::test_Engine_process()
     QVERIFY(guidRegExp.indexIn(text) == 0);
 }
 
-QTEST_APPLESS_MAIN(StringTemplateTest)
+QTEST_APPLESS_MAIN(StringMagic_Template_Test)
 
-#include "test_StringTemplate.moc"
+#include "test_StringMagic_Template.moc"
