@@ -294,7 +294,7 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
                     QObject::tr("Other options"),
                     otherOptions());
 
-        formatter.addTextSection("Template vairables", QStringList()
+        formatter.addTextSection(QObject::tr("Template variables"), QStringList()
                                  << "*** TODO ***");
 
         auto helpText = formatter.formatHelpText();
