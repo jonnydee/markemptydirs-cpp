@@ -25,7 +25,8 @@ CONFIG(debug, debug|release) {
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 HEADERS += \
-    test_StringMagic_Template.hpp
+    test_StringMagic_Template.hpp \
+    test_StringMagic_TextFormatter.hpp
 
 SOURCES += \
     main.cpp

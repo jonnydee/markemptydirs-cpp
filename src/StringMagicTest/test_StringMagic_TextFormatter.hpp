@@ -24,19 +24,57 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "test_StringMagic_Template.hpp"
-#include "test_StringMagic_TextFormatter.hpp"
+#include <QDebug>
+#include <QRegExp>
+#include <QString>
+#include <QtTest>
+
+#include <StringMagic/TextFormatter.hpp>
 
 
-int main(int argc, char *argv[])
+using namespace StringMagic;
+
+class StringMagic_TextFormatter_Test : public QObject
 {
-    {
-        StringMagic_Template_Test tc;
-        QTest::qExec(&tc, argc, argv);
-    }
+    Q_OBJECT
 
-    {
-        StringMagic_TextFormatter_Test tc;
-        QTest::qExec(&tc, argc, argv);
-    }
+public:
+    StringMagic_TextFormatter_Test();
+
+private slots:
+    void initTestCase();
+    void cleanupTestCase();
+
+    void test_format_1();
+};
+
+inline StringMagic_TextFormatter_Test::StringMagic_TextFormatter_Test()
+{
+}
+
+inline void StringMagic_TextFormatter_Test::initTestCase()
+{
+}
+
+inline void StringMagic_TextFormatter_Test::cleanupTestCase()
+{
+}
+
+inline void StringMagic_TextFormatter_Test::test_format_1()
+{
+    TextFormatter sut;
+    sut.setFirstLineLeftIndent(2);
+    sut.setFirstLineRightIndent(5);
+    sut.setParagraphLeftIndent(4);
+    sut.setParagraphRightIndent(10);
+    sut.setMaxLineLength(30);
+
+    QString text("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                 "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                 "sdfl skgjskjfghkd f djkfshgkdfskg kdfh kdf kdjfgh dk jfsdkfgh dkjfgh kdjfhgksjdh "
+                 "kdsjfghk jhdfgjsdhfkgj hsdkfjgh ksjdhgksdjhg kjdhsgkj ksjd dkfgd,fmgldkfmgl kdmfg"
+                 " dlfkgl kdfjlgk jdflgkjdl kfgdslkfg sdfgsdlökjfgl sdlkfgjl sdkfjgl sdkfgjldskfgj "
+                 "lfkgjdl kjdflgkdjlgk jdlkfgjld jlfgj fwe.");
+
+    qDebug() << QString("RESULT:\n%1").arg(sut.format(text));
 }
