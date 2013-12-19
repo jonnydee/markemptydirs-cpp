@@ -27,13 +27,14 @@ DEFINES += STRINGMAGIC_LIBRARY
 SOURCES += \
     Template/Engine.cpp \
     Template/Variable.cpp \
-    Template/VariableFactory.cpp
+    Template/VariableFactory.cpp \
+    Tools.cpp
 
-HEADERS += \
-    stringmagic_global.hpp \
+HEADERS += stringmagic_global.hpp \
     Template/Engine.hpp \
     Template/Variable.hpp \
-    Template/VariableFactory.hpp
+    Template/VariableFactory.hpp \
+    Tools.hpp
 
 INCLUDEPATH += \
     $$_PRO_FILE_PWD_/../../src
