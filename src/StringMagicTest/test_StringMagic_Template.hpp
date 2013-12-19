@@ -62,19 +62,19 @@ private slots:
     void test_Engine_process();
 };
 
-StringMagic_Template_Test::StringMagic_Template_Test()
+inline StringMagic_Template_Test::StringMagic_Template_Test()
 {
 }
 
-void StringMagic_Template_Test::initTestCase()
+inline void StringMagic_Template_Test::initTestCase()
 {
 }
 
-void StringMagic_Template_Test::cleanupTestCase()
+inline void StringMagic_Template_Test::cleanupTestCase()
 {
 }
 
-void StringMagic_Template_Test::test_Variable_custom_expand()
+inline void StringMagic_Template_Test::test_Variable_custom_expand()
 {
     const Variable sut("var",
         [](const Variable::Context& ctx) -> QString
@@ -98,7 +98,7 @@ void StringMagic_Template_Test::test_Variable_custom_expand()
     QVERIFY(text == "This is a test case with a null and an empty variable.");
 }
 
-void StringMagic_Template_Test::test_Variable_datetime_expand()
+inline void StringMagic_Template_Test::test_Variable_datetime_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createDateTimeVariable());
 
@@ -112,7 +112,7 @@ void StringMagic_Template_Test::test_Variable_datetime_expand()
     QVERIFY(timeRegExp.indexIn(text) == 0);
 }
 
-void StringMagic_Template_Test::test_Variable_env_expand()
+inline void StringMagic_Template_Test::test_Variable_env_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createEnvironmentVariable());
 
@@ -127,7 +127,7 @@ void StringMagic_Template_Test::test_Variable_env_expand()
     QVERIFY(text == "This is a environment variable.");
 }
 
-void StringMagic_Template_Test::test_Variable_guid_expand()
+inline void StringMagic_Template_Test::test_Variable_guid_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createGuidVariable());
 
@@ -141,7 +141,7 @@ void StringMagic_Template_Test::test_Variable_guid_expand()
     QVERIFY(guidRegExp.indexIn(text) == 0);
 }
 
-void StringMagic_Template_Test::test_Variable_lf_expand()
+inline void StringMagic_Template_Test::test_Variable_lf_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createLinefeedVariable());
 
@@ -154,7 +154,7 @@ void StringMagic_Template_Test::test_Variable_lf_expand()
     QVERIFY(text == "Line 1\nLine 2\n\nLine 4§lf :  §.");
 }
 
-void StringMagic_Template_Test::test_Variable_sp_expand()
+inline void StringMagic_Template_Test::test_Variable_sp_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createSpaceVariable());
 
@@ -167,7 +167,7 @@ void StringMagic_Template_Test::test_Variable_sp_expand()
     QVERIFY(text == "123 56  9§sp :  §.");
 }
 
-void StringMagic_Template_Test::test_Engine_process()
+inline void StringMagic_Template_Test::test_Engine_process()
 {
     VariableFactory factory;
     std::unique_ptr<Variable> pDateTimeVariable(factory.createDateTimeVariable());
@@ -194,7 +194,3 @@ void StringMagic_Template_Test::test_Engine_process()
     const QRegExp guidRegExp("Id: " GUID_PATTERN "\n\n    Created on: " DATE_PATTERN "\n    Created by: Jonny Dee\n\n    File: .emptydir");
     QVERIFY(guidRegExp.indexIn(text) == 0);
 }
-
-QTEST_APPLESS_MAIN(StringMagic_Template_Test)
-
-#include "test_StringMagic_Template.moc"
