@@ -28,12 +28,14 @@ SOURCES += \
     Template/Engine.cpp \
     Template/Variable.cpp \
     Template/VariableFactory.cpp \
+    TextFormatter.cpp \
     Tools.cpp
 
 HEADERS += stringmagic_global.hpp \
     Template/Engine.hpp \
     Template/Variable.hpp \
     Template/VariableFactory.hpp \
+    TextFormatter.hpp \
     Tools.hpp
 
 INCLUDEPATH += \
