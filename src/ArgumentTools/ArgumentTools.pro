@@ -38,7 +38,19 @@ HEADERS += \
     Option.hpp
 
 INCLUDEPATH += \
-    ../..
+    ..
+
+QMAKE_LIBDIR += \
+    $$_PRO_FILE_PWD_/../../bin
+
+CONFIG(debug, debug|release) {
+    LIBS += \
+        -lStringMagic_debug
+}
+CONFIG(release, debug|release) {
+    LIBS += \
+        -lStringMagic
+}
 
 unix:!symbian {
     maemo5 {

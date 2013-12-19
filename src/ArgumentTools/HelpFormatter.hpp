@@ -76,10 +76,6 @@ protected:
     QStringList formatLongOptionsColumn(const OptionList& options) const;
     QStringList formatDescriptionColumn(const OptionList& options) const;
 
-    int adjustToMaxLen(QStringList& strings) const;
-    void indentLines(QStringList& strings, int count) const;
-    QStringList joinColumns(const QList<QStringList>& columns, const QString& separator) const;
-    void trimRight(QStringList& strings) const;
     QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0, int firstLineIdent = 0) const;
 
 private:

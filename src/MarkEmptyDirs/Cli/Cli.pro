@@ -38,12 +38,14 @@ QMAKE_LIBDIR += \
 CONFIG(debug, debug|release) {
     LIBS += \
         -lMarkEmptyDirsApi_debug \
-        -lArgumentTools_debug
+        -lArgumentTools_debug \
+        -lStringMagic_debug
 }
 CONFIG(release, debug|release) {
     LIBS += \
         -lMarkEmptyDirsApi \
-        -lArgumentTools
+        -lArgumentTools \
+        -lStringMagic
 }
 
 HEADERS += \

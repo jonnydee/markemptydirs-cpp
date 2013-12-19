@@ -27,6 +27,9 @@
 #include "HelpFormatter.hpp"
 #include "Option.hpp"
 
+#include <StringMagic/Tools.hpp>
+
+
 #define WRAPPED_LINE_MIN_LENGTH             40
 #define OPTION_COLUMN_PADDING_SIZE          1
 #define DESCRIPTION_COLUMN_PADDING_SIZE     2
@@ -140,22 +143,22 @@ QString HelpFormatter::formatOptionListSection(const OptionListSection& section)
 QString HelpFormatter::formatOptions(const OptionList& options) const
 {
     auto shortNamesColumn = formatShortOptionsColumn(options);
-    const int shortNamesColumnWidth = adjustToMaxLen(shortNamesColumn);
+    const int shortNamesColumnWidth = StringMagic::adjustToMaxLen(shortNamesColumn);
 
     auto longNamesColumn = formatLongOptionsColumn(options);
-    const int longNamesColumnWidth = adjustToMaxLen(longNamesColumn);
+    const int longNamesColumnWidth = StringMagic::adjustToMaxLen(longNamesColumn);
 
     const auto descriptionsColumn = formatDescriptionColumn(options);
 
-    auto textLines = joinColumns(QList<QStringList>() << shortNamesColumn << longNamesColumn, QString(OPTION_COLUMN_PADDING_SIZE, ' '));
-    textLines = joinColumns(QList<QStringList>() << textLines << descriptionsColumn, QString(DESCRIPTION_COLUMN_PADDING_SIZE, ' '));
+    auto textLines = StringMagic::join(QList<QStringList>() << shortNamesColumn << longNamesColumn, QString(OPTION_COLUMN_PADDING_SIZE, ' '));
+    textLines = StringMagic::join(QList<QStringList>() << textLines << descriptionsColumn, QString(DESCRIPTION_COLUMN_PADDING_SIZE, ' '));
     const int indent = shortNamesColumnWidth + OPTION_COLUMN_PADDING_SIZE + longNamesColumnWidth + DESCRIPTION_COLUMN_PADDING_SIZE;
 
     QStringList wrappedTextLines;
     foreach (const auto textLine, textLines)
         wrappedTextLines << wrapLine(textLine, m_maxLineLength, indent);
 
-    indentLines(wrappedTextLines, m_sectionIndent);
+    StringMagic::indent(wrappedTextLines, m_sectionIndent);
     return wrappedTextLines.join('\n');
 }
 
@@ -245,61 +248,6 @@ QStringList HelpFormatter::formatDescriptionColumn(const OptionList& options) co
     return descriptionColumn;
 }
 
-int HelpFormatter::adjustToMaxLen(QStringList& strings) const
-{
-    int maxLen = 0;
-    foreach (const auto& str, strings)
-        maxLen = qMax(maxLen, str.length());
-    for (int i = 0; i < strings.size(); i++)
-        strings[i] += QString(maxLen - strings[i].length(), ' ');
-    return maxLen;
-}
-
-void HelpFormatter::indentLines(QStringList& strings, int count) const
-{
-    const QString left(count , ' ');
-    for (int i = 0; i < strings.size(); i++)
-        strings[i] = left + strings[i];
-}
-
-QStringList HelpFormatter::joinColumns(const QList<QStringList>& columns, const QString& separator) const
-{
-    if (columns.isEmpty())
-        return QStringList();
-
-    QStringList joined;
-
-    const int numRows = columns.first().size();
-    for (int i = 0; i < numRows; i++)
-    {
-        QStringList row;
-        foreach (const auto& column, columns)
-        {
-            Q_ASSERT(numRows == column.size());
-            row << column[i];
-        }
-        joined << row.join(separator);
-    }
-
-    return joined;
-}
-
-static void strTrimRight(QString& str)
-{
-    for (int i = str.size() - 1; i >= 0; --i)
-        if (!str[i].isSpace())
-        {
-            str.truncate(i + 1);
-            break;
-        }
-}
-
-void HelpFormatter::trimRight(QStringList& strings) const
-{
-    for (int i = 0; i < strings.size(); i++)
-        strTrimRight(strings[i]);
-}
-
 QStringList HelpFormatter::wrapLine(const QString& line, int maxLength, int newLineIndent, int firstLineIdent) const
 {
     QStringList wrappedLines;
@@ -312,7 +260,7 @@ QStringList HelpFormatter::wrapLine(const QString& line, int maxLength, int newL
             --i;
 
         auto newLine = currentLine.left(i);
-        strTrimRight(newLine);
+        StringMagic::trimRight(newLine);
         wrappedLines << newLine;
 
         currentLine = QString(newLineIndent, ' ') + currentLine.mid(i++).trimmed();
