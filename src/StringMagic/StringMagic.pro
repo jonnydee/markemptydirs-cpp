@@ -28,6 +28,7 @@ SOURCES += \
     Template/Engine.cpp \
     Template/Variable.cpp \
     Template/VariableFactory.cpp \
+    FileSystem.cpp \
     TextFormatter.cpp \
     Tools.cpp
 
@@ -35,6 +36,7 @@ HEADERS += stringmagic_global.hpp \
     Template/Engine.hpp \
     Template/Variable.hpp \
     Template/VariableFactory.hpp \
+    FileSystem.hpp \
     TextFormatter.hpp \
     Tools.hpp
 
