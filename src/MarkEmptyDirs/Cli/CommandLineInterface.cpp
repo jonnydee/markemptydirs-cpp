@@ -29,6 +29,8 @@
 #include <ArgumentTools/HelpFormatter.hpp>
 #include <ArgumentTools/ArgumentParser.hpp>
 
+#include <StringMagic/FileSystem.hpp>
+
 #define APPLICATION_DISCLAIMER          "This is free software; see the source for copying conditions. There is NO" "\n" \
                                         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 #define APPLICATION_LICENSE             "BSD"
@@ -42,16 +44,10 @@
 #define APPLICATION_VENDOR_EMAIL        "jonny.dee@gmx.net"
 #define APPLICATION_COPYRIGHT           "Copyright (C) 2013 " APPLICATION_VENDOR_NAME
 
-#ifdef Q_OS_WIN32
- #define PATH_LIST_SEPARATOR        ';'
-#else
- #define PATH_LIST_SEPARATOR        ':'
-#endif
-
-#define DEFAULT_COMMAND             Config::UPDATE
-#define DEFAULT_EXCLUDE_DIRS        ((QStringList() << ".bzr" << "CVS" << ".git" << ".hg" << ".svn").join(PATH_LIST_SEPARATOR))
+#define DEFAULT_COMMAND                 Config::UPDATE
+#define DEFAULT_EXCLUDE_DIRS            ((QStringList() << ".bzr" << "CVS" << ".git" << ".hg" << ".svn").join(StringMagic::FileSystem::pathSeparator()))
 #define DEFAULT_MARKER_CONTENT_FILENAME "marker.txt"
-#define DEFAULT_MARKER_FILENAME     ".emptydir"
+#define DEFAULT_MARKER_FILENAME         ".emptydir"
 
 
 using namespace ArgumentTools;
@@ -201,7 +197,7 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         else if (arg.isBasedOn(excludeOpt))
         {
             Config::DirList dirs;
-            foreach (auto dir, arg.value.split(PATH_LIST_SEPARATOR, QString::SkipEmptyParts))
+            foreach (auto dir, arg.value.split(StringMagic::FileSystem::pathSeparator(), QString::SkipEmptyParts))
                 dirs.push_back(dir);
             config.setExcludeDirs(dirs);
         }
