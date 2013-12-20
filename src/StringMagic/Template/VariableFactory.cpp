@@ -27,6 +27,7 @@
 #include "Variable.hpp"
 #include "VariableFactory.hpp"
 
+#include <QChar>
 #include <QDateTime>
 #include <QObject>
 #include <QUuid>
@@ -42,7 +43,7 @@ VariableFactory::VariableFactory()
 {
 }
 
-Variable* VariableFactory::createCharRepeaterVariable(const QString& name, QChar ch, const QString& description) const
+Variable* VariableFactory::createCharRepeaterVariable(const QString& name, const QChar& ch, const QString& description) const
 {
     auto pVariable = new Variable(name,
         [ch](const Variable::Context& ctx)

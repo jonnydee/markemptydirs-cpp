@@ -31,6 +31,8 @@
 #include "../stringmagic_global.hpp"
 
 
+class QChar;
+
 namespace StringMagic
 {
 
@@ -51,7 +53,7 @@ public:
     Variable* createSpaceVariable() const;
 
 protected:
-    Variable* createCharRepeaterVariable(const QString& name, QChar ch, const QString& description) const;
+    Variable* createCharRepeaterVariable(const QString& name, const QChar& ch, const QString& description) const;
 };
 
 }
