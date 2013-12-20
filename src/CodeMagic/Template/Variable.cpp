@@ -33,7 +33,7 @@
 #define PATTERN     QString("§%1\\s*(?:(\\:)([^§]*))?§")
 
 
-namespace StringMagic
+namespace CodeMagic
 {
 
 namespace Template

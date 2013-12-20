@@ -24,43 +24,57 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Engine.hpp"
-#include "Variable.hpp"
+#pragma once
+#ifndef CODEMAGIC_TEXTFORMATTER_HPP
+#define CODEMAGIC_TEXTFORMATTER_HPP
+
+#include "codemagic_global.hpp"
+
+#include <QList>
+#include <QString>
 
 
-namespace StringMagic
+namespace CodeMagic
 {
 
-namespace Template
+class CODEMAGICSHARED_EXPORT TextFormatter
 {
+public:
+    TextFormatter();
 
-Engine::Engine()
-{
+    QString format(const QString& paragraph) const;
+
+    void setFirstLineLeftIndent(int count);
+    int firstLineLeftIndent() const;
+
+    void setFirstLineRightIndent(int count);
+    int firstLineRightIndent() const;
+
+    void setLinesAfterParagraph(int count);
+    int linesAfterParagraph() const;
+
+    void setLinesBeforeParagraph(int count);
+    int linesBeforeParagraph() const;
+
+    void setMaxLineLength(int maxLength);
+    int maxLineLength() const;
+
+    void setParagraphLeftIndent(int count);
+    int paragraphLeftIndent() const;
+
+    void setParagraphRightIndent(int count);
+    int paragraphRightIndent() const;
+
+private:
+    int m_firstLineLeftIndent;
+    int m_firstLineRightIndent;
+    int m_linesAfterParagraph;
+    int m_linesBeforeParagraph;
+    int m_maxLineLength;
+    int m_paragraphLeftIndent;
+    int m_paragraphRightIndent;
+};
+
 }
 
-void Engine::addVariable(const Variable& variable)
-{
-    m_variables << &variable;
-}
-
-int Engine::process(QString& str) const
-{
-    int expansionCount = 0;
-
-    foreach (const auto pVariable, variables())
-    {
-        Q_ASSERT(pVariable);
-        expansionCount += pVariable->expand(str);
-    }
-
-    return expansionCount;
-}
-
-const VariableList& Engine::variables() const
-{
-    return m_variables;
-}
-
-}
-
-}
+#endif // CODEMAGIC_TEXTFORMATTER_HPP

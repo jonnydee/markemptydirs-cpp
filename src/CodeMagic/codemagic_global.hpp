@@ -24,19 +24,16 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "test_StringMagic_Template.hpp"
-#include "test_StringMagic_TextFormatter.hpp"
+#pragma once
+#ifndef CODEMAGIC_GLOBAL_HPP
+#define CODEMAGIC_GLOBAL_HPP
 
+#include <QtCore/qglobal.h>
 
-int main(int argc, char *argv[])
-{
-    {
-        StringMagic_Template_Test tc;
-        QTest::qExec(&tc, argc, argv);
-    }
+#if defined(CODEMAGIC_LIBRARY)
+#  define CODEMAGICSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define CODEMAGICSHARED_EXPORT Q_DECL_IMPORT
+#endif
 
-    {
-        StringMagic_TextFormatter_Test tc;
-        QTest::qExec(&tc, argc, argv);
-    }
-}
+#endif // CODEMAGIC_GLOBAL_HPP

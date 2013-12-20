@@ -31,7 +31,7 @@
 #include "markemptydirsapi_global.hpp"
 
 
-namespace StringMagic
+namespace CodeMagic
 {
 namespace Template
 {
@@ -52,7 +52,7 @@ class Logger;
 class MARKEMPTYDIRSAPISHARED_EXPORT Context
 {
 public:
-    Context(Logger& logger, StringMagic::Template::Engine& templateEngine);
+    Context(Logger& logger, CodeMagic::Template::Engine& templateEngine);
 
     void setConfig(const Config& config);
 
@@ -60,12 +60,12 @@ public:
 
     Logger& logger();
 
-    StringMagic::Template::Engine& templateEngine();
+    CodeMagic::Template::Engine& templateEngine();
 
 private:
     const Config* m_pConfig;
     Logger* m_pLogger;
-    StringMagic::Template::Engine* m_pTemplateEngine;
+    CodeMagic::Template::Engine* m_pTemplateEngine;
 };
 
 }

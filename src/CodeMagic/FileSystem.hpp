@@ -24,42 +24,32 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "FileSystem.hpp"
+#pragma once
+#ifndef CODEMAGIC_FILESYSTEM_HPP
+#define CODEMAGIC_FILESYSTEM_HPP
+
+#include "codemagic_global.hpp"
 
 #include <QChar>
-#include <QDir>
 
 
-namespace StringMagic
+namespace CodeMagic
 {
 
 namespace FileSystem
 {
 
-QChar dirSeparator()
-{
-    static const auto separator = QDir::separator();
-    return separator;
-}
+CODEMAGICSHARED_EXPORT
+QChar dirSeparator();
 
-QChar pathSeparator()
-{
-#ifdef Q_OS_WIN32
-    return ';';
-#else
-    return ':';
-#endif
-}
+CODEMAGICSHARED_EXPORT
+QChar pathSeparator();
 
-QChar volumeSeparator()
-{
-#ifdef Q_OS_WIN32
-    return ':';
-#else
-    return '/';
-#endif
-}
+CODEMAGICSHARED_EXPORT
+QChar volumeSeparator();
 
 }
 
 }
+
+#endif // CODEMAGIC_FILESYSTEM_HPP

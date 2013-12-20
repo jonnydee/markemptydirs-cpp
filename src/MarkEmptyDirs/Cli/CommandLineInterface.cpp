@@ -29,7 +29,7 @@
 #include <ArgumentTools/HelpFormatter.hpp>
 #include <ArgumentTools/ArgumentParser.hpp>
 
-#include <StringMagic/FileSystem.hpp>
+#include <CodeMagic/FileSystem.hpp>
 
 #define APPLICATION_DISCLAIMER          "This is free software; see the source for copying conditions. There is NO" "\n" \
                                         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
@@ -45,7 +45,7 @@
 #define APPLICATION_COPYRIGHT           "Copyright (C) 2013 " APPLICATION_VENDOR_NAME
 
 #define DEFAULT_COMMAND                 Config::UPDATE
-#define DEFAULT_EXCLUDE_DIRS            ((QStringList() << ".bzr" << "CVS" << ".git" << ".hg" << ".svn").join(StringMagic::FileSystem::pathSeparator()))
+#define DEFAULT_EXCLUDE_DIRS            ((QStringList() << ".bzr" << "CVS" << ".git" << ".hg" << ".svn").join(CodeMagic::FileSystem::pathSeparator()))
 #define DEFAULT_MARKER_CONTENT_FILENAME "marker.txt"
 #define DEFAULT_MARKER_FILENAME         ".emptydir"
 
@@ -197,7 +197,7 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         else if (arg.isBasedOn(excludeOpt))
         {
             Config::DirList dirs;
-            foreach (auto dir, arg.value.split(StringMagic::FileSystem::pathSeparator(), QString::SkipEmptyParts))
+            foreach (auto dir, arg.value.split(CodeMagic::FileSystem::pathSeparator(), QString::SkipEmptyParts))
                 dirs.push_back(dir);
             config.setExcludeDirs(dirs);
         }

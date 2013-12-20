@@ -25,56 +25,40 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef STRINGMAGIC_TEXTFORMATTER_HPP
-#define STRINGMAGIC_TEXTFORMATTER_HPP
+#ifndef CODEMAGIC_TEMPLATE_VARIABLEFACTORY_HPP
+#define CODEMAGIC_TEMPLATE_VARIABLEFACTORY_HPP
 
-#include "stringmagic_global.hpp"
-
-#include <QList>
-#include <QString>
+#include "../codemagic_global.hpp"
 
 
-namespace StringMagic
+class QChar;
+
+namespace CodeMagic
 {
 
-class STRINGMAGICSHARED_EXPORT TextFormatter
+namespace Template
+{
+
+class Variable;
+
+class CODEMAGICSHARED_EXPORT VariableFactory
 {
 public:
-    TextFormatter();
+    VariableFactory();
 
-    QString format(const QString& paragraph) const;
+    Variable* createDateTimeVariable() const;
+    Variable* createEnvironmentVariable() const;
+    Variable* createGuidVariable() const;
+    Variable* createLinefeedVariable() const;
+    Variable* createSeparatorVariable() const;
+    Variable* createSpaceVariable() const;
 
-    void setFirstLineLeftIndent(int count);
-    int firstLineLeftIndent() const;
-
-    void setFirstLineRightIndent(int count);
-    int firstLineRightIndent() const;
-
-    void setLinesAfterParagraph(int count);
-    int linesAfterParagraph() const;
-
-    void setLinesBeforeParagraph(int count);
-    int linesBeforeParagraph() const;
-
-    void setMaxLineLength(int maxLength);
-    int maxLineLength() const;
-
-    void setParagraphLeftIndent(int count);
-    int paragraphLeftIndent() const;
-
-    void setParagraphRightIndent(int count);
-    int paragraphRightIndent() const;
-
-private:
-    int m_firstLineLeftIndent;
-    int m_firstLineRightIndent;
-    int m_linesAfterParagraph;
-    int m_linesBeforeParagraph;
-    int m_maxLineLength;
-    int m_paragraphLeftIndent;
-    int m_paragraphRightIndent;
+protected:
+    Variable* createCharRepeaterVariable(const QString& name, const QChar& ch, const QString& description) const;
 };
 
 }
 
-#endif // STRINGMAGIC_TEXTFORMATTER_HPP
+}
+
+#endif // CODEMAGIC_TEMPLATE_VARIABLEFACTORY_HPP

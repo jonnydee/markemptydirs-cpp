@@ -27,7 +27,7 @@
 #include "HelpFormatter.hpp"
 #include "Option.hpp"
 
-#include <StringMagic/Tools.hpp>
+#include <CodeMagic/Tools.hpp>
 
 
 #define WRAPPED_LINE_MIN_LENGTH             40
@@ -143,22 +143,22 @@ QString HelpFormatter::formatOptionListSection(const OptionListSection& section)
 QString HelpFormatter::formatOptions(const OptionList& options) const
 {
     auto shortNamesColumn = formatShortOptionsColumn(options);
-    const int shortNamesColumnWidth = StringMagic::adjustToMaxLen(shortNamesColumn);
+    const int shortNamesColumnWidth = CodeMagic::adjustToMaxLen(shortNamesColumn);
 
     auto longNamesColumn = formatLongOptionsColumn(options);
-    const int longNamesColumnWidth = StringMagic::adjustToMaxLen(longNamesColumn);
+    const int longNamesColumnWidth = CodeMagic::adjustToMaxLen(longNamesColumn);
 
     const auto descriptionsColumn = formatDescriptionColumn(options);
 
-    auto textLines = StringMagic::join(QList<QStringList>() << shortNamesColumn << longNamesColumn, QString(OPTION_COLUMN_PADDING_SIZE, ' '));
-    textLines = StringMagic::join(QList<QStringList>() << textLines << descriptionsColumn, QString(DESCRIPTION_COLUMN_PADDING_SIZE, ' '));
+    auto textLines = CodeMagic::join(QList<QStringList>() << shortNamesColumn << longNamesColumn, QString(OPTION_COLUMN_PADDING_SIZE, ' '));
+    textLines = CodeMagic::join(QList<QStringList>() << textLines << descriptionsColumn, QString(DESCRIPTION_COLUMN_PADDING_SIZE, ' '));
     const int indent = shortNamesColumnWidth + OPTION_COLUMN_PADDING_SIZE + longNamesColumnWidth + DESCRIPTION_COLUMN_PADDING_SIZE;
 
     QStringList wrappedTextLines;
     foreach (const auto textLine, textLines)
         wrappedTextLines << wrapLine(textLine, m_maxLineLength, indent);
 
-    StringMagic::indent(wrappedTextLines, m_sectionIndent);
+    CodeMagic::indent(wrappedTextLines, m_sectionIndent);
     return wrappedTextLines.join('\n');
 }
 
@@ -260,7 +260,7 @@ QStringList HelpFormatter::wrapLine(const QString& line, int maxLength, int newL
             --i;
 
         auto newLine = currentLine.left(i);
-        StringMagic::trimRight(newLine);
+        CodeMagic::trimRight(newLine);
         wrappedLines << newLine;
 
         currentLine = QString(newLineIndent, ' ') + currentLine.mid(i++).trimmed();

@@ -25,31 +25,40 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef STRINGMAGIC_FILESYSTEM_HPP
-#define STRINGMAGIC_FILESYSTEM_HPP
+#ifndef CODEMAGIC_TEMPLATE_ENGINE_HPP
+#define CODEMAGIC_TEMPLATE_ENGINE_HPP
 
-#include "stringmagic_global.hpp"
+#include "../codemagic_global.hpp"
 
-#include <QChar>
+#include <QList>
+#include <QString>
 
 
-namespace StringMagic
+namespace CodeMagic
 {
 
-namespace FileSystem
+namespace Template
 {
 
-STRINGMAGICSHARED_EXPORT
-QChar dirSeparator();
+class Variable;
+typedef QList<const Variable*> VariableList;
 
-STRINGMAGICSHARED_EXPORT
-QChar pathSeparator();
+class CODEMAGICSHARED_EXPORT Engine
+{
+public:
+    Engine();
 
-STRINGMAGICSHARED_EXPORT
-QChar volumeSeparator();
+    void addVariable(const Variable& variable);
+    const VariableList& variables() const;
+
+    int process(QString& str) const;
+
+private:
+    VariableList m_variables;
+};
 
 }
 
 }
 
-#endif // STRINGMAGIC_FILESYSTEM_HPP
+#endif // CODEMAGIC_TEMPLATE_ENGINE_HPP

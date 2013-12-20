@@ -31,13 +31,13 @@
 #include <MarkEmptyDirs/Api/ICommand.hpp>
 #include <MarkEmptyDirs/Api/Logger.hpp>
 
-#include <StringMagic/Template/Engine.hpp>
+#include <CodeMagic/Template/Engine.hpp>
 
 #include <QCoreApplication>
 #include <QDebug>
 
 using namespace MarkEmptyDirs;
-using namespace StringMagic;
+using namespace CodeMagic;
 
 int main(int argc, char *argv[])
 {

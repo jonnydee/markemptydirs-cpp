@@ -28,10 +28,10 @@
 #include "Context.hpp"
 #include "Logger.hpp"
 
-#include <StringMagic/Template/Engine.hpp>
+#include <CodeMagic/Template/Engine.hpp>
 
 
-using namespace StringMagic;
+using namespace CodeMagic;
 
 namespace MarkEmptyDirs
 {

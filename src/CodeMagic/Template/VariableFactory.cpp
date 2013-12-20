@@ -27,7 +27,7 @@
 #include "Variable.hpp"
 #include "VariableFactory.hpp"
 
-#include "StringMagic/FileSystem.hpp"
+#include "CodeMagic/FileSystem.hpp"
 
 #include <QChar>
 #include <QDateTime>
@@ -35,7 +35,7 @@
 #include <QUuid>
 
 
-namespace StringMagic
+namespace CodeMagic
 {
 
 namespace Template

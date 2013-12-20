@@ -3,7 +3,7 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS = \
-    StringMagic \
-    StringMagicTest \
+    CodeMagic \
+    CodeMagicTest \
     ArgumentTools \
     MarkEmptyDirs

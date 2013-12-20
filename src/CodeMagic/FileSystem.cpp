@@ -24,41 +24,42 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#pragma once
-#ifndef STRINGMAGIC_TEMPLATE_ENGINE_HPP
-#define STRINGMAGIC_TEMPLATE_ENGINE_HPP
+#include "FileSystem.hpp"
 
-#include "../stringmagic_global.hpp"
-
-#include <QList>
-#include <QString>
+#include <QChar>
+#include <QDir>
 
 
-namespace StringMagic
+namespace CodeMagic
 {
 
-namespace Template
+namespace FileSystem
 {
 
-class Variable;
-typedef QList<const Variable*> VariableList;
-
-class STRINGMAGICSHARED_EXPORT Engine
+QChar dirSeparator()
 {
-public:
-    Engine();
+    static const auto separator = QDir::separator();
+    return separator;
+}
 
-    void addVariable(const Variable& variable);
-    const VariableList& variables() const;
+QChar pathSeparator()
+{
+#ifdef Q_OS_WIN32
+    return ';';
+#else
+    return ':';
+#endif
+}
 
-    int process(QString& str) const;
-
-private:
-    VariableList m_variables;
-};
-
+QChar volumeSeparator()
+{
+#ifdef Q_OS_WIN32
+    return ':';
+#else
+    return '/';
+#endif
 }
 
 }
 
-#endif // STRINGMAGIC_TEMPLATE_ENGINE_HPP
+}

@@ -25,38 +25,38 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef STRINGMAGIC_TOOLS_H
-#define STRINGMAGIC_TOOLS_H
+#ifndef CODEMAGIC_TOOLS_H
+#define CODEMAGIC_TOOLS_H
 
-#include "stringmagic_global.hpp"
+#include "codemagic_global.hpp"
 
 #include <QString>
 #include <QStringList>
 
 
-namespace StringMagic
+namespace CodeMagic
 {
 
-STRINGMAGICSHARED_EXPORT
+CODEMAGICSHARED_EXPORT
 int adjustToMaxLen(QStringList& strings, QChar paddingChar = ' ');
 
-STRINGMAGICSHARED_EXPORT
+CODEMAGICSHARED_EXPORT
 void indent(QStringList& strings, int count, QChar paddingChar = ' ');
 
-STRINGMAGICSHARED_EXPORT
+CODEMAGICSHARED_EXPORT
 QStringList join(const QList<QStringList>& columns, const QString& separator = QString());
 
-STRINGMAGICSHARED_EXPORT
+CODEMAGICSHARED_EXPORT
 void prepend(QStringList& strings, const QString& prefix);
 
-STRINGMAGICSHARED_EXPORT
+CODEMAGICSHARED_EXPORT
 void trimRight(QString& str);
 
-STRINGMAGICSHARED_EXPORT
+CODEMAGICSHARED_EXPORT
 void trimRight(QStringList& strings);
 
 //QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0, int firstLineIdent = 0);
 
 }
 
-#endif // STRINGMAGIC_TOOLS_H
+#endif // CODEMAGIC_TOOLS_H

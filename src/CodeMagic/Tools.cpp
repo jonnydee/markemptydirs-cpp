@@ -24,41 +24,71 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#pragma once
-#ifndef STRINGMAGIC_TEMPLATE_VARIABLEFACTORY_HPP
-#define STRINGMAGIC_TEMPLATE_VARIABLEFACTORY_HPP
+#include "Tools.hpp"
 
-#include "../stringmagic_global.hpp"
+#include <QString>
 
 
-class QChar;
-
-namespace StringMagic
+namespace CodeMagic
 {
 
-namespace Template
+int adjustToMaxLen(QStringList& strings, QChar paddingChar)
 {
+    int maxLen = 0;
+    foreach (const auto& str, strings)
+        maxLen = qMax(maxLen, str.length());
+    for (int i = 0; i < strings.size(); i++)
+        strings[i] += QString(maxLen - strings[i].length(), paddingChar);
+    return maxLen;
+}
 
-class Variable;
-
-class STRINGMAGICSHARED_EXPORT VariableFactory
+void indent(QStringList& strings, int count, QChar paddingChar)
 {
-public:
-    VariableFactory();
+    prepend(strings, QString(count, paddingChar));
+}
 
-    Variable* createDateTimeVariable() const;
-    Variable* createEnvironmentVariable() const;
-    Variable* createGuidVariable() const;
-    Variable* createLinefeedVariable() const;
-    Variable* createSeparatorVariable() const;
-    Variable* createSpaceVariable() const;
+QStringList join(const QList<QStringList>& columns, const QString& separator)
+{
+    if (columns.isEmpty())
+        return QStringList();
 
-protected:
-    Variable* createCharRepeaterVariable(const QString& name, const QChar& ch, const QString& description) const;
-};
+    QStringList joined;
 
+    const int numRows = columns.first().size();
+    for (int i = 0; i < numRows; i++)
+    {
+        QStringList row;
+        foreach (const auto& column, columns)
+        {
+            Q_ASSERT(numRows == column.size());
+            row << column[i];
+        }
+        joined << row.join(separator);
+    }
+
+    return joined;
+}
+
+void prepend(QStringList& strings, const QString& prefix)
+{
+    for (int i = 0; i < strings.size(); i++)
+        strings[i].prepend(prefix);
+}
+
+void trimRight(QString& str)
+{
+    for (int i = str.size() - 1; i >= 0; --i)
+        if (!str[i].isSpace())
+        {
+            str.truncate(i + 1);
+            break;
+        }
+}
+
+void trimRight(QStringList& strings)
+{
+    for (int i = 0; i < strings.size(); i++)
+        trimRight(strings[i]);
 }
 
 }
-
-#endif // STRINGMAGIC_TEMPLATE_VARIABLEFACTORY_HPP

@@ -29,7 +29,7 @@
 #include "Tools.hpp"
 
 
-namespace StringMagic
+namespace CodeMagic
 {
 
 TextFormatter::TextFormatter()

@@ -29,17 +29,17 @@
 #include <QString>
 #include <QtTest>
 
-#include <StringMagic/TextFormatter.hpp>
+#include <CodeMagic/TextFormatter.hpp>
 
 
-using namespace StringMagic;
+using namespace CodeMagic;
 
-class StringMagic_TextFormatter_Test : public QObject
+class CodeMagic_TextFormatter_Test : public QObject
 {
     Q_OBJECT
 
 public:
-    StringMagic_TextFormatter_Test();
+    CodeMagic_TextFormatter_Test();
 
 private slots:
     void initTestCase();
@@ -48,19 +48,19 @@ private slots:
     void test_format_1();
 };
 
-inline StringMagic_TextFormatter_Test::StringMagic_TextFormatter_Test()
+inline CodeMagic_TextFormatter_Test::CodeMagic_TextFormatter_Test()
 {
 }
 
-inline void StringMagic_TextFormatter_Test::initTestCase()
+inline void CodeMagic_TextFormatter_Test::initTestCase()
 {
 }
 
-inline void StringMagic_TextFormatter_Test::cleanupTestCase()
+inline void CodeMagic_TextFormatter_Test::cleanupTestCase()
 {
 }
 
-inline void StringMagic_TextFormatter_Test::test_format_1()
+inline void CodeMagic_TextFormatter_Test::test_format_1()
 {
     TextFormatter sut;
     sut.setFirstLineLeftIndent(2);

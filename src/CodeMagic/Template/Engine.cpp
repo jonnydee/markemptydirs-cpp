@@ -24,16 +24,43 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#pragma once
-#ifndef STRINGMAGIC_GLOBAL_HPP
-#define STRINGMAGIC_GLOBAL_HPP
+#include "Engine.hpp"
+#include "Variable.hpp"
 
-#include <QtCore/qglobal.h>
 
-#if defined(STRINGMAGIC_LIBRARY)
-#  define STRINGMAGICSHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define STRINGMAGICSHARED_EXPORT Q_DECL_IMPORT
-#endif
+namespace CodeMagic
+{
 
-#endif // STRINGMAGIC_GLOBAL_HPP
+namespace Template
+{
+
+Engine::Engine()
+{
+}
+
+void Engine::addVariable(const Variable& variable)
+{
+    m_variables << &variable;
+}
+
+int Engine::process(QString& str) const
+{
+    int expansionCount = 0;
+
+    foreach (const auto pVariable, variables())
+    {
+        Q_ASSERT(pVariable);
+        expansionCount += pVariable->expand(str);
+    }
+
+    return expansionCount;
+}
+
+const VariableList& Engine::variables() const
+{
+    return m_variables;
+}
+
+}
+
+}

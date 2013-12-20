@@ -6,7 +6,7 @@
 
 QT       -= gui
 
-TARGET = StringMagic
+TARGET = CodeMagic
 VERSION = 0.1.0
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 
@@ -22,7 +22,7 @@ CONFIG(debug, debug|release) {
      TARGET = $$join(TARGET,,,_debug)
 }
 
-DEFINES += STRINGMAGIC_LIBRARY
+DEFINES += CODEMAGIC_LIBRARY
 
 SOURCES += \
     Template/Engine.cpp \
@@ -32,7 +32,7 @@ SOURCES += \
     TextFormatter.cpp \
     Tools.cpp
 
-HEADERS += stringmagic_global.hpp \
+HEADERS += codemagic_global.hpp \
     Template/Engine.hpp \
     Template/Variable.hpp \
     Template/VariableFactory.hpp \

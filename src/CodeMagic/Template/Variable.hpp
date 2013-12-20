@@ -25,10 +25,10 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef STRINGMAGIC_TEMPLATE_VARIABLE_HPP
-#define STRINGMAGIC_TEMPLATE_VARIABLE_HPP
+#ifndef CODEMAGIC_TEMPLATE_VARIABLE_HPP
+#define CODEMAGIC_TEMPLATE_VARIABLE_HPP
 
-#include "../stringmagic_global.hpp"
+#include "../codemagic_global.hpp"
 
 #include <QRegExp>
 #include <QString>
@@ -36,13 +36,13 @@
 #include <functional>
 
 
-namespace StringMagic
+namespace CodeMagic
 {
 
 namespace Template
 {
 
-class STRINGMAGICSHARED_EXPORT Variable
+class CODEMAGICSHARED_EXPORT Variable
 {
 public:
     struct Context;
@@ -83,7 +83,7 @@ private:
     QString m_description;
 };
 
-struct STRINGMAGICSHARED_EXPORT Variable::Context
+struct CODEMAGICSHARED_EXPORT Variable::Context
 {
     Context(const QString& text_,
             int index_, const QString& match_,
@@ -110,4 +110,4 @@ struct STRINGMAGICSHARED_EXPORT Variable::Context
 
 }
 
-#endif // STRINGMAGIC_TEMPLATE_VARIABLE_HPP
+#endif // CODEMAGIC_TEMPLATE_VARIABLE_HPP

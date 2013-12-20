@@ -28,10 +28,10 @@
 #include <QString>
 #include <QtTest>
 
-#include <StringMagic/FileSystem.hpp>
-#include <StringMagic/Template/Engine.hpp>
-#include <StringMagic/Template/Variable.hpp>
-#include <StringMagic/Template/VariableFactory.hpp>
+#include <CodeMagic/FileSystem.hpp>
+#include <CodeMagic/Template/Engine.hpp>
+#include <CodeMagic/Template/Variable.hpp>
+#include <CodeMagic/Template/VariableFactory.hpp>
 
 #define GUID_PATTERN        "\\{[a-fA-F\\d]{8}-[a-fA-F\\d]{4}-[a-fA-F\\d]{4}-[a-fA-F\\d]{4}-[a-fA-F\\d]{12}\\}"
 
@@ -40,15 +40,15 @@
 #define DATETIME_PATTERN    DATE_PATTERN "T" TIME_PATTERN "Z"
 
 
-using namespace StringMagic;
-using namespace StringMagic::Template;
+using namespace CodeMagic;
+using namespace CodeMagic::Template;
 
-class StringMagic_Template_Test : public QObject
+class CodeMagic_Template_Test : public QObject
 {
     Q_OBJECT
 
 public:
-    StringMagic_Template_Test();
+    CodeMagic_Template_Test();
 
 private slots:
     void initTestCase();
@@ -68,19 +68,19 @@ private slots:
     void test_Engine_process();
 };
 
-inline StringMagic_Template_Test::StringMagic_Template_Test()
+inline CodeMagic_Template_Test::CodeMagic_Template_Test()
 {
 }
 
-inline void StringMagic_Template_Test::initTestCase()
+inline void CodeMagic_Template_Test::initTestCase()
 {
 }
 
-inline void StringMagic_Template_Test::cleanupTestCase()
+inline void CodeMagic_Template_Test::cleanupTestCase()
 {
 }
 
-inline void StringMagic_Template_Test::test_Variable_custom_expand()
+inline void CodeMagic_Template_Test::test_Variable_custom_expand()
 {
     const Variable sut("var",
         [](const Variable::Context& ctx) -> QString
@@ -104,7 +104,7 @@ inline void StringMagic_Template_Test::test_Variable_custom_expand()
     QVERIFY(text == "This is a test case with a null and an empty variable.");
 }
 
-inline void StringMagic_Template_Test::test_Variable_datetime_expand()
+inline void CodeMagic_Template_Test::test_Variable_datetime_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createDateTimeVariable());
 
@@ -118,7 +118,7 @@ inline void StringMagic_Template_Test::test_Variable_datetime_expand()
     QVERIFY(timeRegExp.indexIn(text) == 0);
 }
 
-inline void StringMagic_Template_Test::test_Variable_env_expand()
+inline void CodeMagic_Template_Test::test_Variable_env_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createEnvironmentVariable());
 
@@ -133,7 +133,7 @@ inline void StringMagic_Template_Test::test_Variable_env_expand()
     QVERIFY(text == "This is a environment variable.");
 }
 
-inline void StringMagic_Template_Test::test_Variable_guid_expand()
+inline void CodeMagic_Template_Test::test_Variable_guid_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createGuidVariable());
 
@@ -147,7 +147,7 @@ inline void StringMagic_Template_Test::test_Variable_guid_expand()
     QVERIFY(guidRegExp.indexIn(text) == 0);
 }
 
-inline void StringMagic_Template_Test::test_Variable_lf_expand()
+inline void CodeMagic_Template_Test::test_Variable_lf_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createLinefeedVariable());
 
@@ -160,7 +160,7 @@ inline void StringMagic_Template_Test::test_Variable_lf_expand()
     QVERIFY(text == "Line 1\nLine 2\n\nLine 4§lf :  §.");
 }
 
-inline void StringMagic_Template_Test::test_Variable_separator_expand()
+inline void CodeMagic_Template_Test::test_Variable_separator_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createSeparatorVariable());
 
@@ -172,7 +172,7 @@ inline void StringMagic_Template_Test::test_Variable_separator_expand()
     QVERIFY(expansionCount == 3);
     QVERIFY(text == QString("%1 %2 %3").arg(FileSystem::dirSeparator()).arg(FileSystem::pathSeparator()).arg(FileSystem::volumeSeparator()));
 }
-inline void StringMagic_Template_Test::test_Variable_sp_expand()
+inline void CodeMagic_Template_Test::test_Variable_sp_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createSpaceVariable());
 
@@ -185,7 +185,7 @@ inline void StringMagic_Template_Test::test_Variable_sp_expand()
     QVERIFY(text == "123 56  9§sp :  §.");
 }
 
-inline void StringMagic_Template_Test::test_Variable_toString_with_mandatory_argumentSpec()
+inline void CodeMagic_Template_Test::test_Variable_toString_with_mandatory_argumentSpec()
 {
     Variable sut("sut", [](const Variable::Context&) { return QString(); });
     sut.setArgumentSpec("argSpec");
@@ -194,7 +194,7 @@ inline void StringMagic_Template_Test::test_Variable_toString_with_mandatory_arg
     QVERIFY("§sut:argSpec§" == str);
 }
 
-inline void StringMagic_Template_Test::test_Variable_toString_with_optional_argumentSpec()
+inline void CodeMagic_Template_Test::test_Variable_toString_with_optional_argumentSpec()
 {
     Variable sut("sut", [](const Variable::Context&) { return QString(); });
     sut.setArgumentSpec("argSpec");
@@ -204,7 +204,7 @@ inline void StringMagic_Template_Test::test_Variable_toString_with_optional_argu
     QVERIFY("§sut[:argSpec]§" == str);
 }
 
-inline void StringMagic_Template_Test::test_Variable_toString_without_argumentSpec()
+inline void CodeMagic_Template_Test::test_Variable_toString_without_argumentSpec()
 {
     Variable sut("sut", [](const Variable::Context&) { return QString(); });
 
@@ -212,7 +212,7 @@ inline void StringMagic_Template_Test::test_Variable_toString_without_argumentSp
     QVERIFY("§sut§" == str);
 }
 
-inline void StringMagic_Template_Test::test_Engine_process()
+inline void CodeMagic_Template_Test::test_Engine_process()
 {
     VariableFactory factory;
     std::unique_ptr<Variable> pDateTimeVariable(factory.createDateTimeVariable());

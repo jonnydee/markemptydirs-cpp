@@ -7,7 +7,7 @@
 QT       += testlib
 QT       -= gui
 
-TARGET = test_StringMagic
+TARGET = test_CodeMagic
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 
 TEMPLATE = app
@@ -25,8 +25,8 @@ CONFIG(debug, debug|release) {
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 HEADERS += \
-    test_StringMagic_Template.hpp \
-    test_StringMagic_TextFormatter.hpp
+    test_CodeMagic_Template.hpp \
+    test_CodeMagic_TextFormatter.hpp
 
 SOURCES += \
     main.cpp
@@ -39,9 +39,9 @@ QMAKE_LIBDIR += \
 
 CONFIG(debug, debug|release) {
     LIBS += \
-        -lStringMagic_debug
+        -lCodeMagic_debug
 }
 CONFIG(release, debug|release) {
     LIBS += \
-        -lStringMagic
+        -lCodeMagic
 }

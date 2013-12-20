@@ -39,13 +39,13 @@ CONFIG(debug, debug|release) {
     LIBS += \
         -lMarkEmptyDirsApi_debug \
         -lArgumentTools_debug \
-        -lStringMagic_debug
+        -lCodeMagic_debug
 }
 CONFIG(release, debug|release) {
     LIBS += \
         -lMarkEmptyDirsApi \
         -lArgumentTools \
-        -lStringMagic
+        -lCodeMagic
 }
 
 HEADERS += \
