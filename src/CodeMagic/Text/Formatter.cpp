@@ -24,7 +24,7 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "TextFormatter.hpp"
+#include "Formatter.hpp"
 #include "TextTools.hpp"
 
 
@@ -33,8 +33,7 @@ namespace CodeMagic
 
 namespace Text
 {
-
-TextFormatter::TextFormatter()
+Formatter::Formatter()
     : m_firstLineLeftIndent(0)
     , m_firstLineRightIndent(0)
     , m_linesAfterParagraph(0)
@@ -64,7 +63,7 @@ static QString wrapSingleLine(QString& line, int maxLength)
     return tail.trimmed();
 }
 
-QString TextFormatter::format(const QString& paragraph) const
+QString Formatter::format(const QString& paragraph) const
 {
     QStringList wrappedLines;
 
@@ -90,72 +89,72 @@ QString TextFormatter::format(const QString& paragraph) const
     return wrappedLines.join('\n');
 }
 
-void TextFormatter::setFirstLineLeftIndent(int count)
+void Formatter::setFirstLineLeftIndent(int count)
 {
     m_firstLineLeftIndent = count;
 }
 
-int TextFormatter::firstLineLeftIndent() const
+int Formatter::firstLineLeftIndent() const
 {
     return m_firstLineLeftIndent;
 }
 
-void TextFormatter::setFirstLineRightIndent(int count)
+void Formatter::setFirstLineRightIndent(int count)
 {
     m_firstLineRightIndent = count;
 }
 
-int TextFormatter::firstLineRightIndent() const
+int Formatter::firstLineRightIndent() const
 {
     return m_firstLineRightIndent;
 }
 
-void TextFormatter::setLinesAfterParagraph(int count)
+void Formatter::setLinesAfterParagraph(int count)
 {
     m_linesAfterParagraph = count;
 }
 
-int TextFormatter::linesAfterParagraph() const
+int Formatter::linesAfterParagraph() const
 {
     return m_linesAfterParagraph;
 }
 
-void TextFormatter::setLinesBeforeParagraph(int count)
+void Formatter::setLinesBeforeParagraph(int count)
 {
     m_linesBeforeParagraph = count;
 }
 
-int TextFormatter::linesBeforeParagraph() const
+int Formatter::linesBeforeParagraph() const
 {
     return m_linesBeforeParagraph;
 }
 
-void TextFormatter::setMaxLineLength(int maxLength)
+void Formatter::setMaxLineLength(int maxLength)
 {
     m_maxLineLength = maxLength;
 }
 
-int TextFormatter::maxLineLength() const
+int Formatter::maxLineLength() const
 {
     return m_maxLineLength;
 }
 
-void TextFormatter::setParagraphLeftIndent(int count)
+void Formatter::setParagraphLeftIndent(int count)
 {
     m_paragraphLeftIndent = count;
 }
 
-int TextFormatter::paragraphLeftIndent() const
+int Formatter::paragraphLeftIndent() const
 {
     return m_paragraphLeftIndent;
 }
 
-void TextFormatter::setParagraphRightIndent(int count)
+void Formatter::setParagraphRightIndent(int count)
 {
     m_paragraphRightIndent = count;
 }
 
-int TextFormatter::paragraphRightIndent() const
+int Formatter::paragraphRightIndent() const
 {
     return m_paragraphRightIndent;
 }

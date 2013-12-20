@@ -40,10 +40,10 @@ namespace CodeMagic
 namespace Text
 {
 
-class CODEMAGICSHARED_EXPORT TextFormatter
+class CODEMAGICSHARED_EXPORT Formatter
 {
 public:
-    TextFormatter();
+    Formatter();
 
     QString format(const QString& paragraph) const;
 

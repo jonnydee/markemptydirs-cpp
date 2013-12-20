@@ -26,18 +26,18 @@ DEFINES += CODEMAGIC_LIBRARY
 
 SOURCES += \
     FileSystem/FileSystemTools.cpp \
+    Text/Formatter.cpp \
     Text/Template/Engine.cpp \
     Text/Template/Variable.cpp \
     Text/Template/VariableFactory.cpp \
-    Text/TextFormatter.cpp \
     Text/TextTools.cpp
 
 HEADERS += codemagic_global.hpp \
     FileSystem/FileSystemTools.hpp \
+    Text/Formatter.hpp \
     Text/Template/Engine.hpp \
     Text/Template/Variable.hpp \
     Text/Template/VariableFactory.hpp \
-    Text/TextFormatter.hpp \
     Text/TextTools.hpp
 
 INCLUDEPATH += \

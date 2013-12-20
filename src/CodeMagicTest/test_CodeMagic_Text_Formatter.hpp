@@ -29,7 +29,7 @@
 #include <QString>
 #include <QtTest>
 
-#include <CodeMagic/Text/TextFormatter.hpp>
+#include <CodeMagic/Text/Formatter.hpp>
 
 
 using namespace CodeMagic::Text;
@@ -62,7 +62,7 @@ inline void CodeMagic_Text_Formatter_Test::cleanupTestCase()
 
 inline void CodeMagic_Text_Formatter_Test::test_format_1()
 {
-    TextFormatter sut;
+    Formatter sut;
     sut.setFirstLineLeftIndent(2);
     sut.setFirstLineRightIndent(5);
     sut.setParagraphLeftIndent(4);
