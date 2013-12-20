@@ -27,6 +27,8 @@
 #include "Variable.hpp"
 #include "VariableFactory.hpp"
 
+#include "StringMagic/FileSystem.hpp"
+
 #include <QChar>
 #include <QDateTime>
 #include <QObject>
@@ -103,6 +105,24 @@ Variable* VariableFactory::createLinefeedVariable() const
     return createCharRepeaterVariable(
         "lf", '\n',
         QObject::tr("get line feed character(s)"));
+}
+
+Variable* VariableFactory::createSeparatorVariable() const
+{
+    auto pVariable = new Variable("separator",
+        [](const Variable::Context& ctx) -> QString
+        {
+            if ("dir" == ctx.argument)
+                return FileSystem::dirSeparator();
+            if ("path" == ctx.argument)
+                return FileSystem::pathSeparator();
+            if ("vol" == ctx.argument)
+                return FileSystem::volumeSeparator();
+            return QString();
+        });
+    pVariable->setArgumentSpec("dir|path|vol");
+    pVariable->setDescription(QObject::tr("get platform specific directory, path, or volume separator"));
+    return pVariable;
 }
 
 Variable* VariableFactory::createSpaceVariable() const

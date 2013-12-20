@@ -50,6 +50,7 @@ public:
     Variable* createEnvironmentVariable() const;
     Variable* createGuidVariable() const;
     Variable* createLinefeedVariable() const;
+    Variable* createSeparatorVariable() const;
     Variable* createSpaceVariable() const;
 
 protected:

@@ -28,6 +28,7 @@
 #include <QString>
 #include <QtTest>
 
+#include <StringMagic/FileSystem.hpp>
 #include <StringMagic/Template/Engine.hpp>
 #include <StringMagic/Template/Variable.hpp>
 #include <StringMagic/Template/VariableFactory.hpp>
@@ -39,6 +40,7 @@
 #define DATETIME_PATTERN    DATE_PATTERN "T" TIME_PATTERN "Z"
 
 
+using namespace StringMagic;
 using namespace StringMagic::Template;
 
 class StringMagic_Template_Test : public QObject
@@ -57,6 +59,7 @@ private slots:
     void test_Variable_env_expand();
     void test_Variable_guid_expand();
     void test_Variable_lf_expand();
+    void test_Variable_separator_expand();
     void test_Variable_sp_expand();
     void test_Variable_toString_with_mandatory_argumentSpec();
     void test_Variable_toString_with_optional_argumentSpec();
@@ -157,6 +160,18 @@ inline void StringMagic_Template_Test::test_Variable_lf_expand()
     QVERIFY(text == "Line 1\nLine 2\n\nLine 4§lf :  §.");
 }
 
+inline void StringMagic_Template_Test::test_Variable_separator_expand()
+{
+    std::unique_ptr<const Variable> pSut(VariableFactory().createSeparatorVariable());
+
+    QString text("§separator:dir§ §separator:path§ §separator:vol§");
+    qDebug() << "ORIGINAL:" << text;
+    const auto expansionCount = pSut->expand(text);
+    qDebug() << QString("EXPANDED (%1x):").arg(expansionCount) << text;
+
+    QVERIFY(expansionCount == 3);
+    QVERIFY(text == QString("%1 %2 %3").arg(FileSystem::dirSeparator()).arg(FileSystem::pathSeparator()).arg(FileSystem::volumeSeparator()));
+}
 inline void StringMagic_Template_Test::test_Variable_sp_expand()
 {
     std::unique_ptr<const Variable> pSut(VariableFactory().createSpaceVariable());
