@@ -24,6 +24,8 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
+#include "Config.hpp"
+#include "Context.hpp"
 #include "Logger.hpp"
 
 
@@ -34,24 +36,34 @@ namespace Api
 {
 
 Logger::Logger()
-    : m_sysOut(stdout)
+    : m_pContext(nullptr)
+    , m_sysOut(stdout)
     , m_sysErr(stderr)
 {
 }
 
-void Logger::setConfig(const Config& config)
+void Logger::setContext(Context& ctx)
 {
-    m_config = config;
+    m_pContext = &ctx;
 }
 
-const Config& Logger::config() const
+Context& Logger::context()
 {
-    return m_config;
+    Q_ASSERT(m_pContext);
+    return *m_pContext;
+}
+
+const Context& Logger::context() const
+{
+    Q_ASSERT(m_pContext);
+    return *m_pContext;
 }
 
 void Logger::log(const QString& msg, LogLevel logLevel)
 {
     static const QString LOG_TEMPLATE("%1: %2\n");
+
+    auto& config = context().config();
 
     switch (logLevel)
     {
@@ -59,22 +71,22 @@ void Logger::log(const QString& msg, LogLevel logLevel)
         sysErr() << LOG_TEMPLATE.arg("ERROR").arg(msg) << flush;
         break;
     case LogLevel::NONE:
-        if (config().logLevel() >= LogLevel::NONE)
+        if (config.logLevel() >= LogLevel::NONE)
             sysOut() << msg << '\n' << flush;
         break;
     case LogLevel::INFO:
-        if (config().logLevel() >= LogLevel::INFO)
+        if (config.logLevel() >= LogLevel::INFO)
         {
-            if (config().shortMessages())
+            if (config.shortMessages())
                 sysOut() << msg << '\n' << flush;
             else
                 sysOut() << LOG_TEMPLATE.arg("INFO").arg(msg) << flush;
         }
         break;
     case LogLevel::DEBUG:
-        if (config().logLevel() >= LogLevel::DEBUG)
+        if (config.logLevel() >= LogLevel::DEBUG)
         {
-            if (config().shortMessages())
+            if (config.shortMessages())
                 sysOut() << msg << '\n' << flush;
             else
                 sysOut() << LOG_TEMPLATE.arg("DEBUG").arg(msg) << flush;

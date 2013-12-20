@@ -26,6 +26,7 @@
 
 #include "CommandFactory.hpp"
 #include "Config.hpp"
+#include "Context.hpp"
 #include "CleanCommand.hpp"
 #include "HelpCommand.hpp"
 #include "OverviewCommand.hpp"
@@ -44,10 +45,10 @@ CommandFactory::CommandFactory()
 {
 }
 
-std::unique_ptr<ICommand> CommandFactory::createCommand(const Config& config) const
+std::unique_ptr<ICommand> CommandFactory::createCommand(Context& ctx) const
 {
     std::unique_ptr<ICommand> pCmd;
-    switch (config.command())
+    switch (ctx.config().command())
     {
     case Config::CLEAN:
         pCmd.reset(new CleanCommand);
@@ -69,6 +70,9 @@ std::unique_ptr<ICommand> CommandFactory::createCommand(const Config& config) co
         pCmd.reset(new HelpCommand);
         break;
     }
+
+    pCmd->init(ctx);
+
     return pCmd;
 }
 

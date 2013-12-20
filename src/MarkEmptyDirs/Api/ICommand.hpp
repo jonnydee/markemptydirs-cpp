@@ -37,14 +37,14 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-class Config;
+class Context;
 
 class MARKEMPTYDIRSAPISHARED_EXPORT ICommand
 {
 public:
     virtual ~ICommand() = 0;
 
-    virtual void init(const Config& config) = 0;
+    virtual void init(Context& ctx) = 0;
 
     virtual void run() = 0;
 };

@@ -24,8 +24,10 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "OverviewCommand.hpp"
+#include "Context.hpp"
 #include "DirDescriptor.hpp"
+#include "Logger.hpp"
+#include "OverviewCommand.hpp"
 
 
 namespace MarkEmptyDirs
@@ -43,7 +45,7 @@ void OverviewCommand::run(const PathMap& pathMap)
     auto paths = pathMap.keys();
     qSort(paths);
     foreach (auto path, paths)
-        logger().log(QObject::tr("'%1' [children: %2, marker: %3, subDirs: %4]")
+        context().logger().log(QObject::tr("'%1' [children: %2, marker: %3, subDirs: %4]")
                      .arg(path)
                      .arg(pathMap[path].childCount())
                      .arg(pathMap[path].hasMarker() ? QObject::tr("yes") : QObject::tr("no"))

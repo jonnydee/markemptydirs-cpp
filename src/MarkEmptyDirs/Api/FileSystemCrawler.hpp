@@ -29,12 +29,12 @@
 #define MARKEMPTYDIRS_API_FILESYSTEMCRAWLER_HPP
 
 #include "markemptydirsapi_global.hpp"
-#include "Config.hpp"
-#include "Logger.hpp"
 
 #include <QMap>
 #include <QObject>
 
+
+class QDir;
 
 namespace MarkEmptyDirs
 {
@@ -42,6 +42,7 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
+class Context;
 class DirDescriptor;
 
 class MARKEMPTYDIRSAPISHARED_EXPORT FileSystemCrawler : public QObject
@@ -59,17 +60,14 @@ public:
 
     void run();
 
-    void setConfig(const Config& config);
-    const Config& config() const;
+    void setContext(Context& ctx);
+    Context& context();
+    const Context& context() const;
 
     bool isDirExcluded(const QDir& dir) const;
 
-protected:
-    Logger& logger();
-
 private:
-    Config m_config;
-    Logger m_logger;
+    Context* m_pContext;
     PathMap m_pathMap;
 };
 

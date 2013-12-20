@@ -29,7 +29,6 @@
 #define MARKEMPTYDIRS_API_LOGGER_HPP
 
 #include "markemptydirsapi_global.hpp"
-#include "Config.hpp"
 #include "LogLevel.hpp"
 
 #include <QTextStream>
@@ -41,13 +40,16 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
+class Context;
+
 class MARKEMPTYDIRSAPISHARED_EXPORT Logger
 {
 public:
     Logger();
 
-    void setConfig(const Config& config);
-    const Config& config() const;
+    void setContext(Context& ctx);
+    Context& context();
+    const Context& context() const;
 
     void log(const QString& msg, LogLevel logLevel);
 
@@ -55,7 +57,7 @@ public:
     QTextStream& sysErr();
 
 private:
-    Config m_config;
+    Context* m_pContext;
     QTextStream m_sysOut;
     QTextStream m_sysErr;
 };

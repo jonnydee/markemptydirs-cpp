@@ -24,6 +24,9 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
+#include "Config.hpp"
+#include "Context.hpp"
+#include "Logger.hpp"
 #include "VersionCommand.hpp"
 
 
@@ -39,10 +42,12 @@ VersionCommand::VersionCommand()
 
 void VersionCommand::run()
 {
-    const ApplicationInfo& appInfo = config().applicationInfo();
+    const auto& config = context().config();
+    const auto& appInfo = config.applicationInfo();
+    auto& logger = context().logger();
 
     QString version;
-    if (!config().shortMessages())
+    if (!config.shortMessages())
     {
         QStringList lines;
 
@@ -59,7 +64,7 @@ void VersionCommand::run()
         version = appInfo.version.toString();
     }
 
-    logger().log(version, LogLevel::NONE);
+    logger.log(version, LogLevel::NONE);
 }
 
 }

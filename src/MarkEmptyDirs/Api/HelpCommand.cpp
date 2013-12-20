@@ -24,7 +24,10 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
+#include "Config.hpp"
+#include "Context.hpp"
 #include "HelpCommand.hpp"
+#include "Logger.hpp"
 
 
 namespace MarkEmptyDirs
@@ -39,7 +42,10 @@ HelpCommand::HelpCommand()
 
 void HelpCommand::run()
 {
-    logger().log(config().helpText(), LogLevel::NONE);
+    const auto& config = context().config();
+    auto& logger = context().logger();
+
+    logger.log(config.helpText(), LogLevel::NONE);
 }
 
 }

@@ -25,8 +25,11 @@
 // or implied, of Johann Duscher.
 
 #include "ADirCommand.hpp"
+#include "Config.hpp"
+#include "Context.hpp"
 #include "DirDescriptor.hpp"
 #include "FileSystemCrawler.hpp"
+#include "Logger.hpp"
 
 #include <QFile>
 #include <QFileInfo>
@@ -48,49 +51,52 @@ void ADirCommand::run()
 ADirCommand::PathMap ADirCommand::crawlDir()
 {
     FileSystemCrawler crawler;
-    crawler.setConfig(config());
+    crawler.setContext(context());
     crawler.run();
     return crawler.pathMap();
 }
 
 bool ADirCommand::createMarker(const QDir& dir)
 {
+    const auto& config = context().config();
+    auto& logger = context().logger();
+
     // Create marker.
     {
-        QFileInfo markerFileInfo(dir, config().markerName());
+        QFileInfo markerFileInfo(dir, config.markerName());
         auto filePath = markerFileInfo.absoluteFilePath();
         QFile markerFile(filePath);
 
-        if (!config().dryRun() && !markerFile.open(QIODevice::WriteOnly | QIODevice::Text))
+        if (!config.dryRun() && !markerFile.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            logger().log(QObject::tr("Could not create marker: '%1' (%2)").arg(filePath).arg(markerFile.errorString()),
+            logger.log(QObject::tr("Could not create marker: '%1' (%2)").arg(filePath).arg(markerFile.errorString()),
                          LogLevel::ERROR);
             return false;
         }
         else
         {
-            const auto logMsg = config().shortMessages()
+            const auto logMsg = config.shortMessages()
                     ? filePath
                     : QObject::tr("Created marker: '%1'").arg(filePath);
-            logger().log(logMsg, LogLevel::INFO);
+            logger.log(logMsg, LogLevel::INFO);
         }
     }
 
     // Execute create hook (if any).
-    if (!config().createHookCommand().isNull())
+    if (!config.createHookCommand().isNull())
     {
         QString errorString;
-        if (!config().dryRun() && !executeCommand(config().createHookCommand(), &errorString))
+        if (!config.dryRun() && !executeCommand(config.createHookCommand(), &errorString))
         {
-            logger().log(QObject::tr("Could not execute create hook: '%1' (%2)").arg(config().createHookCommand()).arg(errorString),
+            logger.log(QObject::tr("Could not execute create hook: '%1' (%2)").arg(config.createHookCommand()).arg(errorString),
                          LogLevel::ERROR);
         }
         else
         {
-            const auto logMsg = config().shortMessages()
-                    ? config().createHookCommand()
-                    : QObject::tr("Executed create hook: '%1'").arg(config().createHookCommand());
-            logger().log(logMsg, LogLevel::INFO);
+            const auto logMsg = config.shortMessages()
+                    ? config.createHookCommand()
+                    : QObject::tr("Executed create hook: '%1'").arg(config.createHookCommand());
+            logger.log(logMsg, LogLevel::INFO);
         }
     }
 
@@ -99,42 +105,45 @@ bool ADirCommand::createMarker(const QDir& dir)
 
 bool ADirCommand::deleteMarker(const QDir &dir)
 {
+    const auto& config = context().config();
+    auto& logger = context().logger();
+
     // Execute delete hook (if any).
-    if (!config().deleteHookCommand().isNull())
+    if (!config.deleteHookCommand().isNull())
     {
         QString errorString;
-        if (!config().dryRun() && !executeCommand(config().deleteHookCommand(), &errorString))
+        if (!config.dryRun() && !executeCommand(config.deleteHookCommand(), &errorString))
         {
-            logger().log(QObject::tr("Could not execute delete hook: '%1' (%2)").arg(config().deleteHookCommand()).arg(errorString),
+            logger.log(QObject::tr("Could not execute delete hook: '%1' (%2)").arg(config.deleteHookCommand()).arg(errorString),
                          LogLevel::ERROR);
         }
         else
         {
-            const auto logMsg = config().shortMessages()
-                    ? config().createHookCommand()
-                    : QObject::tr("Executed delete hook: '%1'").arg(config().createHookCommand());
-            logger().log(logMsg, LogLevel::INFO);
+            const auto logMsg = config.shortMessages()
+                    ? config.createHookCommand()
+                    : QObject::tr("Executed delete hook: '%1'").arg(config.createHookCommand());
+            logger.log(logMsg, LogLevel::INFO);
         }
     }
 
     // Delete marker.
     {
-        QFileInfo markerFileInfo(dir, config().markerName());
+        QFileInfo markerFileInfo(dir, config.markerName());
         auto filePath = markerFileInfo.canonicalFilePath();
         QFile markerFile(filePath);
 
-        if (!config().dryRun() && !markerFile.remove())
+        if (!config.dryRun() && !markerFile.remove())
         {
-            logger().log(QObject::tr("Could not delete marker: '%1' (%2)").arg(filePath).arg(markerFile.errorString()),
+            logger.log(QObject::tr("Could not delete marker: '%1' (%2)").arg(filePath).arg(markerFile.errorString()),
                          LogLevel::ERROR);
             return false;
         }
         else
         {
-            const auto logMsg = config().shortMessages()
+            const auto logMsg = config.shortMessages()
                     ? filePath
                     : QObject::tr("Deleted marker: '%1'").arg(filePath);
-            logger().log(logMsg, LogLevel::INFO);
+            logger.log(logMsg, LogLevel::INFO);
         }
     }
 
@@ -143,6 +152,9 @@ bool ADirCommand::deleteMarker(const QDir &dir)
 
 bool ADirCommand::executeCommand(const QString& cmd, QString* pError)
 {
+    const auto& config = context().config();
+    auto& logger = context().logger();
+
     return true;
 }
 

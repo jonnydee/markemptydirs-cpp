@@ -34,6 +34,7 @@
 #include <QMap>
 
 
+class QDir;
 class QString;
 
 namespace MarkEmptyDirs

@@ -27,7 +27,9 @@
 #include "CommandLineInterface.hpp"
 
 #include <MarkEmptyDirs/Api/CommandFactory.hpp>
+#include <MarkEmptyDirs/Api/Context.hpp>
 #include <MarkEmptyDirs/Api/ICommand.hpp>
+#include <MarkEmptyDirs/Api/Logger.hpp>
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -41,14 +43,16 @@ int main(int argc, char *argv[])
 
     Cli::CommandLineInterface cli;
     const auto config = cli.createConfig(args);
-
     app.setApplicationName(config.applicationInfo().name);
     app.setApplicationVersion(config.applicationInfo().version.toString());
     app.setOrganizationName(config.applicationInfo().vendorName);
 
+    Api::Logger logger;
+    Api::Context ctx(logger);
+    ctx.setConfig(config);
+
     Api::CommandFactory factory;
-    auto pCmd = factory.createCommand(config);
-    pCmd->init(config);
+    auto pCmd = factory.createCommand(ctx);
     pCmd->run();
 
     return 0;

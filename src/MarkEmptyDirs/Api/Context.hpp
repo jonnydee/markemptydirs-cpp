@@ -24,7 +24,11 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "ACommand.hpp"
+#pragma once
+#ifndef MARKEMPTYDIRS_API_CCONTEXT_HPP
+#define MARKEMPTYDIRS_API_CCONTEXT_HPP
+
+#include "markemptydirsapi_global.hpp"
 
 
 namespace MarkEmptyDirs
@@ -33,29 +37,27 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-ACommand::ACommand()
+class Config;
+class Logger;
+
+class MARKEMPTYDIRSAPISHARED_EXPORT Context
 {
-}
+public:
+    Context(Logger& logger);
 
-ACommand::~ACommand()
-{
-}
+    void setConfig(const Config& config);
 
-Context& ACommand::context()
-{
-    return *m_pContext;
-}
+    const Config& config() const;
 
-const Context& ACommand::context() const
-{
-    return *m_pContext;
-}
+    Logger& logger();
 
-void ACommand::init(Context& ctx)
-{
-    m_pContext = &ctx;
-}
+private:
+    const Config* m_pConfig;
+    Logger* m_pLogger;
+};
 
 }
 
 }
+
+#endif // CONTEXT_HPP

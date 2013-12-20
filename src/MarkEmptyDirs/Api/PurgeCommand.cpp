@@ -24,8 +24,11 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "PurgeCommand.hpp"
+#include "Config.hpp"
+#include "Context.hpp"
 #include "DirDescriptor.hpp"
+#include "Logger.hpp"
+#include "PurgeCommand.hpp"
 
 #include <cerrno>
 
@@ -42,6 +45,9 @@ PurgeCommand::PurgeCommand()
 
 void PurgeCommand::run(const PathMap& pathMap)
 {
+    const auto& config = context().config();
+    auto& logger = context().logger();
+
     QStringList pathsToPurge;
     pathsToPurge.reserve(pathMap.size());
     for (auto it = pathMap.constBegin(); it != pathMap.constEnd(); it++)
@@ -58,7 +64,7 @@ void PurgeCommand::run(const PathMap& pathMap)
         if (pathsToPurge.isEmpty() || !path.startsWith(pathsToPurge.last()))
         {
             pathsToPurge << path;
-            logger().log(QObject::tr("Found directory to purge: '%1'").arg(path), LogLevel::INFO);
+            logger.log(QObject::tr("Found directory to purge: '%1'").arg(path), LogLevel::INFO);
         }
     }
 
@@ -70,32 +76,32 @@ void PurgeCommand::run(const PathMap& pathMap)
             if (child.isDir())
             {
                 QDir childDir(childPath);
-                if (config().dryRun() || childDir.removeRecursively())
+                if (config.dryRun() || childDir.removeRecursively())
                 {
-                    const auto logMsg = config().shortMessages()
+                    const auto logMsg = config.shortMessages()
                             ? childPath
                             : QObject::tr("Deleted directory: '%1'").arg(childPath);
-                    logger().log(logMsg, LogLevel::INFO);
+                    logger.log(logMsg, LogLevel::INFO);
                 }
                 else
                 {
-                    logger().log(QObject::tr("Could not delete directory: '%1' (%2)").arg(childPath).arg(QLatin1String(strerror(errno))),
+                    logger.log(QObject::tr("Could not delete directory: '%1' (%2)").arg(childPath).arg(QLatin1String(strerror(errno))),
                                  LogLevel::ERROR);
                 }
             }
             else if (child.isFile())
             {
                 QFile childFile(childPath);
-                if (config().dryRun() || childFile.remove())
+                if (config.dryRun() || childFile.remove())
                 {
-                    const auto logMsg = config().shortMessages()
+                    const auto logMsg = config.shortMessages()
                             ? childPath
                             : QObject::tr("Deleted file: '%1'").arg(childPath);
-                    logger().log(logMsg, LogLevel::INFO);
+                    logger.log(logMsg, LogLevel::INFO);
                 }
                 else
                 {
-                    logger().log(QObject::tr("Could not delete file: '%1' (%2)").arg(childPath).arg(childFile.errorString()),
+                    logger.log(QObject::tr("Could not delete file: '%1' (%2)").arg(childPath).arg(childFile.errorString()),
                                  LogLevel::ERROR);
                 }
             }

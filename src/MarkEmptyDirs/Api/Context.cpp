@@ -24,7 +24,9 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "ACommand.hpp"
+#include "Config.hpp"
+#include "Context.hpp"
+#include "Logger.hpp"
 
 
 namespace MarkEmptyDirs
@@ -33,27 +35,28 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-ACommand::ACommand()
+Context::Context(Logger& logger)
+    : m_pConfig(nullptr)
+    , m_pLogger(&logger)
 {
+    m_pLogger->setContext(*this);
 }
 
-ACommand::~ACommand()
+void Context::setConfig(const Config& config)
 {
+    m_pConfig = &config;
 }
 
-Context& ACommand::context()
+const Config& Context::config() const
 {
-    return *m_pContext;
+    Q_ASSERT(m_pConfig);
+    return *m_pConfig;
 }
 
-const Context& ACommand::context() const
+Logger& Context::logger()
 {
-    return *m_pContext;
-}
-
-void ACommand::init(Context& ctx)
-{
-    m_pContext = &ctx;
+    Q_ASSERT(m_pLogger);
+    return *m_pLogger;
 }
 
 }

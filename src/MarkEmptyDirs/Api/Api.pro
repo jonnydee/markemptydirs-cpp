@@ -36,7 +36,8 @@ SOURCES += \
     Logger.cpp \
     ACommand.cpp \
     HelpCommand.cpp \
-    CommandFactory.cpp
+    CommandFactory.cpp \
+    Context.cpp
 
 HEADERS += \
     markemptydirsapi_global.hpp \
@@ -54,7 +55,8 @@ HEADERS += \
     ICommand.hpp \
     ACommand.hpp \
     HelpCommand.hpp \
-    CommandFactory.hpp
+    CommandFactory.hpp \
+    Context.hpp
 
 INCLUDEPATH += \
     ../..

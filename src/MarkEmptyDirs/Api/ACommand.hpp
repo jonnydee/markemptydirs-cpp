@@ -29,9 +29,7 @@
 #define MARKEMPTYDIRS_API_ACOMMAND_HPP
 
 #include "markemptydirsapi_global.hpp"
-#include "Config.hpp"
 #include "ICommand.hpp"
-#include "Logger.hpp"
 
 
 namespace MarkEmptyDirs
@@ -47,18 +45,16 @@ class MARKEMPTYDIRSAPISHARED_EXPORT ACommand : public ICommand
 public:
     ~ACommand();
 
-    void init(const Config& config);
+    void init(Context& ctx);
 
 protected:
     ACommand();
 
-    const Config& config() const;
-
-    Logger& logger();
+    Context& context();
+    const Context& context() const;
 
 private:
-    Config m_config;
-    Logger m_logger;
+    Context* m_pContext;
 };
 
 }

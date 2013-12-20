@@ -24,8 +24,11 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "FileSystemCrawler.hpp"
+#include "Config.hpp"
+#include "Context.hpp"
 #include "DirDescriptor.hpp"
+#include "FileSystemCrawler.hpp"
+#include "Logger.hpp"
 
 #include <QDebug>
 #include <QLinkedList>
@@ -41,6 +44,7 @@ namespace Api
 
 FileSystemCrawler::FileSystemCrawler(QObject *parent)
     : QObject(parent)
+    , m_pContext(nullptr)
 {
 }
 
@@ -48,30 +52,33 @@ FileSystemCrawler::~FileSystemCrawler()
 {
 }
 
-Logger& FileSystemCrawler::logger()
-{
-    return m_logger;
-}
-
 FileSystemCrawler::PathMap FileSystemCrawler::pathMap() const
 {
     return m_pathMap;
 }
 
-void FileSystemCrawler::setConfig(const Config& config)
+void FileSystemCrawler::setContext(Context& ctx)
 {
-    m_config = config;
-    m_logger.setConfig(config);
+    m_pContext = &ctx;
 }
 
-const Config& FileSystemCrawler::config() const
+Context& FileSystemCrawler::context()
 {
-    return m_config;
+    Q_ASSERT(m_pContext);
+    return *m_pContext;
+}
+
+const Context& FileSystemCrawler::context() const
+{
+    Q_ASSERT(m_pContext);
+    return *m_pContext;
 }
 
 bool FileSystemCrawler::isDirExcluded(const QDir& dir) const
 {
-    foreach (const auto& excludeDir, config().excludeDirs())
+    const auto& config = context().config();
+
+    foreach (const auto& excludeDir, config.excludeDirs())
     {
         auto exPath = excludeDir.dirName();
         auto dirPath = dir.dirName();
@@ -83,10 +90,13 @@ bool FileSystemCrawler::isDirExcluded(const QDir& dir) const
 
 void FileSystemCrawler::run()
 {
+    const auto& config = context().config();
+    auto& logger = context().logger();
+
     const QDir::Filters filter = QDir::Dirs | QDir::Files | QDir::Hidden | QDir::NoDotAndDotDot;
 
     QLinkedList<QDir> dirQueue;
-    foreach (const auto& dir, config().rootDirs())
+    foreach (const auto& dir, config.rootDirs())
         dirQueue.push_back(dir);
 
     while (!dirQueue.isEmpty())
@@ -106,7 +116,7 @@ void FileSystemCrawler::run()
         const auto children = dir.entryInfoList(filter);
         foreach (const auto child, children)
         {
-            if ((config().dereferenceSymLinks() || !child.isSymLink()) && child.isDir())
+            if ((config.dereferenceSymLinks() || !child.isSymLink()) && child.isDir())
             {
                 const auto childPath = child.canonicalFilePath();
                 const QDir subDir(childPath);
@@ -115,7 +125,7 @@ void FileSystemCrawler::run()
 
                 dirQueue.append(subDir);
             }
-            else if (child.fileName() == config().markerName() && child.isFile())
+            else if (child.fileName() == config.markerName() && child.isFile())
             {
                 dirDescr.setHasMarker();
                 continue;
@@ -126,15 +136,15 @@ void FileSystemCrawler::run()
 
         m_pathMap[dirPath] = dirDescr;
 
-        if (config().shortMessages())
+        if (config.shortMessages())
         {
-            logger().log(QObject::tr("Visited directory: '%1'")
+            logger.log(QObject::tr("Visited directory: '%1'")
                          .arg(dirDescr.dir().canonicalPath()),
                          LogLevel::DEBUG);
         }
         else
         {
-            logger().log(QObject::tr("Visited directory: '%1' [children: %2, marker: %3]")
+            logger.log(QObject::tr("Visited directory: '%1' [children: %2, marker: %3]")
                          .arg(dirDescr.dir().canonicalPath())
                          .arg(dirDescr.childCount())
                          .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no")),

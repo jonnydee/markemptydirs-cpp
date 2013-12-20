@@ -40,14 +40,14 @@ namespace Api
 {
 
 class ICommand;
-class Config;
+class Context;
 
 class MARKEMPTYDIRSAPISHARED_EXPORT CommandFactory
 {
 public:
     CommandFactory();
 
-    std::unique_ptr<ICommand> createCommand(const Config& config) const;
+    std::unique_ptr<ICommand> createCommand(Context& ctx) const;
 };
 
 }
