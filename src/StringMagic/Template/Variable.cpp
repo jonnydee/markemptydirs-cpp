@@ -135,6 +135,28 @@ int Variable::expand(QString& str) const
     return expansionCount;
 }
 
+bool Variable::hasArgument() const
+{
+    return !m_argumentSpec.isNull();
+}
+
+bool Variable::isArgumentMandatory() const
+{
+    return m_defaultArgument.isNull();
+}
+
+QString Variable::toString() const
+{
+    QString spec;
+    if (hasArgument())
+    {
+        spec = isArgumentMandatory()
+            ? QString(":%1").arg(argumentSpec())
+            : QString("[:%1]").arg(argumentSpec());
+    }
+    return QString("§%1%2§").arg(name()).arg(spec);
+}
+
 }
 
 }

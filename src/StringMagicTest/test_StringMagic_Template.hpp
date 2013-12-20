@@ -58,6 +58,9 @@ private slots:
     void test_Variable_guid_expand();
     void test_Variable_lf_expand();
     void test_Variable_sp_expand();
+    void test_Variable_toString_with_mandatory_argumentSpec();
+    void test_Variable_toString_with_optional_argumentSpec();
+    void test_Variable_toString_without_argumentSpec();
 
     void test_Engine_process();
 };
@@ -165,6 +168,33 @@ inline void StringMagic_Template_Test::test_Variable_sp_expand()
 
     QVERIFY(expansionCount == 2);
     QVERIFY(text == "123 56  9§sp :  §.");
+}
+
+inline void StringMagic_Template_Test::test_Variable_toString_with_mandatory_argumentSpec()
+{
+    Variable sut("sut", [](const Variable::Context&) { return QString(); });
+    sut.setArgumentSpec("argSpec");
+
+    QString str = sut.toString();
+    QVERIFY("§sut:argSpec§" == str);
+}
+
+inline void StringMagic_Template_Test::test_Variable_toString_with_optional_argumentSpec()
+{
+    Variable sut("sut", [](const Variable::Context&) { return QString(); });
+    sut.setArgumentSpec("argSpec");
+    sut.setDefaultArgument("defaultArg");
+
+    QString str = sut.toString();
+    QVERIFY("§sut[:argSpec]§" == str);
+}
+
+inline void StringMagic_Template_Test::test_Variable_toString_without_argumentSpec()
+{
+    Variable sut("sut", [](const Variable::Context&) { return QString(); });
+
+    QString str = sut.toString();
+    QVERIFY("§sut§" == str);
 }
 
 inline void StringMagic_Template_Test::test_Engine_process()

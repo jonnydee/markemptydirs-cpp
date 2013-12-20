@@ -60,9 +60,15 @@ public:
     void setDescription(const QString& description);
     QString description() const;
 
+    bool hasArgument() const;
+
+    bool isArgumentMandatory() const;
+
     QString name() const;
 
     int expand(QString& str) const;
+
+    QString toString() const;
 
 private:
     QString m_name;
