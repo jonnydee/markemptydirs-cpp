@@ -51,6 +51,9 @@ public:
 
     Variable(const QString& name, const EvalFn& eval);
 
+    void setArgumentDescription(const QString& description);
+    QString argumentDescription() const;
+
     void setArgumentSpec(const QString& argumentSpec);
     QString argumentSpec() const;
 
@@ -74,6 +77,7 @@ private:
     QString m_name;
     QRegExp m_pattern;
     EvalFn m_eval;
+    QString m_argumentDescription;
     QString m_argumentSpec;
     QString m_defaultArgument;
     QString m_description;
