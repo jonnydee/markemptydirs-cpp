@@ -24,43 +24,46 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Engine.hpp"
-#include "Variable.hpp"
+#pragma once
+#ifndef CODEMAGIC_TEXT_TEMPLATE_ENGINE_HPP
+#define CODEMAGIC_TEXT_TEMPLATE_ENGINE_HPP
+
+#include "../../codemagic_global.hpp"
+
+#include <QList>
+#include <QString>
 
 
 namespace CodeMagic
 {
 
+namespace Text
+{
+
 namespace Template
 {
 
-Engine::Engine()
+class Variable;
+typedef QList<const Variable*> VariableList;
+
+class CODEMAGICSHARED_EXPORT Engine
 {
-}
+public:
+    Engine();
 
-void Engine::addVariable(const Variable& variable)
-{
-    m_variables << &variable;
-}
+    void addVariable(const Variable& variable);
+    const VariableList& variables() const;
 
-int Engine::process(QString& str) const
-{
-    int expansionCount = 0;
+    int process(QString& str) const;
 
-    foreach (const auto pVariable, variables())
-    {
-        Q_ASSERT(pVariable);
-        expansionCount += pVariable->expand(str);
-    }
+private:
+    VariableList m_variables;
+};
 
-    return expansionCount;
-}
-
-const VariableList& Engine::variables() const
-{
-    return m_variables;
 }
 
 }
 
 }
+
+#endif // CODEMAGIC_TEXT_TEMPLATE_ENGINE_HPP

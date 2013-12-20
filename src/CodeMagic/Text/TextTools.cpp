@@ -24,40 +24,74 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "FileSystem.hpp"
+#include "TextTools.hpp"
 
-#include <QChar>
-#include <QDir>
+#include <QString>
 
 
 namespace CodeMagic
 {
 
-namespace FileSystem
+namespace Text
 {
 
-QChar dirSeparator()
+int adjustToMaxLen(QStringList& strings, QChar paddingChar)
 {
-    static const auto separator = QDir::separator();
-    return separator;
+    int maxLen = 0;
+    foreach (const auto& str, strings)
+        maxLen = qMax(maxLen, str.length());
+    for (int i = 0; i < strings.size(); i++)
+        strings[i] += QString(maxLen - strings[i].length(), paddingChar);
+    return maxLen;
 }
 
-QChar pathSeparator()
+void indent(QStringList& strings, int count, QChar paddingChar)
 {
-#ifdef Q_OS_WIN32
-    return ';';
-#else
-    return ':';
-#endif
+    prepend(strings, QString(count, paddingChar));
 }
 
-QChar volumeSeparator()
+QStringList join(const QList<QStringList>& columns, const QString& separator)
 {
-#ifdef Q_OS_WIN32
-    return ':';
-#else
-    return '/';
-#endif
+    if (columns.isEmpty())
+        return QStringList();
+
+    QStringList joined;
+
+    const int numRows = columns.first().size();
+    for (int i = 0; i < numRows; i++)
+    {
+        QStringList row;
+        foreach (const auto& column, columns)
+        {
+            Q_ASSERT(numRows == column.size());
+            row << column[i];
+        }
+        joined << row.join(separator);
+    }
+
+    return joined;
+}
+
+void prepend(QStringList& strings, const QString& prefix)
+{
+    for (int i = 0; i < strings.size(); i++)
+        strings[i].prepend(prefix);
+}
+
+void trimRight(QString& str)
+{
+    for (int i = str.size() - 1; i >= 0; --i)
+        if (!str[i].isSpace())
+        {
+            str.truncate(i + 1);
+            break;
+        }
+}
+
+void trimRight(QStringList& strings)
+{
+    for (int i = 0; i < strings.size(); i++)
+        trimRight(strings[i]);
 }
 
 }

@@ -25,40 +25,45 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef CODEMAGIC_TEMPLATE_ENGINE_HPP
-#define CODEMAGIC_TEMPLATE_ENGINE_HPP
+#ifndef CODEMAGIC_TEXT_TEMPLATE_VARIABLEFACTORY_HPP
+#define CODEMAGIC_TEXT_TEMPLATE_VARIABLEFACTORY_HPP
 
-#include "../codemagic_global.hpp"
+#include "../../codemagic_global.hpp"
 
-#include <QList>
-#include <QString>
 
+class QChar;
 
 namespace CodeMagic
+{
+
+namespace Text
 {
 
 namespace Template
 {
 
 class Variable;
-typedef QList<const Variable*> VariableList;
 
-class CODEMAGICSHARED_EXPORT Engine
+class CODEMAGICSHARED_EXPORT VariableFactory
 {
 public:
-    Engine();
+    VariableFactory();
 
-    void addVariable(const Variable& variable);
-    const VariableList& variables() const;
+    Variable* createDateTimeVariable() const;
+    Variable* createEnvironmentVariable() const;
+    Variable* createGuidVariable() const;
+    Variable* createLinefeedVariable() const;
+    Variable* createSeparatorVariable() const;
+    Variable* createSpaceVariable() const;
 
-    int process(QString& str) const;
-
-private:
-    VariableList m_variables;
+protected:
+    Variable* createCharRepeaterVariable(const QString& name, const QChar& ch, const QString& description) const;
 };
 
 }
 
 }
 
-#endif // CODEMAGIC_TEMPLATE_ENGINE_HPP
+}
+
+#endif // CODEMAGIC_TEXT_TEMPLATE_VARIABLEFACTORY_HPP

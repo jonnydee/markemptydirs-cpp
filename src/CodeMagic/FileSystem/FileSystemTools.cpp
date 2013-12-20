@@ -24,57 +24,42 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#pragma once
-#ifndef CODEMAGIC_TEXTFORMATTER_HPP
-#define CODEMAGIC_TEXTFORMATTER_HPP
+#include "FileSystemTools.hpp"
 
-#include "codemagic_global.hpp"
-
-#include <QList>
-#include <QString>
+#include <QChar>
+#include <QDir>
 
 
 namespace CodeMagic
 {
 
-class CODEMAGICSHARED_EXPORT TextFormatter
+namespace FileSystem
 {
-public:
-    TextFormatter();
 
-    QString format(const QString& paragraph) const;
+QChar dirSeparator()
+{
+    static const auto separator = QDir::separator();
+    return separator;
+}
 
-    void setFirstLineLeftIndent(int count);
-    int firstLineLeftIndent() const;
+QChar pathSeparator()
+{
+#ifdef Q_OS_WIN32
+    return ';';
+#else
+    return ':';
+#endif
+}
 
-    void setFirstLineRightIndent(int count);
-    int firstLineRightIndent() const;
-
-    void setLinesAfterParagraph(int count);
-    int linesAfterParagraph() const;
-
-    void setLinesBeforeParagraph(int count);
-    int linesBeforeParagraph() const;
-
-    void setMaxLineLength(int maxLength);
-    int maxLineLength() const;
-
-    void setParagraphLeftIndent(int count);
-    int paragraphLeftIndent() const;
-
-    void setParagraphRightIndent(int count);
-    int paragraphRightIndent() const;
-
-private:
-    int m_firstLineLeftIndent;
-    int m_firstLineRightIndent;
-    int m_linesAfterParagraph;
-    int m_linesBeforeParagraph;
-    int m_maxLineLength;
-    int m_paragraphLeftIndent;
-    int m_paragraphRightIndent;
-};
+QChar volumeSeparator()
+{
+#ifdef Q_OS_WIN32
+    return ':';
+#else
+    return '/';
+#endif
+}
 
 }
 
-#endif // CODEMAGIC_TEXTFORMATTER_HPP
+}

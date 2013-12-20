@@ -25,11 +25,13 @@
 // or implied, of Johann Duscher.
 
 #include "TextFormatter.hpp"
-
-#include "Tools.hpp"
+#include "TextTools.hpp"
 
 
 namespace CodeMagic
+{
+
+namespace Text
 {
 
 TextFormatter::TextFormatter()
@@ -156,6 +158,8 @@ void TextFormatter::setParagraphRightIndent(int count)
 int TextFormatter::paragraphRightIndent() const
 {
     return m_paragraphRightIndent;
+}
+
 }
 
 }

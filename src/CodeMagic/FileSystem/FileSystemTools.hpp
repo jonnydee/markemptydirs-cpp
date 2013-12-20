@@ -25,40 +25,31 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef CODEMAGIC_TEMPLATE_VARIABLEFACTORY_HPP
-#define CODEMAGIC_TEMPLATE_VARIABLEFACTORY_HPP
+#ifndef CODEMAGIC_FILESYSTEM_TOOLS_HPP
+#define CODEMAGIC_FILESYSTEM_TOOLS_HPP
 
 #include "../codemagic_global.hpp"
 
+#include <QChar>
 
-class QChar;
 
 namespace CodeMagic
 {
 
-namespace Template
+namespace FileSystem
 {
 
-class Variable;
+CODEMAGICSHARED_EXPORT
+QChar dirSeparator();
 
-class CODEMAGICSHARED_EXPORT VariableFactory
-{
-public:
-    VariableFactory();
+CODEMAGICSHARED_EXPORT
+QChar pathSeparator();
 
-    Variable* createDateTimeVariable() const;
-    Variable* createEnvironmentVariable() const;
-    Variable* createGuidVariable() const;
-    Variable* createLinefeedVariable() const;
-    Variable* createSeparatorVariable() const;
-    Variable* createSpaceVariable() const;
-
-protected:
-    Variable* createCharRepeaterVariable(const QString& name, const QChar& ch, const QString& description) const;
-};
+CODEMAGICSHARED_EXPORT
+QChar volumeSeparator();
 
 }
 
 }
 
-#endif // CODEMAGIC_TEMPLATE_VARIABLEFACTORY_HPP
+#endif // CODEMAGIC_FILESYSTEM_TOOLS_HPP

@@ -29,7 +29,7 @@
 #include <ArgumentTools/HelpFormatter.hpp>
 #include <ArgumentTools/ArgumentParser.hpp>
 
-#include <CodeMagic/FileSystem.hpp>
+#include <CodeMagic/FileSystem/FileSystemTools.hpp>
 
 #define APPLICATION_DISCLAIMER          "This is free software; see the source for copying conditions. There is NO" "\n" \
                                         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."

@@ -25,20 +25,20 @@ CONFIG(debug, debug|release) {
 DEFINES += CODEMAGIC_LIBRARY
 
 SOURCES += \
-    Template/Engine.cpp \
-    Template/Variable.cpp \
-    Template/VariableFactory.cpp \
-    FileSystem.cpp \
-    TextFormatter.cpp \
-    Tools.cpp
+    FileSystem/FileSystemTools.cpp \
+    Text/Template/Engine.cpp \
+    Text/Template/Variable.cpp \
+    Text/Template/VariableFactory.cpp \
+    Text/TextFormatter.cpp \
+    Text/TextTools.cpp
 
 HEADERS += codemagic_global.hpp \
-    Template/Engine.hpp \
-    Template/Variable.hpp \
-    Template/VariableFactory.hpp \
-    FileSystem.hpp \
-    TextFormatter.hpp \
-    Tools.hpp
+    FileSystem/FileSystemTools.hpp \
+    Text/Template/Engine.hpp \
+    Text/Template/Variable.hpp \
+    Text/Template/VariableFactory.hpp \
+    Text/TextFormatter.hpp \
+    Text/TextTools.hpp
 
 INCLUDEPATH += \
     $$_PRO_FILE_PWD_/../../src

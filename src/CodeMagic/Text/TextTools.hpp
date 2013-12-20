@@ -25,31 +25,43 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef CODEMAGIC_FILESYSTEM_HPP
-#define CODEMAGIC_FILESYSTEM_HPP
+#ifndef CODEMAGIC_TEXT_TEXTTOOLS_H
+#define CODEMAGIC_TEXT_TEXTTOOLS_H
 
-#include "codemagic_global.hpp"
+#include "../codemagic_global.hpp"
 
-#include <QChar>
+#include <QString>
+#include <QStringList>
 
 
 namespace CodeMagic
 {
 
-namespace FileSystem
+namespace Text
 {
 
 CODEMAGICSHARED_EXPORT
-QChar dirSeparator();
+int adjustToMaxLen(QStringList& strings, QChar paddingChar = ' ');
 
 CODEMAGICSHARED_EXPORT
-QChar pathSeparator();
+void indent(QStringList& strings, int count, QChar paddingChar = ' ');
 
 CODEMAGICSHARED_EXPORT
-QChar volumeSeparator();
+QStringList join(const QList<QStringList>& columns, const QString& separator = QString());
+
+CODEMAGICSHARED_EXPORT
+void prepend(QStringList& strings, const QString& prefix);
+
+CODEMAGICSHARED_EXPORT
+void trimRight(QString& str);
+
+CODEMAGICSHARED_EXPORT
+void trimRight(QStringList& strings);
+
+//QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0, int firstLineIdent = 0);
 
 }
 
 }
 
-#endif // CODEMAGIC_FILESYSTEM_HPP
+#endif // CODEMAGIC_TEXT_TEXTTOOLS_H

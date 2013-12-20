@@ -24,57 +24,48 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include <QDebug>
-#include <QRegExp>
-#include <QString>
-#include <QtTest>
-
-#include <CodeMagic/TextFormatter.hpp>
+#include "Engine.hpp"
+#include "Variable.hpp"
 
 
-using namespace CodeMagic;
-
-class CodeMagic_TextFormatter_Test : public QObject
+namespace CodeMagic
 {
-    Q_OBJECT
 
-public:
-    CodeMagic_TextFormatter_Test();
+namespace Text
+{
 
-private slots:
-    void initTestCase();
-    void cleanupTestCase();
+namespace Template
+{
 
-    void test_format_1();
-};
-
-inline CodeMagic_TextFormatter_Test::CodeMagic_TextFormatter_Test()
+Engine::Engine()
 {
 }
 
-inline void CodeMagic_TextFormatter_Test::initTestCase()
+void Engine::addVariable(const Variable& variable)
 {
+    m_variables << &variable;
 }
 
-inline void CodeMagic_TextFormatter_Test::cleanupTestCase()
+int Engine::process(QString& str) const
 {
+    int expansionCount = 0;
+
+    foreach (const auto pVariable, variables())
+    {
+        Q_ASSERT(pVariable);
+        expansionCount += pVariable->expand(str);
+    }
+
+    return expansionCount;
 }
 
-inline void CodeMagic_TextFormatter_Test::test_format_1()
+const VariableList& Engine::variables() const
 {
-    TextFormatter sut;
-    sut.setFirstLineLeftIndent(2);
-    sut.setFirstLineRightIndent(5);
-    sut.setParagraphLeftIndent(4);
-    sut.setParagraphRightIndent(10);
-    sut.setMaxLineLength(30);
+    return m_variables;
+}
 
-    QString text("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                 "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                 "sdfl skgjskjfghkd f djkfshgkdfskg kdfh kdf kdjfgh dk jfsdkfgh dkjfgh kdjfhgksjdh "
-                 "kdsjfghk jhdfgjsdhfkgj hsdkfjgh ksjdhgksdjhg kjdhsgkj ksjd dkfgd,fmgldkfmgl kdmfg"
-                 " dlfkgl kdfjlgk jdflgkjdl kfgdslkfg sdfgsdlökjfgl sdlkfgjl sdkfjgl sdkfgjldskfgj "
-                 "lfkgjdl kjdflgkdjlgk jdlkfgjld jlfgj fwe.");
+}
 
-    qDebug() << QString("RESULT:\n%1").arg(sut.format(text));
+}
+
 }

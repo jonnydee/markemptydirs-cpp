@@ -27,13 +27,15 @@
 #include "HelpFormatter.hpp"
 #include "Option.hpp"
 
-#include <CodeMagic/Tools.hpp>
+#include <CodeMagic/Text/TextTools.hpp>
 
 
 #define WRAPPED_LINE_MIN_LENGTH             40
 #define OPTION_COLUMN_PADDING_SIZE          1
 #define DESCRIPTION_COLUMN_PADDING_SIZE     2
 
+
+using namespace CodeMagic;
 
 namespace ArgumentTools
 {
@@ -143,22 +145,22 @@ QString HelpFormatter::formatOptionListSection(const OptionListSection& section)
 QString HelpFormatter::formatOptions(const OptionList& options) const
 {
     auto shortNamesColumn = formatShortOptionsColumn(options);
-    const int shortNamesColumnWidth = CodeMagic::adjustToMaxLen(shortNamesColumn);
+    const int shortNamesColumnWidth = Text::adjustToMaxLen(shortNamesColumn);
 
     auto longNamesColumn = formatLongOptionsColumn(options);
-    const int longNamesColumnWidth = CodeMagic::adjustToMaxLen(longNamesColumn);
+    const int longNamesColumnWidth = Text::adjustToMaxLen(longNamesColumn);
 
     const auto descriptionsColumn = formatDescriptionColumn(options);
 
-    auto textLines = CodeMagic::join(QList<QStringList>() << shortNamesColumn << longNamesColumn, QString(OPTION_COLUMN_PADDING_SIZE, ' '));
-    textLines = CodeMagic::join(QList<QStringList>() << textLines << descriptionsColumn, QString(DESCRIPTION_COLUMN_PADDING_SIZE, ' '));
+    auto textLines = Text::join(QList<QStringList>() << shortNamesColumn << longNamesColumn, QString(OPTION_COLUMN_PADDING_SIZE, ' '));
+    textLines = Text::join(QList<QStringList>() << textLines << descriptionsColumn, QString(DESCRIPTION_COLUMN_PADDING_SIZE, ' '));
     const int indent = shortNamesColumnWidth + OPTION_COLUMN_PADDING_SIZE + longNamesColumnWidth + DESCRIPTION_COLUMN_PADDING_SIZE;
 
     QStringList wrappedTextLines;
     foreach (const auto textLine, textLines)
         wrappedTextLines << wrapLine(textLine, m_maxLineLength, indent);
 
-    CodeMagic::indent(wrappedTextLines, m_sectionIndent);
+    Text::indent(wrappedTextLines, m_sectionIndent);
     return wrappedTextLines.join('\n');
 }
 
@@ -260,7 +262,7 @@ QStringList HelpFormatter::wrapLine(const QString& line, int maxLength, int newL
             --i;
 
         auto newLine = currentLine.left(i);
-        CodeMagic::trimRight(newLine);
+        Text::trimRight(newLine);
         wrappedLines << newLine;
 
         currentLine = QString(newLineIndent, ' ') + currentLine.mid(i++).trimmed();

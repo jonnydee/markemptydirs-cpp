@@ -25,10 +25,10 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef CODEMAGIC_TEMPLATE_VARIABLE_HPP
-#define CODEMAGIC_TEMPLATE_VARIABLE_HPP
+#ifndef CODEMAGIC_TEXT_TEMPLATE_VARIABLE_HPP
+#define CODEMAGIC_TEXT_TEMPLATE_VARIABLE_HPP
 
-#include "../codemagic_global.hpp"
+#include "../../codemagic_global.hpp"
 
 #include <QRegExp>
 #include <QString>
@@ -37,6 +37,9 @@
 
 
 namespace CodeMagic
+{
+
+namespace Text
 {
 
 namespace Template
@@ -110,4 +113,6 @@ struct CODEMAGICSHARED_EXPORT Variable::Context
 
 }
 
-#endif // CODEMAGIC_TEMPLATE_VARIABLE_HPP
+}
+
+#endif // CODEMAGIC_TEXT_TEMPLATE_VARIABLE_HPP

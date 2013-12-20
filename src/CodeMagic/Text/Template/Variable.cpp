@@ -36,6 +36,9 @@
 namespace CodeMagic
 {
 
+namespace Text
+{
+
 namespace Template
 {
 
@@ -165,6 +168,8 @@ QString Variable::toString() const
             : QString("[:%1]").arg(argumentSpec());
     }
     return QString("§%1%2§").arg(name()).arg(spec);
+}
+
 }
 
 }

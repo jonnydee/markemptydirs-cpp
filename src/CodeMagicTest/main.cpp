@@ -24,19 +24,19 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "test_CodeMagic_Template.hpp"
-#include "test_CodeMagic_TextFormatter.hpp"
+#include "test_CodeMagic_Text_Template.hpp"
+#include "test_CodeMagic_Text_Formatter.hpp"
 
 
 int main(int argc, char *argv[])
 {
     {
-        CodeMagic_Template_Test tc;
+        CodeMagic_Text_Template_Test tc;
         QTest::qExec(&tc, argc, argv);
     }
 
     {
-        CodeMagic_TextFormatter_Test tc;
+        CodeMagic_Text_Formatter_Test tc;
         QTest::qExec(&tc, argc, argv);
     }
 }

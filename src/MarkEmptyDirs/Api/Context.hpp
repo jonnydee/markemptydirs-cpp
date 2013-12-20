@@ -33,9 +33,12 @@
 
 namespace CodeMagic
 {
+namespace Text
+{
 namespace Template
 {
     class Engine;
+}
 }
 }
 
@@ -52,7 +55,7 @@ class Logger;
 class MARKEMPTYDIRSAPISHARED_EXPORT Context
 {
 public:
-    Context(Logger& logger, CodeMagic::Template::Engine& templateEngine);
+    Context(Logger& logger, CodeMagic::Text::Template::Engine& templateEngine);
 
     void setConfig(const Config& config);
 
@@ -60,12 +63,12 @@ public:
 
     Logger& logger();
 
-    CodeMagic::Template::Engine& templateEngine();
+    CodeMagic::Text::Template::Engine& templateEngine();
 
 private:
     const Config* m_pConfig;
     Logger* m_pLogger;
-    CodeMagic::Template::Engine* m_pTemplateEngine;
+    CodeMagic::Text::Template::Engine* m_pTemplateEngine;
 };
 
 }

@@ -25,38 +25,61 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef CODEMAGIC_TOOLS_H
-#define CODEMAGIC_TOOLS_H
+#ifndef CODEMAGIC_TEXT_FORMATTER_HPP
+#define CODEMAGIC_TEXT_FORMATTER_HPP
 
-#include "codemagic_global.hpp"
+#include "../codemagic_global.hpp"
 
+#include <QList>
 #include <QString>
-#include <QStringList>
 
 
 namespace CodeMagic
 {
 
-CODEMAGICSHARED_EXPORT
-int adjustToMaxLen(QStringList& strings, QChar paddingChar = ' ');
+namespace Text
+{
 
-CODEMAGICSHARED_EXPORT
-void indent(QStringList& strings, int count, QChar paddingChar = ' ');
+class CODEMAGICSHARED_EXPORT TextFormatter
+{
+public:
+    TextFormatter();
 
-CODEMAGICSHARED_EXPORT
-QStringList join(const QList<QStringList>& columns, const QString& separator = QString());
+    QString format(const QString& paragraph) const;
 
-CODEMAGICSHARED_EXPORT
-void prepend(QStringList& strings, const QString& prefix);
+    void setFirstLineLeftIndent(int count);
+    int firstLineLeftIndent() const;
 
-CODEMAGICSHARED_EXPORT
-void trimRight(QString& str);
+    void setFirstLineRightIndent(int count);
+    int firstLineRightIndent() const;
 
-CODEMAGICSHARED_EXPORT
-void trimRight(QStringList& strings);
+    void setLinesAfterParagraph(int count);
+    int linesAfterParagraph() const;
 
-//QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0, int firstLineIdent = 0);
+    void setLinesBeforeParagraph(int count);
+    int linesBeforeParagraph() const;
+
+    void setMaxLineLength(int maxLength);
+    int maxLineLength() const;
+
+    void setParagraphLeftIndent(int count);
+    int paragraphLeftIndent() const;
+
+    void setParagraphRightIndent(int count);
+    int paragraphRightIndent() const;
+
+private:
+    int m_firstLineLeftIndent;
+    int m_firstLineRightIndent;
+    int m_linesAfterParagraph;
+    int m_linesBeforeParagraph;
+    int m_maxLineLength;
+    int m_paragraphLeftIndent;
+    int m_paragraphRightIndent;
+};
 
 }
 
-#endif // CODEMAGIC_TOOLS_H
+}
+
+#endif // CODEMAGIC_TEXT_FORMATTER_HPP

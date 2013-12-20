@@ -27,7 +27,7 @@
 #include "Variable.hpp"
 #include "VariableFactory.hpp"
 
-#include "CodeMagic/FileSystem.hpp"
+#include "CodeMagic/FileSystem/FileSystemTools.hpp"
 
 #include <QChar>
 #include <QDateTime>
@@ -36,6 +36,9 @@
 
 
 namespace CodeMagic
+{
+
+namespace Text
 {
 
 namespace Template
@@ -130,6 +133,8 @@ Variable* VariableFactory::createSpaceVariable() const
     return createCharRepeaterVariable(
         "sp", ' ',
         QObject::tr("get space character(s)"));
+}
+
 }
 
 }
