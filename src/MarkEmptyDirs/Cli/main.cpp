@@ -31,10 +31,13 @@
 #include <MarkEmptyDirs/Api/ICommand.hpp>
 #include <MarkEmptyDirs/Api/Logger.hpp>
 
+#include <StringMagic/Template/Engine.hpp>
+
 #include <QCoreApplication>
 #include <QDebug>
 
 using namespace MarkEmptyDirs;
+using namespace StringMagic;
 
 int main(int argc, char *argv[])
 {
@@ -48,7 +51,8 @@ int main(int argc, char *argv[])
     app.setOrganizationName(config.applicationInfo().vendorName);
 
     Api::Logger logger;
-    Api::Context ctx(logger);
+    Template::Engine templateEngine;
+    Api::Context ctx(logger, templateEngine);
     ctx.setConfig(config);
 
     Api::CommandFactory factory;

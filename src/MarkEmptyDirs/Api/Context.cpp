@@ -28,6 +28,10 @@
 #include "Context.hpp"
 #include "Logger.hpp"
 
+#include <StringMagic/Template/Engine.hpp>
+
+
+using namespace StringMagic;
 
 namespace MarkEmptyDirs
 {
@@ -35,9 +39,10 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-Context::Context(Logger& logger)
+Context::Context(Logger& logger, Template::Engine& templateEngine)
     : m_pConfig(nullptr)
     , m_pLogger(&logger)
+    , m_pTemplateEngine(&templateEngine)
 {
     m_pLogger->setContext(*this);
 }
@@ -57,6 +62,12 @@ Logger& Context::logger()
 {
     Q_ASSERT(m_pLogger);
     return *m_pLogger;
+}
+
+Template::Engine& Context::templateEngine()
+{
+    Q_ASSERT(m_pTemplateEngine);
+    return *m_pTemplateEngine;
 }
 
 }
