@@ -33,6 +33,8 @@
 #include <QList>
 #include <QString>
 
+#include <memory>
+
 
 namespace CodeMagic
 {
@@ -52,8 +54,7 @@ public:
     Engine();
     ~Engine();
 
-    // Takes ownership of given variable.
-    void addVariable(const Variable* pVariable);
+    void addVariable(std::unique_ptr<const Variable> pVariable);
 
     const VariableList& variables() const;
 

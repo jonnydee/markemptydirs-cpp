@@ -31,17 +31,6 @@
 #include <CodeMagic/Text/Template/VariableFactory.hpp>
 
 
-namespace CodeMagic
-{
-namespace Text
-{
-namespace Template
-{
-    class Variable;
-}
-}
-}
-
 namespace MarkEmptyDirs
 {
 
@@ -53,11 +42,9 @@ class Context;
 class VariableFactory : public CodeMagic::Text::Template::VariableFactory
 {
 public:
-    typedef CodeMagic::Text::Template::Variable Variable;
-
     VariableFactory();
 
-    Variable* createDirVariable(const Context& ctx) const;
+    VariablePtr createDirVariable(const Context& ctx) const;
 };
 
 }

@@ -30,6 +30,8 @@
 
 #include "../../codemagic_global.hpp"
 
+#include <memory>
+
 
 class QChar;
 
@@ -47,17 +49,19 @@ class Variable;
 class CODEMAGICSHARED_EXPORT VariableFactory
 {
 public:
+    typedef std::unique_ptr<const Variable> VariablePtr;
+
     VariableFactory();
 
-    Variable* createDateTimeVariable() const;
-    Variable* createEnvironmentVariable() const;
-    Variable* createGuidVariable() const;
-    Variable* createLinefeedVariable() const;
-    Variable* createSeparatorVariable() const;
-    Variable* createSpaceVariable() const;
+    VariablePtr createDateTimeVariable() const;
+    VariablePtr createEnvironmentVariable() const;
+    VariablePtr createGuidVariable() const;
+    VariablePtr createLinefeedVariable() const;
+    VariablePtr createSeparatorVariable() const;
+    VariablePtr createSpaceVariable() const;
 
 protected:
-    Variable* createCharRepeaterVariable(const QString& name, const QChar& ch, const QString& description) const;
+    VariablePtr createCharRepeaterVariable(const QString& name, const QChar& ch, const QString& description) const;
 };
 
 }

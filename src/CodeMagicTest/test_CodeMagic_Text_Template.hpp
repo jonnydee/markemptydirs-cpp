@@ -106,7 +106,7 @@ inline void CodeMagic_Text_Template_Test::test_Variable_custom_expand()
 
 inline void CodeMagic_Text_Template_Test::test_Variable_datetime_expand()
 {
-    std::unique_ptr<const Variable> pSut(VariableFactory().createDateTimeVariable());
+    auto pSut = VariableFactory().createDateTimeVariable();
 
     QString text("Now we have §datetime§, or shorter §datetime:yyyy-MM-dd§, or wrong §datetime:§.");
     qDebug() << "ORIGINAL:" << text;
@@ -120,7 +120,7 @@ inline void CodeMagic_Text_Template_Test::test_Variable_datetime_expand()
 
 inline void CodeMagic_Text_Template_Test::test_Variable_env_expand()
 {
-    std::unique_ptr<const Variable> pSut(VariableFactory().createEnvironmentVariable());
+    auto pSut = VariableFactory().createEnvironmentVariable();
 
     qputenv("STRINGTEMPLATE_VARIABLE_ENV", "environment");
 
@@ -135,7 +135,7 @@ inline void CodeMagic_Text_Template_Test::test_Variable_env_expand()
 
 inline void CodeMagic_Text_Template_Test::test_Variable_guid_expand()
 {
-    std::unique_ptr<const Variable> pSut(VariableFactory().createGuidVariable());
+    auto pSut = VariableFactory().createGuidVariable();
 
     QString text("This is a §guid§ variable.");
     qDebug() << "ORIGINAL:" << text;
@@ -149,7 +149,7 @@ inline void CodeMagic_Text_Template_Test::test_Variable_guid_expand()
 
 inline void CodeMagic_Text_Template_Test::test_Variable_lf_expand()
 {
-    std::unique_ptr<const Variable> pSut(VariableFactory().createLinefeedVariable());
+    auto pSut = VariableFactory().createLinefeedVariable();
 
     QString text("Line 1§lf§Line 2§lf:2§Line 4§lf :  §.");
     qDebug() << "ORIGINAL:" << text;
@@ -162,7 +162,7 @@ inline void CodeMagic_Text_Template_Test::test_Variable_lf_expand()
 
 inline void CodeMagic_Text_Template_Test::test_Variable_separator_expand()
 {
-    std::unique_ptr<const Variable> pSut(VariableFactory().createSeparatorVariable());
+    auto pSut = VariableFactory().createSeparatorVariable();
 
     QString text("§separator:dir§ §separator:path§ §separator:vol§");
     qDebug() << "ORIGINAL:" << text;
@@ -174,7 +174,7 @@ inline void CodeMagic_Text_Template_Test::test_Variable_separator_expand()
 }
 inline void CodeMagic_Text_Template_Test::test_Variable_sp_expand()
 {
-    std::unique_ptr<const Variable> pSut(VariableFactory().createSpaceVariable());
+    auto pSut = VariableFactory().createSpaceVariable();
 
     QString text("123§sp§56§sp:2§9§sp :  §.");
     qDebug() << "ORIGINAL:" << text;

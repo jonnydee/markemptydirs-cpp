@@ -48,7 +48,7 @@ VariableFactory::VariableFactory()
 {
 }
 
-Variable* VariableFactory::createCharRepeaterVariable(const QString& name, const QChar& ch, const QString& description) const
+VariableFactory::VariablePtr VariableFactory::createCharRepeaterVariable(const QString& name, const QChar& ch, const QString& description) const
 {
     auto pVariable = new Variable(name,
         [ch](const Variable::Context& ctx)
@@ -61,10 +61,10 @@ Variable* VariableFactory::createCharRepeaterVariable(const QString& name, const
     pVariable->setArgumentSpec("count");
     pVariable->setDefaultArgument("1");
     pVariable->setDescription(description);
-    return pVariable;
+    return VariablePtr(pVariable);
 }
 
-Variable* VariableFactory::createDateTimeVariable() const
+VariableFactory::VariablePtr VariableFactory::createDateTimeVariable() const
 {
     auto pVariable = new Variable("datetime",
         [](const Variable::Context& ctx)
@@ -75,10 +75,10 @@ Variable* VariableFactory::createDateTimeVariable() const
     pVariable->setArgumentSpec("format-pattern");
     pVariable->setDefaultArgument("yyyy-MM-ddThh:mm:ssZ");
     pVariable->setDescription(QObject::tr("get UTC time"));
-    return pVariable;
+    return VariablePtr(pVariable);
 }
 
-Variable* VariableFactory::createEnvironmentVariable() const
+VariableFactory::VariablePtr VariableFactory::createEnvironmentVariable() const
 {
     auto pVariable = new Variable("env",
         [](const Variable::Context& ctx)
@@ -89,10 +89,10 @@ Variable* VariableFactory::createEnvironmentVariable() const
         });
     pVariable->setArgumentSpec("env-var-name");
     pVariable->setDescription(QObject::tr("get the value from an environment variable"));
-    return pVariable;
+    return VariablePtr(pVariable);
 }
 
-Variable* VariableFactory::createGuidVariable() const
+VariableFactory::VariablePtr VariableFactory::createGuidVariable() const
 {
     auto pVariable = new Variable("guid",
         [](const Variable::Context&)
@@ -100,17 +100,17 @@ Variable* VariableFactory::createGuidVariable() const
             return QUuid::createUuid().toString();
         });
     pVariable->setDescription(QObject::tr("get a new globally unique identifier"));
-    return pVariable;
+    return VariablePtr(pVariable);
 }
 
-Variable* VariableFactory::createLinefeedVariable() const
+VariableFactory::VariablePtr VariableFactory::createLinefeedVariable() const
 {
     return createCharRepeaterVariable(
         "lf", '\n',
         QObject::tr("get line feed character(s)"));
 }
 
-Variable* VariableFactory::createSeparatorVariable() const
+VariableFactory::VariablePtr VariableFactory::createSeparatorVariable() const
 {
     auto pVariable = new Variable("separator",
         [](const Variable::Context& ctx) -> QString
@@ -125,10 +125,10 @@ Variable* VariableFactory::createSeparatorVariable() const
         });
     pVariable->setArgumentSpec("dir|path|vol");
     pVariable->setDescription(QObject::tr("get platform specific directory, path, or volume separator"));
-    return pVariable;
+    return VariablePtr(pVariable);
 }
 
-Variable* VariableFactory::createSpaceVariable() const
+VariableFactory::VariablePtr VariableFactory::createSpaceVariable() const
 {
     return createCharRepeaterVariable(
         "sp", ' ',

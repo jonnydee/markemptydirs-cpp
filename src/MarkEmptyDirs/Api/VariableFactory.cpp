@@ -30,6 +30,8 @@
 #include <CodeMagic/Text/Template/Variable.hpp>
 
 
+using namespace CodeMagic::Text::Template;
+
 namespace MarkEmptyDirs
 {
 
@@ -40,7 +42,7 @@ VariableFactory::VariableFactory()
 {
 }
 
-VariableFactory::Variable* VariableFactory::createDirVariable(const Context& ctx) const
+VariableFactory::VariablePtr VariableFactory::createDirVariable(const Context& ctx) const
 {
     const auto pMarkEmptyDirsApiCtx = &ctx;
 
@@ -64,7 +66,7 @@ VariableFactory::Variable* VariableFactory::createDirVariable(const Context& ctx
     pVariable->setArgumentSpec("base|base.abs|base.rel|cur|cur.abs|cur.rel");
     pVariable->setDefaultArgument("base.abs");
     pVariable->setDescription(QObject::tr("get the base or current directory"));
-    return pVariable;
+    return VariablePtr(pVariable);
 }
 
 }

@@ -41,13 +41,11 @@ int main(int argc, char *argv[])
     auto args = app.arguments();
 
     Cli::CommandLineInterface cli;
-    const auto config = cli.createConfig(args);
-    app.setApplicationName(config.applicationInfo().name);
-    app.setApplicationVersion(config.applicationInfo().version.toString());
-    app.setOrganizationName(config.applicationInfo().vendorName);
+    auto pCtx = Api::Context::create(cli.createConfig(args));
 
-    auto pCtx = Api::Context::create();
-    pCtx->setConfig(config);
+    app.setApplicationName(pCtx->config().applicationInfo().name);
+    app.setApplicationVersion(pCtx->config().applicationInfo().version.toString());
+    app.setOrganizationName(pCtx->config().applicationInfo().vendorName);
 
     Api::CommandFactory commandFactory;
     auto pCmd = commandFactory.createCommand(*pCtx);

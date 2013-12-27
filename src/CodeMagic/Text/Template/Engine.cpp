@@ -46,14 +46,14 @@ Engine::~Engine()
     qDeleteAll(m_variables);
 }
 
-void Engine::addVariable(const Variable* pVariable)
+void Engine::addVariable(std::unique_ptr<const Variable> pVariable)
 {
     Q_ASSERT(pVariable);
-    Q_ASSERT(!m_variables.contains(pVariable));
-    if (!pVariable || m_variables.contains(pVariable))
+    Q_ASSERT(!m_variables.contains(pVariable.get()));
+    if (!pVariable || m_variables.contains(pVariable.get()))
         return;
 
-    m_variables << pVariable;
+    m_variables << pVariable.release();
 }
 
 int Engine::process(QString& str) const

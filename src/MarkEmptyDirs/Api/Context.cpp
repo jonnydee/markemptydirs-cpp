@@ -30,6 +30,7 @@
 #include "VariableFactory.hpp"
 
 #include <CodeMagic/Text/Template/Engine.hpp>
+#include <CodeMagic/Text/Template/Variable.hpp>
 
 
 using namespace CodeMagic::Text;
@@ -40,39 +41,45 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-std::unique_ptr<Context> Context::create(Logger *pLogger, Template::Engine *pTemplateEngine)
+std::unique_ptr<Context> Context::create(std::unique_ptr<const Config> pConfig,
+                                         std::unique_ptr<Logger> pLogger,
+                                         std::unique_ptr<Template::Engine> pTemplateEngine)
 {
+    if (!pConfig)
+        pConfig.reset(new Config);
     if (!pLogger)
-        pLogger = new Logger;
+        pLogger.reset(new Logger);
     if (!pTemplateEngine)
-        pTemplateEngine = new Template::Engine;
+        pTemplateEngine.reset(new Template::Engine);
 
-    std::unique_ptr<Context> pContext(new Context(pLogger, pTemplateEngine));
+    auto pContext = new Context(std::move(pConfig), std::move(pLogger), std::move(pTemplateEngine));
 
     // Add variables to template engine.
     {
+        auto& templateEngine = pContext->templateEngine();
         VariableFactory variableFactory;
-        pTemplateEngine->addVariable(variableFactory.createDateTimeVariable());
-        pTemplateEngine->addVariable(variableFactory.createEnvironmentVariable());
-        pTemplateEngine->addVariable(variableFactory.createGuidVariable());
-        pTemplateEngine->addVariable(variableFactory.createLinefeedVariable());
-        pTemplateEngine->addVariable(variableFactory.createSpaceVariable());
-        pTemplateEngine->addVariable(variableFactory.createDirVariable(*pContext));
+        templateEngine.addVariable(variableFactory.createDateTimeVariable());
+        templateEngine.addVariable(variableFactory.createEnvironmentVariable());
+        templateEngine.addVariable(variableFactory.createGuidVariable());
+        templateEngine.addVariable(variableFactory.createLinefeedVariable());
+        templateEngine.addVariable(variableFactory.createSpaceVariable());
+        templateEngine.addVariable(variableFactory.createDirVariable(*pContext));
     }
 
-    return pContext;
+    return std::unique_ptr<Context>(pContext);
 }
 
-std::unique_ptr<Context> Context::create()
+std::unique_ptr<Context> Context::create(std::unique_ptr<const Config> pConfig)
 {
-    return create(nullptr, nullptr);
+    return create(std::move(pConfig), nullptr, nullptr);
 }
 
-Context::Context(Logger* pLogger, Template::Engine* pTemplateEngine)
-    : m_pConfig(nullptr)
-    , m_pLogger(pLogger)
-    , m_pTemplateEngine(pTemplateEngine)
+Context::Context(std::unique_ptr<const Config> pConfig, std::unique_ptr<Logger> pLogger, std::unique_ptr<Template::Engine> pTemplateEngine)
+    : m_pConfig(pConfig.release())
+    , m_pLogger(pLogger.release())
+    , m_pTemplateEngine(pTemplateEngine.release())
 {
+    Q_ASSERT(m_pConfig);
     Q_ASSERT(m_pLogger);
     Q_ASSERT(m_pTemplateEngine);
 
@@ -83,6 +90,7 @@ Context::~Context()
 {
     delete m_pTemplateEngine;
     delete m_pLogger;
+    delete m_pConfig;
 }
 
 void Context::setBaseDir(const QDir& baseDir)
@@ -95,14 +103,8 @@ QDir Context::baseDir() const
     return m_baseDir;
 }
 
-void Context::setConfig(const Config& config)
-{
-    m_pConfig = &config;
-}
-
 const Config& Context::config() const
 {
-    Q_ASSERT(m_pConfig);
     return *m_pConfig;
 }
 
@@ -118,13 +120,11 @@ QDir Context::currentDir() const
 
 Logger& Context::logger()
 {
-    Q_ASSERT(m_pLogger);
     return *m_pLogger;
 }
 
 Template::Engine& Context::templateEngine()
 {
-    Q_ASSERT(m_pTemplateEngine);
     return *m_pTemplateEngine;
 }
 

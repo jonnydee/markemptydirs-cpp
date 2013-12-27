@@ -154,7 +154,7 @@ CommandLineInterface::CommandLineInterface()
         << &noFollowSymLinksOpt;
 }
 
-Config CommandLineInterface::createConfig(const QStringList& args) const
+std::unique_ptr<const Config> CommandLineInterface::createConfig(const QStringList& args) const
 {
     ArgumentParser parser;
     parser.addOptions(options());
@@ -173,9 +173,9 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
     appInfo.version.bugfix = APPLICATION_VERSION_BUGFIX;
     appInfo.version.suffix = APPLICATION_VERSION_SUFFIX;
 
-    Config config;
-    config.setApplicationInfo(appInfo);
-    config.setExecutableFile(args[0]);
+    auto pConfig = new Config;
+    pConfig->setApplicationInfo(appInfo);
+    pConfig->setExecutableFile(args[0]);
 
     const auto arguments = parser.arguments();
     for (int i = 1; i < arguments.size(); i++)
@@ -184,97 +184,97 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
 
         if (arg.isBasedOn(dryRunOpt))
         {
-            config.setDryRun(true);
+            pConfig->setDryRun(true);
         }
         else if (arg.isBasedOn(createHookOpt))
         {
-            config.setCreateHookCommand(arg.value);
+            pConfig->setCreateHookCommand(arg.value);
         }
         else if (arg.isBasedOn(deleteHookOpt))
         {
-            config.setDeleteHookCommand(arg.value);
+            pConfig->setDeleteHookCommand(arg.value);
         }
         else if (arg.isBasedOn(excludeOpt))
         {
             Config::DirList dirs;
             foreach (auto dir, arg.value.split(CodeMagic::FileSystem::pathSeparator(), QString::SkipEmptyParts))
                 dirs.push_back(dir);
-            config.setExcludeDirs(dirs);
+            pConfig->setExcludeDirs(dirs);
         }
         else if (arg.isBasedOn(shortOpt))
         {
-            config.setShortMessages(true);
+            pConfig->setShortMessages(true);
         }
         else if (arg.isBasedOn(verboseOpt))
         {
-            switch (config.logLevel())
+            switch (pConfig->logLevel())
             {
             case LogLevel::NONE:
-                config.setLogLevel(LogLevel::INFO);
+                pConfig->setLogLevel(LogLevel::INFO);
                 break;
             case LogLevel::INFO:
             default:
-                config.setLogLevel(LogLevel::DEBUG);
+                pConfig->setLogLevel(LogLevel::DEBUG);
             }
         }
         else if (arg.isBasedOn(markerOpt))
         {
-            config.setMarkerName(arg.value);
+            pConfig->setMarkerName(arg.value);
         }
         else if (arg.isBasedOn(textOpt))
         {
-            config.setMarkerText(arg.value);
+            pConfig->setMarkerText(arg.value);
         }
         else if (arg.isBasedOn(followSymLinksOpt))
         {
-            config.setDereferenceSymLinks(true);
+            pConfig->setDereferenceSymLinks(true);
         }
         else if (arg.isBasedOn(noFollowSymLinksOpt))
         {
-            config.setDereferenceSymLinks(false);
+            pConfig->setDereferenceSymLinks(false);
         }
         else if (arg.isBasedOn(substOpt))
         {
-            config.setSubstituteVariables(true);
+            pConfig->setSubstituteVariables(true);
         }
         else if (arg.isBasedOn(noSubstOpt))
         {
-            config.setSubstituteVariables(false);
+            pConfig->setSubstituteVariables(false);
         }
         else if (arg.isBasedOn(helpOpt))
         {
-            config.setCommand(Config::Command::HELP);
+            pConfig->setCommand(Config::Command::HELP);
         }
         else if (arg.isBasedOn(updateOpt))
         {
-            config.setCommand(Config::Command::UPDATE);
+            pConfig->setCommand(Config::Command::UPDATE);
         }
         else if (arg.isBasedOn(listOpt))
         {
-            config.setCommand(Config::Command::CLEAN);
-            config.setDryRun(true);
-            config.setShortMessages(true);
-            config.setLogLevel(LogLevel::INFO);
+            pConfig->setCommand(Config::Command::CLEAN);
+            pConfig->setDryRun(true);
+            pConfig->setShortMessages(true);
+            pConfig->setLogLevel(LogLevel::INFO);
         }
         else if (arg.isBasedOn(cleanOpt))
         {
-            config.setCommand(Config::Command::CLEAN);
+            pConfig->setCommand(Config::Command::CLEAN);
         }
         else if (arg.isBasedOn(overviewOpt))
         {
-            config.setCommand(Config::Command::OVERVIEW);
+            pConfig->setCommand(Config::Command::OVERVIEW);
         }
         else if (arg.isBasedOn(purgeOpt))
         {
-            config.setCommand(Config::Command::PURGE);
+            pConfig->setCommand(Config::Command::PURGE);
         }
         else if (arg.isBasedOn(versionOpt))
         {
-            config.setCommand(Config::Command::VERSION);
+            pConfig->setCommand(Config::Command::VERSION);
         }
         else
         {
-            config.addRootDir(QDir(arg.value));
+            pConfig->addRootDir(QDir(arg.value));
         }
     }
 
@@ -282,7 +282,7 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
     {
         HelpFormatter formatter;
 
-        formatter.setExecutableFileName(config.executableFile().fileName());
+        formatter.setExecutableFileName(pConfig->executableFile().fileName());
 
         formatter.addUsageSection("[COMMAND] [OPTION]... DIR...");
 
@@ -299,11 +299,12 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
 
         auto helpText = formatter.formatHelpText();
 
-        config.setHelpText(helpText);
+        pConfig->setHelpText(helpText);
     }
 
-    return config;
+    return std::unique_ptr<const Config>(pConfig);
 }
+
 OptionList CommandLineInterface::options() const
 {
     return OptionList() << commandOptions() << otherOptions();
