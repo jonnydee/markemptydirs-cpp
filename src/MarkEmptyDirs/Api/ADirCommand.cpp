@@ -48,6 +48,17 @@ void ADirCommand::run()
     run(pathMap);
 }
 
+QDir ADirCommand::baseDir(const QDir& dir) const
+{
+    const auto& config = context().config();
+
+    const auto dirPath = dir.absolutePath();
+    foreach (const auto& rootDir, config.rootDirs())
+        if (dirPath.startsWith(rootDir.absolutePath()))
+            return rootDir;
+    return dir;
+}
+
 ADirCommand::PathMap ADirCommand::crawlDir()
 {
     FileSystemCrawler crawler;
@@ -60,6 +71,10 @@ bool ADirCommand::createMarker(const QDir& dir)
 {
     const auto& config = context().config();
     auto& logger = context().logger();
+
+    // Update context.
+    context().setBaseDir(baseDir(dir));
+    context().setCurrentDir(dir);
 
     // Create marker.
     {
@@ -107,6 +122,10 @@ bool ADirCommand::deleteMarker(const QDir& dir)
 {
     const auto& config = context().config();
     auto& logger = context().logger();
+
+    // Update context.
+    context().setBaseDir(baseDir(dir));
+    context().setCurrentDir(dir);
 
     // Execute delete hook (if any).
     if (!config.deleteHookCommand().isNull())

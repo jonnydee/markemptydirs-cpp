@@ -30,6 +30,8 @@
 
 #include "markemptydirsapi_global.hpp"
 
+#include <QDir>
+
 
 namespace CodeMagic
 {
@@ -57,16 +59,26 @@ class MARKEMPTYDIRSAPISHARED_EXPORT Context
 public:
     Context(Logger& logger, CodeMagic::Text::Template::Engine& templateEngine);
 
+    void setBaseDir(const QDir& baseDir);
+
+    QDir baseDir() const;
+
     void setConfig(const Config& config);
 
     const Config& config() const;
+
+    void setCurrentDir(const QDir& currentDir);
+
+    QDir currentDir() const;
 
     Logger& logger();
 
     CodeMagic::Text::Template::Engine& templateEngine();
 
 private:
+    QDir m_baseDir;
     const Config* m_pConfig;
+    QDir m_currentDir;
     Logger* m_pLogger;
     CodeMagic::Text::Template::Engine* m_pTemplateEngine;
 };

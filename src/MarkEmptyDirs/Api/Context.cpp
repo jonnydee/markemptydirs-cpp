@@ -47,6 +47,16 @@ Context::Context(Logger& logger, Template::Engine& templateEngine)
     m_pLogger->setContext(*this);
 }
 
+void Context::setBaseDir(const QDir& baseDir)
+{
+    m_baseDir = baseDir;
+}
+
+QDir Context::baseDir() const
+{
+    return m_baseDir;
+}
+
 void Context::setConfig(const Config& config)
 {
     m_pConfig = &config;
@@ -56,6 +66,16 @@ const Config& Context::config() const
 {
     Q_ASSERT(m_pConfig);
     return *m_pConfig;
+}
+
+void Context::setCurrentDir(const QDir& currentDir)
+{
+    m_currentDir = currentDir;
+}
+
+QDir Context::currentDir() const
+{
+    return m_currentDir;
 }
 
 Logger& Context::logger()

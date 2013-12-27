@@ -59,6 +59,8 @@ protected:
 
     virtual void run(const PathMap& pathMap) = 0;
 
+    QDir baseDir(const QDir& dir) const;
+
     bool createMarker(const QDir& dir);
     bool deleteMarker(const QDir& dir);
     bool executeCommand(const QString& cmd, QString* pError);
