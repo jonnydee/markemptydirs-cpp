@@ -34,6 +34,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QObject>
+#include <QTextStream>
 
 
 namespace MarkEmptyDirs
@@ -90,6 +91,15 @@ bool ADirCommand::createMarker(const QDir& dir)
         }
         else
         {
+            // Write marker file content (if any).
+            if (!config.dryRun() && !config.markerText().isEmpty())
+            {
+                auto markerText = config.markerText();
+
+                QTextStream out(&markerFile);
+                out << markerText;
+            }
+
             const auto logMsg = config.shortMessages()
                     ? filePath
                     : QObject::tr("Created marker: '%1'").arg(filePath);
