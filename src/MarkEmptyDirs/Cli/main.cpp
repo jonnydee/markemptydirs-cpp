@@ -64,11 +64,13 @@ int main(int argc, char *argv[])
     std::unique_ptr<Template::Variable> pGuidVariable(variableFactory.createGuidVariable());
     std::unique_ptr<Template::Variable> pLfVariable(variableFactory.createLinefeedVariable());
     std::unique_ptr<Template::Variable> pSpVariable(variableFactory.createSpaceVariable());
+    std::unique_ptr<Template::Variable> pDirVariable(variableFactory.createDirVariable(ctx));
     templateEngine.addVariable(*pDateTimeVariable);
     templateEngine.addVariable(*pEnvVariable);
     templateEngine.addVariable(*pGuidVariable);
     templateEngine.addVariable(*pLfVariable);
     templateEngine.addVariable(*pSpVariable);
+    templateEngine.addVariable(*pDirVariable);
 
     Api::CommandFactory commandFactory;
     auto pCmd = commandFactory.createCommand(ctx);
