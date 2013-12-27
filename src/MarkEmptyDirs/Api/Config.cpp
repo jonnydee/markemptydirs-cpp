@@ -207,6 +207,16 @@ QString Config::markerName() const
     return m_markerName;
 }
 
+void Config::setMarkerText(const QString& text)
+{
+    m_markerText = text;
+}
+
+QString Config::markerText() const
+{
+    return m_markerText;
+}
+
 void Config::setDereferenceSymLinks(bool dereference)
 {
     m_dereferenceSymLinks = dereference;
@@ -260,6 +270,7 @@ QString Config::toString() const
             << nameValueStr("executableFile", valueStr(executableFile().fileName()))
             << nameValueStr("logLevel", logLevel())
             << nameValueStr("markerName", valueStr(markerName()))
+            << nameValueStr("markerText", valueStr(markerText()))
             << nameValueStr("dereferenceSymLinks", dereferenceSymLinks())
             << nameValueStr("rootDirs", listValueStr(rootDirs(), [](const QDir& dir) { return dir.path(); }))
             << nameValueStr("shortMessages", shortMessages())

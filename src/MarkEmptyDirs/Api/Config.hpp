@@ -115,6 +115,9 @@ public:
     void setMarkerName(const QString& fileName);
     QString markerName() const;
 
+    void setMarkerText(const QString& text);
+    QString markerText() const;
+
     void setDereferenceSymLinks(bool dereference);
     bool dereferenceSymLinks() const;
 
@@ -140,6 +143,7 @@ private:
     QString m_helpText;
     LogLevel m_logLevel;
     QString m_markerName;
+    QString m_markerText;
     bool m_dereferenceSymLinks;
     DirList m_rootDirs;
     bool m_shortMessages;
