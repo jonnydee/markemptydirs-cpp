@@ -25,20 +25,23 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef ARGUMENTTOOLS_HELPFORMATTER_HPP
-#define ARGUMENTTOOLS_HELPFORMATTER_HPP
+#ifndef CODEMAGIC_CLI_HELPFORMATTER_HPP
+#define CODEMAGIC_CLI_HELPFORMATTER_HPP
 
-#include "argumenttools_global.hpp"
+#include "../codemagic_global.hpp"
 #include "Option.hpp"
 
 #include <QList>
 #include <QPair>
 
 
-namespace ArgumentTools
+namespace CodeMagic
 {
 
-class ARGUMENTTOOLSSHARED_EXPORT HelpFormatter
+namespace Cli
+{
+
+class CODEMAGICSHARED_EXPORT HelpFormatter
 {
 public:
     HelpFormatter(int optionListIndent = 2, int maxLineLength = 80);
@@ -90,4 +93,6 @@ private:
 
 }
 
-#endif // ARGUMENTTOOLS_HELPFORMATTER_HPP
+}
+
+#endif // CODEMAGIC_CLI_HELPFORMATTER_HPP

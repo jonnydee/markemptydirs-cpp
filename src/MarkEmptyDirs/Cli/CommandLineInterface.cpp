@@ -26,8 +26,8 @@
 
 #include "CommandLineInterface.hpp"
 
-#include <ArgumentTools/HelpFormatter.hpp>
-#include <ArgumentTools/ArgumentParser.hpp>
+#include <CodeMagic/Cli/HelpFormatter.hpp>
+#include <CodeMagic/Cli/ArgumentParser.hpp>
 
 #include <CodeMagic/FileSystem/FileSystemTools.hpp>
 
@@ -50,7 +50,7 @@
 #define DEFAULT_MARKER_FILENAME         ".emptydir"
 
 
-using namespace ArgumentTools;
+using namespace CodeMagic::Cli;
 using namespace MarkEmptyDirs::Api;
 
 namespace MarkEmptyDirs

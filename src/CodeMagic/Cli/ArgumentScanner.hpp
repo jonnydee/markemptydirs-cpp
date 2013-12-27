@@ -25,42 +25,60 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef ARGUMENTTOOLS_OPTION_HPP
-#define ARGUMENTTOOLS_OPTION_HPP
-
-#include "argumenttools_global.hpp"
+#ifndef CODEMAGIC_CLI_ARGUMENTSCANNER_HPP
+#define CODEMAGIC_CLI_ARGUMENTSCANNER_HPP
 
 #include <QList>
 #include <QString>
-#include <QStringList>
 
 
-namespace ArgumentTools
+class QStringList;
+
+namespace CodeMagic
 {
 
-class ARGUMENTTOOLSSHARED_EXPORT Option
+namespace Cli
+{
+
+struct Token
+{
+    enum Type
+    {
+        LONGNAME,
+        SHORTNAME,
+        ASSIGN,
+        OTHER
+    };
+
+    Type type;
+    QString payload;
+
+    Token(Type aType, const QString& aPayload = QString())
+        : type(aType), payload(aPayload)
+    {}
+};
+typedef QList<Token> TokenList;
+
+class ArgumentScanner
 {
 public:
-    Option(const QStringList& names, const QString& description = QString::null, const QString& valueName = QString::null, const QString& defaultValue = QString::null);
+    ArgumentScanner();
 
-    QString defaultValue() const;
-    QString description() const;
-    bool hasValue() const;
-    bool isValueMandatory() const;
-    QStringList longNames() const;
-    QStringList names() const;
-    QString valueName() const;
-    QList<QChar> shortNames() const;
+    void scan(const QStringList& args);
+
+    TokenList tokens() const;
+
+protected:
+    int scanShortOptions(const QStringList& args, int startIndex);
+    int scanLongOption(const QStringList& args, int startIndex);
+    int scanOther(const QStringList& args, int startIndex);
 
 private:
-    QStringList m_names;
-    QString m_description;
-    QString m_valueName;
-    QString m_defaultValue;
+    TokenList m_tokens;
 };
-
-typedef QList<const Option*> OptionList;
 
 }
 
-#endif // ARGUMENTTOOLS_OPTION_HPP
+}
+
+#endif // CODEMAGIC_CLI_ARGUMENTSCANNER_HPP

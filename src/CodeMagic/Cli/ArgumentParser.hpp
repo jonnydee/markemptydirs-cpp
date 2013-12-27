@@ -25,8 +25,10 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef ARGUMENTTOOLS_ARGUMENTSCANNER_HPP
-#define ARGUMENTTOOLS_ARGUMENTSCANNER_HPP
+#ifndef CODEMAGIC_CLI_ARGUMENTPARSER_HPP
+#define CODEMAGIC_CLI_ARGUMENTPARSER_HPP
+
+#include "../codemagic_global.hpp"
 
 #include <QList>
 #include <QString>
@@ -34,46 +36,65 @@
 
 class QStringList;
 
-namespace ArgumentTools
+namespace CodeMagic
 {
 
-struct Token
+namespace Cli
 {
-    enum Type
-    {
-        LONGNAME,
-        SHORTNAME,
-        ASSIGN,
-        OTHER
-    };
 
-    Type type;
-    QString payload;
-
-    Token(Type aType, const QString& aPayload = QString())
-        : type(aType), payload(aPayload)
-    {}
-};
+struct Token;
 typedef QList<Token> TokenList;
 
-class ArgumentScanner
+class Option;
+typedef QList<const Option*> OptionList;
+
+
+struct CODEMAGICSHARED_EXPORT Argument
+{
+    const Option* option;
+    QString name;
+    QString value;
+    QString errorMessage;
+
+    Argument() : option(nullptr) {}
+
+    bool isKnown() const { return nullptr != option; }
+    bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
+    bool isBasedOn(const Option& opt) const { return &opt == option; }
+};
+typedef QList<Argument> ArgumentList;
+
+
+class CODEMAGICSHARED_EXPORT ArgumentParser
 {
 public:
-    ArgumentScanner();
+    ArgumentParser();
 
-    void scan(const QStringList& args);
+    void addOption(const Option& option);
+    void addOptions(const OptionList& options);
 
-    TokenList tokens() const;
+    ArgumentList arguments() const;
+    Argument findUnknownArgument() const;
+    Argument findArgument(const Option& option) const;
+    ArgumentList findUnknownArguments() const;
+    ArgumentList findArguments(const Option& option) const;
+
+    OptionList options() const;
+
+    void parse(const QStringList& args);
 
 protected:
-    int scanShortOptions(const QStringList& args, int startIndex);
-    int scanLongOption(const QStringList& args, int startIndex);
-    int scanOther(const QStringList& args, int startIndex);
+    int parseShortOption(const TokenList& tokens, int startIndex);
+    int parseLongOption(const TokenList& tokens, int startIndex);
+    int parseOther(const TokenList& tokens, int startIndex);
 
 private:
-    TokenList m_tokens;
+    OptionList m_options;
+    ArgumentList m_arguments;
 };
 
 }
 
-#endif // ARGUMENTTOOLS_ARGUMENTSCANNER_HPP
+}
+
+#endif // CODEMAGIC_CLI_ARGUMENTPARSER_HPP

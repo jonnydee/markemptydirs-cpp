@@ -25,15 +25,47 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef ARGUMENTTOOLS_GLOBAL_HPP
-#define ARGUMENTTOOLS_GLOBAL_HPP
+#ifndef CODEMAGIC_CLI_OPTION_HPP
+#define CODEMAGIC_CLI_OPTION_HPP
 
-#include <QtCore/qglobal.h>
+#include "../codemagic_global.hpp"
 
-#if defined(ARGUMENTTOOLS_LIBRARY)
-#  define ARGUMENTTOOLSSHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define ARGUMENTTOOLSSHARED_EXPORT Q_DECL_IMPORT
-#endif
+#include <QList>
+#include <QString>
+#include <QStringList>
 
-#endif // ARGUMENTTOOLS_GLOBAL_HPP
+
+namespace CodeMagic
+{
+
+namespace Cli
+{
+
+class CODEMAGICSHARED_EXPORT Option
+{
+public:
+    Option(const QStringList& names, const QString& description = QString::null, const QString& valueName = QString::null, const QString& defaultValue = QString::null);
+
+    QString defaultValue() const;
+    QString description() const;
+    bool hasValue() const;
+    bool isValueMandatory() const;
+    QStringList longNames() const;
+    QStringList names() const;
+    QString valueName() const;
+    QList<QChar> shortNames() const;
+
+private:
+    QStringList m_names;
+    QString m_description;
+    QString m_valueName;
+    QString m_defaultValue;
+};
+
+typedef QList<const Option*> OptionList;
+
+}
+
+}
+
+#endif // CODEMAGIC_CLI_OPTION_HPP

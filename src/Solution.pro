@@ -5,5 +5,4 @@ CONFIG += ordered
 SUBDIRS = \
     CodeMagic \
     CodeMagicTest \
-    ArgumentTools \
     MarkEmptyDirs

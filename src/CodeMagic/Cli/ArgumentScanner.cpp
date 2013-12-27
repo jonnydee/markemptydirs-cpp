@@ -29,7 +29,10 @@
 #include <QStringList>
 
 
-namespace ArgumentTools
+namespace CodeMagic
+{
+
+namespace Cli
 {
 
 ArgumentScanner::ArgumentScanner()
@@ -120,6 +123,8 @@ int ArgumentScanner::scanOther(const QStringList& args, int startIndex)
     m_tokens.push_back(other);
 
     return 1;
+}
+
 }
 
 }

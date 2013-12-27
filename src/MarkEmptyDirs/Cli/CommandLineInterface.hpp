@@ -27,7 +27,7 @@
 #ifndef COMMANDLINEINTERFACE_HPP
 #define COMMANDLINEINTERFACE_HPP
 
-#include <ArgumentTools/Option.hpp>
+#include <CodeMagic/Cli/Option.hpp>
 #include <MarkEmptyDirs/Api/Config.hpp>
 
 
@@ -40,38 +40,38 @@ namespace Cli
 class CommandLineInterface
 {
 public:
-    const ArgumentTools::Option dryRunOpt;
-    const ArgumentTools::Option shortOpt;
-    const ArgumentTools::Option verboseOpt;
-    const ArgumentTools::Option cleanOpt;
-    const ArgumentTools::Option helpOpt;
-    const ArgumentTools::Option createHookOpt;
-    const ArgumentTools::Option deleteHookOpt;
-    const ArgumentTools::Option listOpt;
-    const ArgumentTools::Option purgeOpt;
-    const ArgumentTools::Option excludeOpt;
-    const ArgumentTools::Option markerOpt;
-    const ArgumentTools::Option textOpt;
-    const ArgumentTools::Option fileOpt;
-    const ArgumentTools::Option substOpt;
-    const ArgumentTools::Option noSubstOpt;
-    const ArgumentTools::Option followSymLinksOpt;
-    const ArgumentTools::Option noFollowSymLinksOpt;
-    const ArgumentTools::Option overviewOpt;
-    const ArgumentTools::Option updateOpt;
-    const ArgumentTools::Option versionOpt;
+    const CodeMagic::Cli::Option dryRunOpt;
+    const CodeMagic::Cli::Option shortOpt;
+    const CodeMagic::Cli::Option verboseOpt;
+    const CodeMagic::Cli::Option cleanOpt;
+    const CodeMagic::Cli::Option helpOpt;
+    const CodeMagic::Cli::Option createHookOpt;
+    const CodeMagic::Cli::Option deleteHookOpt;
+    const CodeMagic::Cli::Option listOpt;
+    const CodeMagic::Cli::Option purgeOpt;
+    const CodeMagic::Cli::Option excludeOpt;
+    const CodeMagic::Cli::Option markerOpt;
+    const CodeMagic::Cli::Option textOpt;
+    const CodeMagic::Cli::Option fileOpt;
+    const CodeMagic::Cli::Option substOpt;
+    const CodeMagic::Cli::Option noSubstOpt;
+    const CodeMagic::Cli::Option followSymLinksOpt;
+    const CodeMagic::Cli::Option noFollowSymLinksOpt;
+    const CodeMagic::Cli::Option overviewOpt;
+    const CodeMagic::Cli::Option updateOpt;
+    const CodeMagic::Cli::Option versionOpt;
 
     CommandLineInterface();
 
-    ArgumentTools::OptionList options() const;
-    ArgumentTools::OptionList commandOptions() const;
-    ArgumentTools::OptionList otherOptions() const;
+    CodeMagic::Cli::OptionList options() const;
+    CodeMagic::Cli::OptionList commandOptions() const;
+    CodeMagic::Cli::OptionList otherOptions() const;
 
     Api::Config createConfig(const QStringList& args) const;
 
 private:
-    ArgumentTools::OptionList m_commandOptions;
-    ArgumentTools::OptionList m_otherOptions;
+    CodeMagic::Cli::OptionList m_commandOptions;
+    CodeMagic::Cli::OptionList m_otherOptions;
 };
 
 }

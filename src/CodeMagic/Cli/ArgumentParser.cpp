@@ -31,7 +31,10 @@
 #include <QStringList>
 
 
-namespace ArgumentTools
+namespace CodeMagic
+{
+
+namespace Cli
 {
 
 ArgumentParser::ArgumentParser()
@@ -234,6 +237,8 @@ int ArgumentParser::parseOther(const TokenList& tokens, int startIndex)
     m_arguments.push_back(other);
 
     return 1;
+}
+
 }
 
 }

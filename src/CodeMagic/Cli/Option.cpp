@@ -24,72 +24,71 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#pragma once
-#ifndef ARGUMENTTOOLS_ARGUMENTPARSER_HPP
-#define ARGUMENTTOOLS_ARGUMENTPARSER_HPP
-
-#include "argumenttools_global.hpp"
-
-#include <QList>
-#include <QString>
+#include "Option.hpp"
 
 
-class QStringList;
-
-namespace ArgumentTools
+namespace CodeMagic
 {
 
-struct Token;
-typedef QList<Token> TokenList;
-
-class Option;
-typedef QList<const Option*> OptionList;
-
-
-struct ARGUMENTTOOLSSHARED_EXPORT Argument
+namespace Cli
 {
-    const Option* option;
-    QString name;
-    QString value;
-    QString errorMessage;
 
-    Argument() : option(nullptr) {}
-
-    bool isKnown() const { return nullptr != option; }
-    bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
-    bool isBasedOn(const Option& opt) const { return &opt == option; }
-};
-typedef QList<Argument> ArgumentList;
-
-
-class ARGUMENTTOOLSSHARED_EXPORT ArgumentParser
+Option::Option(const QStringList& names, const QString& description, const QString& valueName, const QString& defaultValue)
+    : m_names(names)
+    , m_description(description)
+    , m_valueName(valueName)
+    , m_defaultValue(defaultValue)
 {
-public:
-    ArgumentParser();
+}
 
-    void addOption(const Option& option);
-    void addOptions(const OptionList& options);
+QStringList Option::names() const
+{
+    return m_names;
+}
 
-    ArgumentList arguments() const;
-    Argument findUnknownArgument() const;
-    Argument findArgument(const Option& option) const;
-    ArgumentList findUnknownArguments() const;
-    ArgumentList findArguments(const Option& option) const;
+QString Option::defaultValue() const
+{
+    return m_defaultValue;
+}
 
-    OptionList options() const;
+bool Option::hasValue() const
+{
+    return !m_valueName.isNull();
+}
 
-    void parse(const QStringList& args);
+bool Option::isValueMandatory() const
+{
+    return hasValue() && m_defaultValue.isNull();
+}
 
-protected:
-    int parseShortOption(const TokenList& tokens, int startIndex);
-    int parseLongOption(const TokenList& tokens, int startIndex);
-    int parseOther(const TokenList& tokens, int startIndex);
+QString Option::description() const
+{
+    return m_description;
+}
 
-private:
-    OptionList m_options;
-    ArgumentList m_arguments;
-};
+QString Option::valueName() const
+{
+    return m_valueName;
+}
+
+QList<QChar> Option::shortNames() const
+{
+    QList<QChar> foundNames;
+    foreach (auto name, names())
+        if (name.length() == 1)
+            foundNames.push_back(name[0]);
+    return foundNames;
+}
+
+QStringList Option::longNames() const
+{
+    QStringList foundNames;
+    foreach (auto name, names())
+        if (name.length() > 1)
+            foundNames.push_back(name);
+    return foundNames;
+}
 
 }
 
-#endif // ARGUMENTTOOLS_ARGUMENTPARSER_HPP
+}

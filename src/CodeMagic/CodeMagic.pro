@@ -25,6 +25,10 @@ CONFIG(debug, debug|release) {
 DEFINES += CODEMAGIC_LIBRARY
 
 SOURCES += \
+    Cli/ArgumentParser.cpp \
+    Cli/ArgumentScanner.cpp \
+    Cli/HelpFormatter.cpp \
+    Cli/Option.cpp \
     FileSystem/FileSystemTools.cpp \
     Text/Formatter.cpp \
     Text/Template/Engine.cpp \
@@ -33,6 +37,10 @@ SOURCES += \
     Text/TextTools.cpp
 
 HEADERS += codemagic_global.hpp \
+    Cli/ArgumentParser.hpp \
+    Cli/ArgumentScanner.hpp \
+    Cli/HelpFormatter.hpp \
+    Cli/Option.hpp \
     FileSystem/FileSystemTools.hpp \
     Text/Formatter.hpp \
     Text/Template/Engine.hpp \

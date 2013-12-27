@@ -35,9 +35,10 @@
 #define DESCRIPTION_COLUMN_PADDING_SIZE     2
 
 
-using namespace CodeMagic;
+namespace CodeMagic
+{
 
-namespace ArgumentTools
+namespace Cli
 {
 
 HelpFormatter::HelpFormatter(int sectionIndent, int maxLineLength)
@@ -270,6 +271,8 @@ QStringList HelpFormatter::wrapLine(const QString& line, int maxLength, int newL
     wrappedLines << currentLine;
 
     return wrappedLines;
+}
+
 }
 
 }
