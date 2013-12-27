@@ -40,8 +40,12 @@ QMAKE_LIBDIR += \
 CONFIG(debug, debug|release) {
     LIBS += \
         -lCodeMagic_debug
+    PRE_TARGETDEPS += \
+        $$QMAKE_LIBDIR/libCodeMagic_debug.a
 }
 CONFIG(release, debug|release) {
     LIBS += \
         -lCodeMagic
+    PRE_TARGETDEPS += \
+        $$QMAKE_LIBDIR/libCodeMagic.a
 }
