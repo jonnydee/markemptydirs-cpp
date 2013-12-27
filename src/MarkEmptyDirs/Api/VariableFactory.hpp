@@ -45,6 +45,8 @@ public:
     VariableFactory();
 
     VariablePtr createDirVariable(const Context& ctx) const;
+
+    VariablePtr createMarkerVariable(const Context& ctx) const;
 };
 
 }

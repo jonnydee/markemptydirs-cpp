@@ -24,6 +24,7 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
+#include "Config.hpp"
 #include "Context.hpp"
 #include "VariableFactory.hpp"
 
@@ -66,6 +67,31 @@ VariableFactory::VariablePtr VariableFactory::createDirVariable(const Context& c
     pVariable->setArgumentSpec("base|base.abs|base.rel|cur|cur.abs|cur.rel");
     pVariable->setDefaultArgument("base.abs");
     pVariable->setDescription(QObject::tr("get base or current directory"));
+    return VariablePtr(pVariable);
+}
+
+VariableFactory::VariablePtr VariableFactory::createMarkerVariable(const Context& ctx) const
+{
+    const auto pMarkEmptyDirsApiCtx = &ctx;
+
+    auto pVariable = new Variable("marker",
+        [pMarkEmptyDirsApiCtx](const Variable::Context& ctx) -> QString
+        {
+            if ("name" == ctx.argument)
+                return pMarkEmptyDirsApiCtx->config().markerName();
+
+            const auto markerFilePath = pMarkEmptyDirsApiCtx->currentDir().absoluteFilePath(pMarkEmptyDirsApiCtx->config().markerName());
+
+            if ("name.abs" == ctx.argument)
+                return markerFilePath;
+            if ("name.rel" == ctx.argument)
+                return pMarkEmptyDirsApiCtx->baseDir().relativeFilePath(markerFilePath);
+
+            return QString();
+        });
+    pVariable->setArgumentSpec("name|name.abs|name.rel");
+    pVariable->setDefaultArgument("name");
+    pVariable->setDescription(QObject::tr("get marker name"));
     return VariablePtr(pVariable);
 }
 
