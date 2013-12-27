@@ -39,11 +39,17 @@ CONFIG(debug, debug|release) {
     LIBS += \
         -lMarkEmptyDirsApi_debug \
         -lCodeMagic_debug
+    PRE_TARGETDEPS += \
+        $$QMAKE_LIBDIR/libMarkEmptyDirsApi_debug.a \
+        $$QMAKE_LIBDIR/libCodeMagic_debug.a
 }
 CONFIG(release, debug|release) {
     LIBS += \
         -lMarkEmptyDirsApi \
         -lCodeMagic
+    PRE_TARGETDEPS += \
+        $$QMAKE_LIBDIR/libMarkEmptyDirsApi.a \
+        $$QMAKE_LIBDIR/libCodeMagic.a
 }
 
 HEADERS += \
