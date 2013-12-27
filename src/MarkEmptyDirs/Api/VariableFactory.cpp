@@ -65,7 +65,7 @@ VariableFactory::VariablePtr VariableFactory::createDirVariable(const Context& c
         });
     pVariable->setArgumentSpec("base|base.abs|base.rel|cur|cur.abs|cur.rel");
     pVariable->setDefaultArgument("base.abs");
-    pVariable->setDescription(QObject::tr("get the base or current directory"));
+    pVariable->setDescription(QObject::tr("get base or current directory"));
     return VariablePtr(pVariable);
 }
 
