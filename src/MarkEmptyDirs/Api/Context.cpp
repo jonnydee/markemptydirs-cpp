@@ -64,6 +64,7 @@ std::unique_ptr<Context> Context::create(std::unique_ptr<const Config> pConfig,
         templateEngine.addVariable(variableFactory.createLinefeedVariable());
         templateEngine.addVariable(variableFactory.createSpaceVariable());
         templateEngine.addVariable(variableFactory.createDirVariable(*pContext));
+        templateEngine.addVariable(variableFactory.createMarkerVariable(*pContext));
     }
 
     return std::unique_ptr<Context>(pContext);
