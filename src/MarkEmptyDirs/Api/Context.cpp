@@ -39,12 +39,23 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-Context::Context(Logger& logger, Template::Engine& templateEngine)
+Context::Context(Logger* pLogger, Template::Engine* pTemplateEngine)
     : m_pConfig(nullptr)
-    , m_pLogger(&logger)
-    , m_pTemplateEngine(&templateEngine)
+    , m_pLogger(pLogger)
+    , m_pTemplateEngine(pTemplateEngine)
 {
+    if (!pLogger)
+        throw std::invalid_argument("pLogger");
+    if (!pTemplateEngine)
+        throw std::invalid_argument("pTemplateEngine");
+
     m_pLogger->setContext(*this);
+}
+
+Context::~Context()
+{
+    delete m_pTemplateEngine;
+    delete m_pLogger;
 }
 
 void Context::setBaseDir(const QDir& baseDir)

@@ -52,19 +52,18 @@ int main(int argc, char *argv[])
     app.setApplicationVersion(config.applicationInfo().version.toString());
     app.setOrganizationName(config.applicationInfo().vendorName);
 
-    Api::Logger logger;
-    Template::Engine templateEngine;
-    Api::Context ctx(logger, templateEngine);
+    auto pTemplateEngine = new Template::Engine;
+    Api::Context ctx(new Api::Logger, pTemplateEngine);
     ctx.setConfig(config);
 
     // Initialize template engine.
     Api::VariableFactory variableFactory;
-    templateEngine.addVariable(variableFactory.createDateTimeVariable());
-    templateEngine.addVariable(variableFactory.createEnvironmentVariable());
-    templateEngine.addVariable(variableFactory.createGuidVariable());
-    templateEngine.addVariable(variableFactory.createLinefeedVariable());
-    templateEngine.addVariable(variableFactory.createSpaceVariable());
-    templateEngine.addVariable(variableFactory.createDirVariable(ctx));
+    pTemplateEngine->addVariable(variableFactory.createDateTimeVariable());
+    pTemplateEngine->addVariable(variableFactory.createEnvironmentVariable());
+    pTemplateEngine->addVariable(variableFactory.createGuidVariable());
+    pTemplateEngine->addVariable(variableFactory.createLinefeedVariable());
+    pTemplateEngine->addVariable(variableFactory.createSpaceVariable());
+    pTemplateEngine->addVariable(variableFactory.createDirVariable(ctx));
 
     Api::CommandFactory commandFactory;
     auto pCmd = commandFactory.createCommand(ctx);

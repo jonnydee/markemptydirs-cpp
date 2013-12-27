@@ -57,7 +57,9 @@ class Logger;
 class MARKEMPTYDIRSAPISHARED_EXPORT Context
 {
 public:
-    Context(Logger& logger, CodeMagic::Text::Template::Engine& templateEngine);
+    Context(Logger* pLogger, CodeMagic::Text::Template::Engine* pTemplateEngine);
+
+    ~Context();
 
     void setBaseDir(const QDir& baseDir);
 
