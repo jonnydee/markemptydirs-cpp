@@ -118,7 +118,7 @@ void FileSystemCrawler::run()
         {
             if ((config.dereferenceSymLinks() || !child.isSymLink()) && child.isDir())
             {
-                const auto childPath = child.canonicalFilePath();
+                const auto childPath = child.absoluteFilePath();
                 const QDir subDir(childPath);
                 if (isDirExcluded(subDir))
                     continue;
