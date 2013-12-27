@@ -103,7 +103,7 @@ bool ADirCommand::createMarker(const QDir& dir)
     return true;
 }
 
-bool ADirCommand::deleteMarker(const QDir &dir)
+bool ADirCommand::deleteMarker(const QDir& dir)
 {
     const auto& config = context().config();
     auto& logger = context().logger();
