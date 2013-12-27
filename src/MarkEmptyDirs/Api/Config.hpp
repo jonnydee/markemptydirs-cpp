@@ -47,9 +47,9 @@ struct MARKEMPTYDIRSAPISHARED_EXPORT ApplicationInfo
 {
     struct Version
     {
-        quint16 major;
-        quint16 minor;
-        quint16 bugfix;
+        quint16 major = 0;
+        quint16 minor = 0;
+        quint16 bugfix = 0;
         QString suffix;
 
         QString toString() const;
