@@ -56,6 +56,8 @@ public:
     typedef CodeMagic::Text::Template::Variable Variable;
 
     VariableFactory();
+
+    Variable* createDirVariable(const Context& ctx) const;
 };
 
 }

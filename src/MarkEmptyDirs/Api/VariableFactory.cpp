@@ -40,6 +40,27 @@ VariableFactory::VariableFactory()
 {
 }
 
+VariableFactory::Variable* VariableFactory::createDirVariable(const Context& ctx) const
+{
+    const auto pMarkEmptyDirsApiCtx = &ctx;
+
+    auto pVariable = new Variable("dir",
+        [pMarkEmptyDirsApiCtx](const Variable::Context& ctx) -> QString
+        {
+            if ("base" == ctx.argument)
+                return pMarkEmptyDirsApiCtx->baseDir().absolutePath();
+            if ("cur.abs" == ctx.argument)
+                return pMarkEmptyDirsApiCtx->currentDir().absolutePath();
+            if ("cur.rel" == ctx.argument)
+                return pMarkEmptyDirsApiCtx->baseDir().relativeFilePath(pMarkEmptyDirsApiCtx->currentDir().absolutePath());
+            return QString();
+        });
+    pVariable->setArgumentSpec("base|cur.abs|cur.rel");
+    pVariable->setDefaultArgument("base");
+    pVariable->setDescription(QObject::tr("get the base or current directory"));
+    return pVariable;
+}
+
 }
 
 }
