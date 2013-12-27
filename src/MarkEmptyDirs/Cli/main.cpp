@@ -30,8 +30,10 @@
 #include <MarkEmptyDirs/Api/Context.hpp>
 #include <MarkEmptyDirs/Api/ICommand.hpp>
 #include <MarkEmptyDirs/Api/Logger.hpp>
+#include <MarkEmptyDirs/Api/VariableFactory.hpp>
 
 #include <CodeMagic/Text/Template/Engine.hpp>
+#include <CodeMagic/Text/Template/Variable.hpp>
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -55,8 +57,21 @@ int main(int argc, char *argv[])
     Api::Context ctx(logger, templateEngine);
     ctx.setConfig(config);
 
-    Api::CommandFactory factory;
-    auto pCmd = factory.createCommand(ctx);
+    // Initialize template engine.
+    Api::VariableFactory variableFactory;
+    std::unique_ptr<Template::Variable> pDateTimeVariable(variableFactory.createDateTimeVariable());
+    std::unique_ptr<Template::Variable> pEnvVariable(variableFactory.createEnvironmentVariable());
+    std::unique_ptr<Template::Variable> pGuidVariable(variableFactory.createGuidVariable());
+    std::unique_ptr<Template::Variable> pLfVariable(variableFactory.createLinefeedVariable());
+    std::unique_ptr<Template::Variable> pSpVariable(variableFactory.createSpaceVariable());
+    templateEngine.addVariable(*pDateTimeVariable);
+    templateEngine.addVariable(*pEnvVariable);
+    templateEngine.addVariable(*pGuidVariable);
+    templateEngine.addVariable(*pLfVariable);
+    templateEngine.addVariable(*pSpVariable);
+
+    Api::CommandFactory commandFactory;
+    auto pCmd = commandFactory.createCommand(ctx);
     pCmd->run();
 
     return 0;

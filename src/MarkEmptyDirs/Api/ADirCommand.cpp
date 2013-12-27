@@ -31,6 +31,8 @@
 #include "FileSystemCrawler.hpp"
 #include "Logger.hpp"
 
+#include <CodeMagic/Text/Template/Engine.hpp>
+
 #include <QFile>
 #include <QFileInfo>
 #include <QObject>
@@ -95,6 +97,8 @@ bool ADirCommand::createMarker(const QDir& dir)
             if (!config.dryRun() && !config.markerText().isEmpty())
             {
                 auto markerText = config.markerText();
+                if (config.substituteVariables())
+                    context().templateEngine().process(markerText);
 
                 QTextStream out(&markerFile);
                 out << markerText;

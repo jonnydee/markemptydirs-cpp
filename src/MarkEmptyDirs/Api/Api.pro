@@ -37,7 +37,8 @@ SOURCES += \
     ACommand.cpp \
     HelpCommand.cpp \
     CommandFactory.cpp \
-    Context.cpp
+    Context.cpp \
+    VariableFactory.cpp
 
 HEADERS += \
     markemptydirsapi_global.hpp \
@@ -56,7 +57,8 @@ HEADERS += \
     ACommand.hpp \
     HelpCommand.hpp \
     CommandFactory.hpp \
-    Context.hpp
+    Context.hpp \
+    VariableFactory.hpp
 
 INCLUDEPATH += \
     ../..
