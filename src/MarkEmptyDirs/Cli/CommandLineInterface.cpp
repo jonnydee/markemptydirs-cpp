@@ -221,6 +221,10 @@ Config CommandLineInterface::createConfig(const QStringList& args) const
         {
             config.setMarkerName(arg.value);
         }
+        else if (arg.isBasedOn(textOpt))
+        {
+            config.setMarkerText(arg.value);
+        }
         else if (arg.isBasedOn(followSymLinksOpt))
         {
             config.setDereferenceSymLinks(true);
