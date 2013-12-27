@@ -214,21 +214,15 @@ inline void CodeMagic_Text_Template_Test::test_Variable_toString_without_argumen
 
 inline void CodeMagic_Text_Template_Test::test_Engine_process()
 {
-    VariableFactory factory;
-    std::unique_ptr<Variable> pDateTimeVariable(factory.createDateTimeVariable());
-    std::unique_ptr<Variable> pEnvVariable(factory.createEnvironmentVariable());
-    std::unique_ptr<Variable> pGuidVariable(factory.createGuidVariable());
-    std::unique_ptr<Variable> pLfVariable(factory.createLinefeedVariable());
-    std::unique_ptr<Variable> pSpVariable(factory.createSpaceVariable());
-
     qputenv("STRINGTEMPLATE_AUTHOR", "Jonny Dee");
 
+    VariableFactory factory;
     Engine sut;
-    sut.addVariable(*pDateTimeVariable);
-    sut.addVariable(*pEnvVariable);
-    sut.addVariable(*pGuidVariable);
-    sut.addVariable(*pLfVariable);
-    sut.addVariable(*pSpVariable);
+    sut.addVariable(factory.createDateTimeVariable());
+    sut.addVariable(factory.createEnvironmentVariable());
+    sut.addVariable(factory.createGuidVariable());
+    sut.addVariable(factory.createLinefeedVariable());
+    sut.addVariable(factory.createSpaceVariable());
 
     QString text("Id: §guid§§lf:2§§sp:4§Created on: §datetime:yyyy-MM-dd§§lf§§sp:4§Created by: §env:STRINGTEMPLATE_AUTHOR§§lf:2§§sp:4§File: .emptydir");
     qDebug() << "ORIGINAL:" << text;

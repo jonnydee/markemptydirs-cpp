@@ -59,18 +59,12 @@ int main(int argc, char *argv[])
 
     // Initialize template engine.
     Api::VariableFactory variableFactory;
-    std::unique_ptr<Template::Variable> pDateTimeVariable(variableFactory.createDateTimeVariable());
-    std::unique_ptr<Template::Variable> pEnvVariable(variableFactory.createEnvironmentVariable());
-    std::unique_ptr<Template::Variable> pGuidVariable(variableFactory.createGuidVariable());
-    std::unique_ptr<Template::Variable> pLfVariable(variableFactory.createLinefeedVariable());
-    std::unique_ptr<Template::Variable> pSpVariable(variableFactory.createSpaceVariable());
-    std::unique_ptr<Template::Variable> pDirVariable(variableFactory.createDirVariable(ctx));
-    templateEngine.addVariable(*pDateTimeVariable);
-    templateEngine.addVariable(*pEnvVariable);
-    templateEngine.addVariable(*pGuidVariable);
-    templateEngine.addVariable(*pLfVariable);
-    templateEngine.addVariable(*pSpVariable);
-    templateEngine.addVariable(*pDirVariable);
+    templateEngine.addVariable(variableFactory.createDateTimeVariable());
+    templateEngine.addVariable(variableFactory.createEnvironmentVariable());
+    templateEngine.addVariable(variableFactory.createGuidVariable());
+    templateEngine.addVariable(variableFactory.createLinefeedVariable());
+    templateEngine.addVariable(variableFactory.createSpaceVariable());
+    templateEngine.addVariable(variableFactory.createDirVariable(ctx));
 
     Api::CommandFactory commandFactory;
     auto pCmd = commandFactory.createCommand(ctx);

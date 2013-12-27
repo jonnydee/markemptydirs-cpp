@@ -41,9 +41,19 @@ Engine::Engine()
 {
 }
 
-void Engine::addVariable(const Variable& variable)
+Engine::~Engine()
 {
-    m_variables << &variable;
+    qDeleteAll(m_variables);
+}
+
+void Engine::addVariable(const Variable* pVariable)
+{
+    Q_ASSERT(pVariable);
+    Q_ASSERT(!m_variables.contains(pVariable));
+    if (!pVariable || m_variables.contains(pVariable))
+        return;
+
+    m_variables << pVariable;
 }
 
 int Engine::process(QString& str) const

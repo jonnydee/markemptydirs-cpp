@@ -50,8 +50,11 @@ class CODEMAGICSHARED_EXPORT Engine
 {
 public:
     Engine();
+    ~Engine();
 
-    void addVariable(const Variable& variable);
+    // Takes ownership of given variable.
+    void addVariable(const Variable* pVariable);
+
     const VariableList& variables() const;
 
     int process(QString& str) const;
