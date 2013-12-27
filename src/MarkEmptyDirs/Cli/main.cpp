@@ -29,17 +29,11 @@
 #include <MarkEmptyDirs/Api/CommandFactory.hpp>
 #include <MarkEmptyDirs/Api/Context.hpp>
 #include <MarkEmptyDirs/Api/ICommand.hpp>
-#include <MarkEmptyDirs/Api/Logger.hpp>
-#include <MarkEmptyDirs/Api/VariableFactory.hpp>
-
-#include <CodeMagic/Text/Template/Engine.hpp>
-#include <CodeMagic/Text/Template/Variable.hpp>
 
 #include <QCoreApplication>
 #include <QDebug>
 
 using namespace MarkEmptyDirs;
-using namespace CodeMagic::Text;
 
 int main(int argc, char *argv[])
 {
@@ -52,21 +46,11 @@ int main(int argc, char *argv[])
     app.setApplicationVersion(config.applicationInfo().version.toString());
     app.setOrganizationName(config.applicationInfo().vendorName);
 
-    auto pTemplateEngine = new Template::Engine;
-    Api::Context ctx(new Api::Logger, pTemplateEngine);
-    ctx.setConfig(config);
-
-    // Initialize template engine.
-    Api::VariableFactory variableFactory;
-    pTemplateEngine->addVariable(variableFactory.createDateTimeVariable());
-    pTemplateEngine->addVariable(variableFactory.createEnvironmentVariable());
-    pTemplateEngine->addVariable(variableFactory.createGuidVariable());
-    pTemplateEngine->addVariable(variableFactory.createLinefeedVariable());
-    pTemplateEngine->addVariable(variableFactory.createSpaceVariable());
-    pTemplateEngine->addVariable(variableFactory.createDirVariable(ctx));
+    auto pCtx = Api::Context::create();
+    pCtx->setConfig(config);
 
     Api::CommandFactory commandFactory;
-    auto pCmd = commandFactory.createCommand(ctx);
+    auto pCmd = commandFactory.createCommand(*pCtx);
     pCmd->run();
 
     return 0;

@@ -27,6 +27,7 @@
 #include "Config.hpp"
 #include "Context.hpp"
 #include "Logger.hpp"
+#include "VariableFactory.hpp"
 
 #include <CodeMagic/Text/Template/Engine.hpp>
 
@@ -39,15 +40,41 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
+std::unique_ptr<Context> Context::create(Logger *pLogger, Template::Engine *pTemplateEngine)
+{
+    if (!pLogger)
+        pLogger = new Logger;
+    if (!pTemplateEngine)
+        pTemplateEngine = new Template::Engine;
+
+    std::unique_ptr<Context> pContext(new Context(pLogger, pTemplateEngine));
+
+    // Add variables to template engine.
+    {
+        VariableFactory variableFactory;
+        pTemplateEngine->addVariable(variableFactory.createDateTimeVariable());
+        pTemplateEngine->addVariable(variableFactory.createEnvironmentVariable());
+        pTemplateEngine->addVariable(variableFactory.createGuidVariable());
+        pTemplateEngine->addVariable(variableFactory.createLinefeedVariable());
+        pTemplateEngine->addVariable(variableFactory.createSpaceVariable());
+        pTemplateEngine->addVariable(variableFactory.createDirVariable(*pContext));
+    }
+
+    return pContext;
+}
+
+std::unique_ptr<Context> Context::create()
+{
+    return create(nullptr, nullptr);
+}
+
 Context::Context(Logger* pLogger, Template::Engine* pTemplateEngine)
     : m_pConfig(nullptr)
     , m_pLogger(pLogger)
     , m_pTemplateEngine(pTemplateEngine)
 {
-    if (!pLogger)
-        throw std::invalid_argument("pLogger");
-    if (!pTemplateEngine)
-        throw std::invalid_argument("pTemplateEngine");
+    Q_ASSERT(m_pLogger);
+    Q_ASSERT(m_pTemplateEngine);
 
     m_pLogger->setContext(*this);
 }

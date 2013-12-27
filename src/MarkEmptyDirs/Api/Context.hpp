@@ -57,7 +57,8 @@ class Logger;
 class MARKEMPTYDIRSAPISHARED_EXPORT Context
 {
 public:
-    Context(Logger* pLogger, CodeMagic::Text::Template::Engine* pTemplateEngine);
+    static std::unique_ptr<Context> create(Logger* pLogger, CodeMagic::Text::Template::Engine* pTemplateEngine);
+    static std::unique_ptr<Context> create();
 
     ~Context();
 
@@ -76,6 +77,9 @@ public:
     Logger& logger();
 
     CodeMagic::Text::Template::Engine& templateEngine();
+
+protected:
+    Context(Logger* pLogger, CodeMagic::Text::Template::Engine* pTemplateEngine);
 
 private:
     QDir m_baseDir;
