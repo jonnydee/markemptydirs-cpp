@@ -26,10 +26,14 @@
 
 #include "CommandLineInterface.hpp"
 
+#include <MarkEmptyDirs/Api/Config.hpp>
+#include <MarkEmptyDirs/Api/Context.hpp>
+
 #include <CodeMagic/Cli/HelpFormatter.hpp>
 #include <CodeMagic/Cli/ArgumentParser.hpp>
-
 #include <CodeMagic/FileSystem/FileSystemTools.hpp>
+#include <CodeMagic/Text/Template/Engine.hpp>
+#include <CodeMagic/Text/Template/Variable.hpp>
 
 #define APPLICATION_DISCLAIMER          "This is free software; see the source for copying conditions. There is NO" "\n" \
                                         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
@@ -51,6 +55,7 @@
 
 
 using namespace CodeMagic::Cli;
+using namespace CodeMagic::Text;
 using namespace MarkEmptyDirs::Api;
 
 namespace MarkEmptyDirs
@@ -58,6 +63,39 @@ namespace MarkEmptyDirs
 
 namespace Cli
 {
+
+namespace
+{
+    QStringList formatVariableParagraph(const Template::Variable& variable)
+    {
+        QStringList lines;
+        // Format title.
+        {
+            auto title = QString("%1 --> %2").arg(variable.toString()).arg(variable.description());
+            if (variable.hasArgument() && !variable.isArgumentMandatory())
+                title += " (" + QObject::tr("default is '%1'").arg(variable.defaultArgument()) + ")";
+
+            lines << title;
+        }
+        // Format argument descriptions.
+        {
+            foreach (const auto& argDescr, variable.argumentDescriptions())
+                lines << QString("    %1 : %2").arg(argDescr.argument).arg(argDescr.description);
+        }
+
+        return lines;
+    }
+
+    QStringList formatVariableParagraphs(const Template::VariableList& variables)
+    {
+        QStringList paragraphs;
+        foreach (const auto pVariable, variables)
+            paragraphs << formatVariableParagraph(*pVariable) << QString();
+        if (!paragraphs.isEmpty())
+            paragraphs.removeLast();
+        return paragraphs;
+    }
+}
 
 CommandLineInterface::CommandLineInterface()
     : dryRunOpt(
@@ -294,8 +332,9 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
                     QObject::tr("Other options"),
                     otherOptions());
 
-        formatter.addTextSection(QObject::tr("Template variables"), QStringList()
-                                 << "*** TODO ***");
+        formatter.addTextSection(
+                    QObject::tr("Template variables"),
+                    formatVariableParagraphs(ctx.templateEngine().variables()));
 
         auto helpText = formatter.formatHelpText();
 
