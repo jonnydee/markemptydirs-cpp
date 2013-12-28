@@ -61,6 +61,7 @@ std::unique_ptr<Context> Context::create(std::unique_ptr<Logger> pLogger,
         templateEngine.addVariable(variableFactory.createGuidVariable());
         templateEngine.addVariable(variableFactory.createLinefeedVariable());
         templateEngine.addVariable(variableFactory.createMarkerVariable(*pContext));
+        templateEngine.addVariable(variableFactory.createSeparatorVariable());
         templateEngine.addVariable(variableFactory.createSpaceVariable());
     }
 
