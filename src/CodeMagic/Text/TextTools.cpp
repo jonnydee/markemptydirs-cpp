@@ -80,7 +80,7 @@ void prepend(QStringList& strings, const QString& prefix)
 
 void trimRight(QString& str)
 {
-    for (int i = str.size() - 1; i >= 0; --i)
+    for (int i = str.length() - 1; i >= 0; --i)
         if (!str[i].isSpace())
         {
             str.truncate(i + 1);
