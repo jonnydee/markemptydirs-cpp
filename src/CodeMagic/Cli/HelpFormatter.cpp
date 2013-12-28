@@ -28,6 +28,7 @@
 #include "Option.hpp"
 
 #include <CodeMagic/Text/TextTools.hpp>
+#include <CodeMagic/Text/Formatter.hpp>
 
 
 #define WRAPPED_LINE_MIN_LENGTH             40
@@ -40,6 +41,21 @@ namespace CodeMagic
 
 namespace Cli
 {
+
+namespace
+{
+
+    QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0, int firstLineIdent = 0)
+    {
+        Text::Formatter formatter;
+        formatter.setMaxLineLength(maxLength);
+        formatter.setFirstLineLeftIndent(firstLineIdent);
+        formatter.setParagraphLeftIndent(newLineIndent);
+        return formatter.format(line);
+    }
+
+}
+
 
 HelpFormatter::HelpFormatter(int sectionIndent, int maxLineLength)
     : m_maxLineLength(maxLineLength)
@@ -249,28 +265,6 @@ QStringList HelpFormatter::formatDescriptionColumn(const OptionList& options) co
         descriptionColumn << description;
     }
     return descriptionColumn;
-}
-
-QStringList HelpFormatter::wrapLine(const QString& line, int maxLength, int newLineIndent, int firstLineIdent) const
-{
-    QStringList wrappedLines;
-
-    auto currentLine = QString(firstLineIdent, ' ') + line;
-    while (currentLine.length() > maxLength)
-    {
-        int i = maxLength;
-        while (i >= 0 && !currentLine[i].isSpace())
-            --i;
-
-        auto newLine = currentLine.left(i);
-        Text::trimRight(newLine);
-        wrappedLines << newLine;
-
-        currentLine = QString(newLineIndent, ' ') + currentLine.mid(i++).trimmed();
-    }
-    wrappedLines << currentLine;
-
-    return wrappedLines;
 }
 
 }

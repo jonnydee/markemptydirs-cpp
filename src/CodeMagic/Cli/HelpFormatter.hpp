@@ -79,8 +79,6 @@ protected:
     QStringList formatLongOptionsColumn(const OptionList& options) const;
     QStringList formatDescriptionColumn(const OptionList& options) const;
 
-    QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0, int firstLineIdent = 0) const;
-
 private:
     QString m_executableFileName;
     int m_maxLineLength;
