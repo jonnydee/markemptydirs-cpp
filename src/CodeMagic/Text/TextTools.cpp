@@ -78,6 +78,22 @@ void prepend(QStringList& strings, const QString& prefix)
         strings[i].prepend(prefix);
 }
 
+void trimLeft(QString& str)
+{
+    for (int i = 0; i < str.length() - 1; i++)
+        if (!str[i].isSpace())
+        {
+            str.remove(0, i);
+            break;
+        }
+}
+
+void trimLeft(QStringList& strings)
+{
+    for (int i = 0; i < strings.size(); i++)
+        trimLeft(strings[i]);
+}
+
 void trimRight(QString& str)
 {
     for (int i = str.length() - 1; i >= 0; --i)

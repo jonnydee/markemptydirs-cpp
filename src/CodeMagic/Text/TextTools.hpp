@@ -53,6 +53,12 @@ CODEMAGICSHARED_EXPORT
 void prepend(QStringList& strings, const QString& prefix);
 
 CODEMAGICSHARED_EXPORT
+void trimLeft(QString& str);
+
+CODEMAGICSHARED_EXPORT
+void trimLeft(QStringList& strings);
+
+CODEMAGICSHARED_EXPORT
 void trimRight(QString& str);
 
 CODEMAGICSHARED_EXPORT
