@@ -44,7 +44,7 @@ namespace Cli
 class CODEMAGICSHARED_EXPORT HelpFormatter
 {
 public:
-    HelpFormatter(int optionListIndent = 2, int maxLineLength = 80);
+    HelpFormatter(int sectionIndent = 2, int maxLineLength = 80);
 
     void setExecutableFileName(const QString& fileName);
 
