@@ -82,6 +82,8 @@ public:
 
     CodeMagic::Text::Template::Engine& templateEngine();
 
+    const CodeMagic::Text::Template::Engine& templateEngine() const;
+
 protected:
     Context(std::unique_ptr<Logger> pLogger, std::unique_ptr<CodeMagic::Text::Template::Engine> pTemplateEngine);
 

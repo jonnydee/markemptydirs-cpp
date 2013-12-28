@@ -132,6 +132,11 @@ Template::Engine& Context::templateEngine()
     return *m_pTemplateEngine;
 }
 
+const Template::Engine& Context::templateEngine() const
+{
+    return *m_pTemplateEngine;
+}
+
 }
 
 }
