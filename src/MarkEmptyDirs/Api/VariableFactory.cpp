@@ -64,9 +64,15 @@ VariableFactory::VariablePtr VariableFactory::createDirVariable(const Context& c
                 return pMarkEmptyDirsApiCtx->baseDir().relativeFilePath(pMarkEmptyDirsApiCtx->currentDir().absolutePath());
             return QString();
         });
+    pVariable->setDescription(QObject::tr("get base or current directory"));
     pVariable->setArgumentSpec("base|base.abs|base.rel|cur|cur.abs|cur.rel");
     pVariable->setDefaultArgument("base.abs");
-    pVariable->setDescription(QObject::tr("get base or current directory"));
+    pVariable->addArgumentDescription("base", QObject::tr("name of base directory"));
+    pVariable->addArgumentDescription("base.abs", QObject::tr("absolute path of base directory"));
+    pVariable->addArgumentDescription("base.rel", QObject::tr("path of base directory relative to current directory"));
+    pVariable->addArgumentDescription("cur", QObject::tr("name of current directory"));
+    pVariable->addArgumentDescription("cur.abs", QObject::tr("absolute path of current directory"));
+    pVariable->addArgumentDescription("cur.rel", QObject::tr("path of current directory relative to base directory"));
     return VariablePtr(pVariable);
 }
 
@@ -89,9 +95,12 @@ VariableFactory::VariablePtr VariableFactory::createMarkerVariable(const Context
 
             return QString();
         });
+    pVariable->setDescription(QObject::tr("get marker name"));
     pVariable->setArgumentSpec("name|name.abs|name.rel");
     pVariable->setDefaultArgument("name");
-    pVariable->setDescription(QObject::tr("get marker name"));
+    pVariable->addArgumentDescription("name", QObject::tr("name of marker file"));
+    pVariable->addArgumentDescription("name.abs", QObject::tr("absolute path of marker file"));
+    pVariable->addArgumentDescription("name.rel", QObject::tr("path of marker file relative to base directory"));
     return VariablePtr(pVariable);
 }
 

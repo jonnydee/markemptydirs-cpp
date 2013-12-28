@@ -58,9 +58,10 @@ VariableFactory::VariablePtr VariableFactory::createCharRepeaterVariable(const Q
             const auto count = countStr.toUInt(&ok);
             return ok ? QString(count, ch) : QString();
         });
-    pVariable->setArgumentSpec("count");
-    pVariable->setDefaultArgument("1");
     pVariable->setDescription(description);
+    pVariable->setArgumentSpec("COUNT");
+    pVariable->setDefaultArgument("1");
+    pVariable->addArgumentDescription("COUNT", QObject::tr("integer denoting how often character is repeated"));
     return VariablePtr(pVariable);
 }
 
@@ -72,9 +73,10 @@ VariableFactory::VariablePtr VariableFactory::createDateTimeVariable() const
             const auto currentDateTime = QDateTime::currentDateTimeUtc();
             return currentDateTime.toString(ctx.argument);
         });
-    pVariable->setArgumentSpec("format-pattern");
-    pVariable->setDefaultArgument("yyyy-MM-ddThh:mm:ssZ");
     pVariable->setDescription(QObject::tr("get UTC time"));
+    pVariable->setArgumentSpec("FORMAT");
+    pVariable->setDefaultArgument("yyyy-MM-ddThh:mm:ssZ");
+    pVariable->addArgumentDescription("FORMAT", QObject::tr("custom format string (see documentation for details)"));
     return VariablePtr(pVariable);
 }
 
@@ -87,8 +89,9 @@ VariableFactory::VariablePtr VariableFactory::createEnvironmentVariable() const
             const auto varValue = qgetenv(varName.constData());
             return QString::fromUtf8(varValue);
         });
-    pVariable->setArgumentSpec("env-var-name");
     pVariable->setDescription(QObject::tr("get the value from an environment variable"));
+    pVariable->setArgumentSpec("NAME");
+    pVariable->addArgumentDescription("NAME", QObject::tr("the environment variable's name"));
     return VariablePtr(pVariable);
 }
 
@@ -123,8 +126,11 @@ VariableFactory::VariablePtr VariableFactory::createSeparatorVariable() const
                 return FileSystem::volumeSeparator();
             return QString();
         });
-    pVariable->setArgumentSpec("dir|path|vol");
     pVariable->setDescription(QObject::tr("get platform specific directory, path, or volume separator"));
+    pVariable->setArgumentSpec("dir|path|vol");
+    pVariable->addArgumentDescription("dir", QObject::tr("directory separator ('%1')").arg(FileSystem::dirSeparator()));
+    pVariable->addArgumentDescription("path", QObject::tr("path separator ('%1')").arg(FileSystem::pathSeparator()));
+    pVariable->addArgumentDescription("vol", QObject::tr("volume separator ('%1')").arg(FileSystem::volumeSeparator()));
     return VariablePtr(pVariable);
 }
 
