@@ -58,8 +58,6 @@ void trimRight(QString& str);
 CODEMAGICSHARED_EXPORT
 void trimRight(QStringList& strings);
 
-//QStringList wrapLine(const QString& line, int maxLength, int newLineIndent = 0, int firstLineIdent = 0);
-
 }
 
 }
