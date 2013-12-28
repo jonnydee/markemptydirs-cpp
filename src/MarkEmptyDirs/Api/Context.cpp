@@ -41,18 +41,15 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
-std::unique_ptr<Context> Context::create(std::unique_ptr<const Config> pConfig,
-                                         std::unique_ptr<Logger> pLogger,
+std::unique_ptr<Context> Context::create(std::unique_ptr<Logger> pLogger,
                                          std::unique_ptr<Template::Engine> pTemplateEngine)
 {
-    if (!pConfig)
-        pConfig.reset(new Config);
     if (!pLogger)
         pLogger.reset(new Logger);
     if (!pTemplateEngine)
         pTemplateEngine.reset(new Template::Engine);
 
-    auto pContext = new Context(std::move(pConfig), std::move(pLogger), std::move(pTemplateEngine));
+    auto pContext = new Context(std::move(pLogger), std::move(pTemplateEngine));
 
     // Add variables to template engine.
     {
@@ -70,17 +67,16 @@ std::unique_ptr<Context> Context::create(std::unique_ptr<const Config> pConfig,
     return std::unique_ptr<Context>(pContext);
 }
 
-std::unique_ptr<Context> Context::create(std::unique_ptr<const Config> pConfig)
+std::unique_ptr<Context> Context::create()
 {
-    return create(std::move(pConfig), nullptr, nullptr);
+    return create(nullptr, nullptr);
 }
 
-Context::Context(std::unique_ptr<const Config> pConfig, std::unique_ptr<Logger> pLogger, std::unique_ptr<Template::Engine> pTemplateEngine)
-    : m_pConfig(pConfig.release())
+Context::Context(std::unique_ptr<Logger> pLogger, std::unique_ptr<Template::Engine> pTemplateEngine)
+    : m_pConfig(nullptr)
     , m_pLogger(pLogger.release())
     , m_pTemplateEngine(pTemplateEngine.release())
 {
-    Q_ASSERT(m_pConfig);
     Q_ASSERT(m_pLogger);
     Q_ASSERT(m_pTemplateEngine);
 
@@ -104,8 +100,15 @@ QDir Context::baseDir() const
     return m_baseDir;
 }
 
+void Context::setConfig(std::unique_ptr<const Config> pConfig)
+{
+    m_pConfig = pConfig.release();
+    Q_ASSERT(m_pConfig);
+}
+
 const Config& Context::config() const
 {
+    Q_ASSERT(m_pConfig);
     return *m_pConfig;
 }
 

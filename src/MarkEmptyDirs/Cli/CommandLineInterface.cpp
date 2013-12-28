@@ -154,7 +154,7 @@ CommandLineInterface::CommandLineInterface()
         << &noFollowSymLinksOpt;
 }
 
-std::unique_ptr<const Config> CommandLineInterface::createConfig(const QStringList& args) const
+std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& ctx, const QStringList& args) const
 {
     ArgumentParser parser;
     parser.addOptions(options());

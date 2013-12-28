@@ -28,13 +28,18 @@
 #define COMMANDLINEINTERFACE_HPP
 
 #include <CodeMagic/Cli/Option.hpp>
-#include <MarkEmptyDirs/Api/Config.hpp>
 
 #include <memory>
 
 
 namespace MarkEmptyDirs
 {
+
+namespace Api
+{
+    class Config;
+    class Context;
+}
 
 namespace Cli
 {
@@ -69,7 +74,7 @@ public:
     CodeMagic::Cli::OptionList commandOptions() const;
     CodeMagic::Cli::OptionList otherOptions() const;
 
-    std::unique_ptr<const Api::Config> createConfig(const QStringList& args) const;
+    std::unique_ptr<const Api::Config> createConfig(const Api::Context& ctx, const QStringList& args) const;
 
 private:
     CodeMagic::Cli::OptionList m_commandOptions;

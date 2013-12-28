@@ -27,6 +27,7 @@
 #include "CommandLineInterface.hpp"
 
 #include <MarkEmptyDirs/Api/CommandFactory.hpp>
+#include <MarkEmptyDirs/Api/Config.hpp>
 #include <MarkEmptyDirs/Api/Context.hpp>
 #include <MarkEmptyDirs/Api/ICommand.hpp>
 
@@ -40,8 +41,10 @@ int main(int argc, char *argv[])
     QCoreApplication app(argc, argv);
     auto args = app.arguments();
 
+    auto pCtx = Api::Context::create();
+
     Cli::CommandLineInterface cli;
-    auto pCtx = Api::Context::create(cli.createConfig(args));
+    pCtx->setConfig(cli.createConfig(*pCtx, args));
 
     app.setApplicationName(pCtx->config().applicationInfo().name);
     app.setApplicationVersion(pCtx->config().applicationInfo().version.toString());
