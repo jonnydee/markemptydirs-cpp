@@ -76,5 +76,5 @@ inline void CodeMagic_Text_Formatter_Test::test_format_1()
                  " dlfkgl kdfjlgk jdflgkjdl kfgdslkfg sdfgsdlökjfgl sdlkfgjl sdkfjgl sdkfgjldskfgj "
                  "lfkgjdl kjdflgkdjlgk jdlkfgjld jlfgj fwe.");
 
-    qDebug() << QString("RESULT:\n%1").arg(sut.format(text));
+    qDebug() << QString("RESULT:\n%1").arg(sut.format(text).join('\n'));
 }

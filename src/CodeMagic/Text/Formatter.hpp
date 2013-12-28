@@ -45,7 +45,7 @@ class CODEMAGICSHARED_EXPORT Formatter
 public:
     Formatter();
 
-    QString format(const QString& paragraph) const;
+    QStringList format(const QString& paragraphs) const;
 
     void setFirstLineLeftIndent(int count);
     int firstLineLeftIndent() const;

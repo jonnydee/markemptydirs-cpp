@@ -33,6 +33,31 @@ namespace CodeMagic
 
 namespace Text
 {
+
+namespace
+{
+
+    QString wrapSingleLine(QString& line, int maxLength)
+    {
+        if (line.length() <= maxLength)
+            return QString();
+
+        int i = maxLength - 1;
+        while (i >= 0 && !line[i].isSpace())
+            --i;
+
+        if (i < 0)
+            i = maxLength;
+
+        auto tail = line.mid(i);
+        trimLeft(tail);
+        line.truncate(i);
+        trimRight(line);
+        return tail;
+    }
+
+}
+
 Formatter::Formatter()
     : m_firstLineLeftIndent(0)
     , m_firstLineRightIndent(0)
@@ -44,49 +69,32 @@ Formatter::Formatter()
 {
 }
 
-static QString wrapSingleLine(QString& line, int maxLength)
-{
-    line = line.trimmed();
-    if (line.length() <= maxLength)
-        return QString();
-
-    int i = maxLength - 1;
-    while (i >= 0 && !line[i].isSpace())
-        --i;
-
-    if (i < 0)
-        i = maxLength;
-
-    const auto tail = line.mid(i);
-    line.truncate(i);
-    trimRight(line);
-    return tail.trimmed();
-}
-
-QString Formatter::format(const QString& paragraph) const
+QStringList Formatter::format(const QString& paragraphs) const
 {
     QStringList wrappedLines;
 
-    auto line = paragraph.trimmed();
-    auto LeftIndent = firstLineLeftIndent();
-    auto rightIndent = firstLineRightIndent();
-    int textWidth = maxLineLength() - LeftIndent - rightIndent;
-    Q_ASSERT(textWidth > 0);
-    while (line.length() > textWidth)
+    foreach (auto line, paragraphs.split('\n'))
     {
-        auto nextLine = wrapSingleLine(line, textWidth);
-        wrappedLines << QString(LeftIndent, ' ') + line;
-
-        line = nextLine;
-        LeftIndent = paragraphLeftIndent();
-        rightIndent = paragraphRightIndent();
-        textWidth = m_maxLineLength - LeftIndent - rightIndent;
+        auto LeftIndent = firstLineLeftIndent();
+        auto rightIndent = firstLineRightIndent();
+        int textWidth = maxLineLength() - LeftIndent - rightIndent;
         Q_ASSERT(textWidth > 0);
-    }
-    if (!line.isEmpty())
-        wrappedLines << QString(LeftIndent, ' ') + line;
+        while (line.length() > textWidth)
+        {
+            auto nextLine = wrapSingleLine(line, textWidth);
+            wrappedLines << QString(LeftIndent, ' ') + line;
 
-    return wrappedLines.join('\n');
+            line = nextLine;
+            LeftIndent = paragraphLeftIndent();
+            rightIndent = paragraphRightIndent();
+            textWidth = m_maxLineLength - LeftIndent - rightIndent;
+            Q_ASSERT(textWidth > 0);
+        }
+        if (!line.isEmpty())
+            wrappedLines << QString(LeftIndent, ' ') + line;
+    }
+
+    return wrappedLines;
 }
 
 void Formatter::setFirstLineLeftIndent(int count)
