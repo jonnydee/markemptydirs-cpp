@@ -75,8 +75,8 @@ QStringList Formatter::format(const QString& paragraphs) const
 
     foreach (auto line, paragraphs.split('\n'))
     {
-        auto LeftIndent = firstLineLeftIndent();
-        auto rightIndent = firstLineRightIndent();
+        auto LeftIndent = qMax(firstLineLeftIndent() + paragraphLeftIndent(), 0);
+        auto rightIndent = qMax(firstLineRightIndent() + paragraphRightIndent(), 0);
         int textWidth = maxLineLength() - LeftIndent - rightIndent;
         Q_ASSERT(textWidth > 0);
         while (line.length() > textWidth)
@@ -90,7 +90,7 @@ QStringList Formatter::format(const QString& paragraphs) const
             textWidth = m_maxLineLength - LeftIndent - rightIndent;
             Q_ASSERT(textWidth > 0);
         }
-        if (!line.isEmpty())
+        if (line.isNull() || !line.isEmpty())
             wrappedLines << QString(LeftIndent, ' ') + line;
     }
 

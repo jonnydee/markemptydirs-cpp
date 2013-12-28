@@ -49,7 +49,7 @@ namespace
     {
         Text::Formatter formatter;
         formatter.setMaxLineLength(maxLength);
-        formatter.setFirstLineLeftIndent(firstLineIdent);
+        formatter.setFirstLineLeftIndent(firstLineIdent - newLineIndent);
         formatter.setParagraphLeftIndent(newLineIndent);
         return formatter.format(line);
     }
@@ -89,14 +89,21 @@ void HelpFormatter::addTextSection(const QString& title, const QString& paragrap
 void HelpFormatter::addTextSection(const QString& title, const QStringList& paragraphs)
 {
     QList<TextSectionParagraph> paras;
-    foreach (const auto& pararaph, paragraphs)
-        for (int i = 0; i < pararaph.length(); i++)
-            if (' ' != pararaph[i])
+    foreach (const auto& paragraph, paragraphs)
+    {
+        if (paragraph.trimmed().isEmpty())
+        {
+            paras << TextSectionParagraph(0, QString());
+            continue;
+        }
+
+        for (int i = 0; i < paragraph.length(); i++)
+            if (!paragraph[i].isSpace())
             {
-                paras << TextSectionParagraph(i, pararaph.mid(i));
+                paras << TextSectionParagraph(i, paragraph.mid(i));
                 break;
             }
-
+    }
     m_textSections << TextSection(title, paras);
     m_sectionList << SectionItem(SectionText, m_textSections.size() - 1);
 }
