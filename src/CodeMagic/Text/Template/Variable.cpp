@@ -49,14 +49,14 @@ Variable::Variable(const QString& name, const EvalFn& eval)
 {
 }
 
-void Variable::setArgumentDescription(const QString& description)
+void Variable::addArgumentDescription(const QString& argument, const QString& description)
 {
-    m_argumentDescription = description;
+    m_argumentDescriptions << ArgumentDescription(argument, description);
 }
 
-QString Variable::argumentDescription() const
+const QList<Variable::ArgumentDescription>& Variable::argumentDescriptions() const
 {
-    return m_argumentDescription;
+    return m_argumentDescriptions;
 }
 
 void Variable::setArgumentSpec(const QString& argumentSpec)

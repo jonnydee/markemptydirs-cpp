@@ -30,6 +30,7 @@
 
 #include "../../codemagic_global.hpp"
 
+#include <QList>
 #include <QRegExp>
 #include <QString>
 
@@ -48,14 +49,15 @@ namespace Template
 class CODEMAGICSHARED_EXPORT Variable
 {
 public:
+    struct ArgumentDescription;
     struct Context;
 
     typedef std::function<QString(const Context&)> EvalFn;
 
     Variable(const QString& name, const EvalFn& eval);
 
-    void setArgumentDescription(const QString& description);
-    QString argumentDescription() const;
+    void addArgumentDescription(const QString& argument, const QString& description);
+    const QList<ArgumentDescription>& argumentDescriptions() const;
 
     void setArgumentSpec(const QString& argumentSpec);
     QString argumentSpec() const;
@@ -80,10 +82,21 @@ private:
     QString m_name;
     QRegExp m_pattern;
     EvalFn m_eval;
-    QString m_argumentDescription;
+    QList<ArgumentDescription> m_argumentDescriptions;
     QString m_argumentSpec;
     QString m_defaultArgument;
     QString m_description;
+};
+
+struct CODEMAGICSHARED_EXPORT Variable::ArgumentDescription
+{
+    ArgumentDescription(const QString& argument_, const QString& description_)
+        : argument(argument_)
+        , description(description_)
+    {}
+
+    QString argument;
+    QString description;
 };
 
 struct CODEMAGICSHARED_EXPORT Variable::Context
