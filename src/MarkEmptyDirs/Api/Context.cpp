@@ -56,12 +56,12 @@ std::unique_ptr<Context> Context::create(std::unique_ptr<Logger> pLogger,
         auto& templateEngine = pContext->templateEngine();
         VariableFactory variableFactory;
         templateEngine.addVariable(variableFactory.createDateTimeVariable());
+        templateEngine.addVariable(variableFactory.createDirVariable(*pContext));
         templateEngine.addVariable(variableFactory.createEnvironmentVariable());
         templateEngine.addVariable(variableFactory.createGuidVariable());
         templateEngine.addVariable(variableFactory.createLinefeedVariable());
-        templateEngine.addVariable(variableFactory.createSpaceVariable());
-        templateEngine.addVariable(variableFactory.createDirVariable(*pContext));
         templateEngine.addVariable(variableFactory.createMarkerVariable(*pContext));
+        templateEngine.addVariable(variableFactory.createSpaceVariable());
     }
 
     return std::unique_ptr<Context>(pContext);
