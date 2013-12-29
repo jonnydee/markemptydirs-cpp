@@ -33,6 +33,8 @@
 #include <QChar>
 
 
+class QString;
+
 namespace CodeMagic
 {
 
@@ -41,6 +43,9 @@ namespace FileSystem
 
 CODEMAGICSHARED_EXPORT
 QChar dirSeparator();
+
+CODEMAGICSHARED_EXPORT
+bool isValidFileName(const QString& fileName, QString* pErrorMsg = nullptr);
 
 CODEMAGICSHARED_EXPORT
 QChar pathSeparator();

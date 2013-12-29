@@ -28,6 +28,8 @@
 
 #include <QChar>
 #include <QDir>
+#include <QRegExp>
+#include <QString>
 
 
 namespace CodeMagic
@@ -40,6 +42,31 @@ QChar dirSeparator()
 {
     static const auto separator = QDir::separator();
     return separator;
+}
+
+bool isValidFileName(const QString& fileName, QString* pErrorMsg)
+{
+    static QString devNull;
+    auto& errorMsg = pErrorMsg ? *pErrorMsg : devNull;
+
+    if (fileName.isEmpty())
+    {
+        errorMsg = QObject::tr("File name must not be empty.");
+        return false;
+    }
+
+#ifdef Q_OS_WIN32
+    static const QRegExp invalidPattern("[<>:\"/\\|?*]");
+#else
+    static const QRegExp invalidPattern("[<>:\"/\\|?*]");
+#endif
+    if (fileName.contains(invalidPattern))
+    {
+        errorMsg = QObject::tr("File name contains invalid characters.");
+        return false;
+    }
+
+    return true;
 }
 
 QChar pathSeparator()
