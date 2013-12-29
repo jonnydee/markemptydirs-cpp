@@ -74,7 +74,7 @@ public:
     CodeMagic::Cli::OptionList commandOptions() const;
     CodeMagic::Cli::OptionList otherOptions() const;
 
-    std::unique_ptr<const Api::Config> createConfig(const Api::Context& ctx, const QStringList& args) const;
+    std::unique_ptr<const Api::Config> createConfig(const Api::Context& ctx, const QStringList& args, QStringList& errorMessages) const;
 
 private:
     CodeMagic::Cli::OptionList m_commandOptions;

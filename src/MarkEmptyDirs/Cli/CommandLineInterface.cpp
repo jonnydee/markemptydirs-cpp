@@ -220,6 +220,9 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
     {
         const auto& arg = arguments[i];
 
+        if (!arg.errorMessage.isNull())
+            errorMessages << arg.errorMessage;
+
         if (arg.isBasedOn(dryRunOpt))
         {
             pConfig->setDryRun(true);
