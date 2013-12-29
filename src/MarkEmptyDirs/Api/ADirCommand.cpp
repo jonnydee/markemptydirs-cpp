@@ -47,6 +47,12 @@ namespace Api
 
 void ADirCommand::run()
 {
+    if (context().config().rootDirs().isEmpty())
+    {
+        context().logger().log(QObject::tr("No directory specified."), LogLevel::ERROR);
+        return;
+    }
+
     auto pathMap = crawlDir();
     run(pathMap);
 }
