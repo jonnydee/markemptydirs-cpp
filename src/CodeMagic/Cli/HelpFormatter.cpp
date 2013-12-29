@@ -75,6 +75,12 @@ void HelpFormatter::setExecutableFileName(const QString& executableFileName)
     m_executableFileName = executableFileName;
 }
 
+void HelpFormatter::addCommandListSection(const QString& title, const CommandList& commands)
+{
+    m_commandsListSections << CommandListSection(title, commands);
+    m_sectionList << SectionItem(SectionCommandList, m_commandsListSections.size() - 1);
+}
+
 void HelpFormatter::addOptionListSection(const QString& title, const OptionList& options)
 {
     m_optionsListSections << OptionListSection(title, options);
@@ -123,6 +129,9 @@ QString HelpFormatter::formatHelpText() const
         const auto& index = item.second;
         switch (type)
         {
+        case SectionCommandList:
+            sections << formatCommandListSection(m_commandsListSections[index]);
+            break;
         case SectionOptionList:
             sections << formatOptionListSection(m_optionsListSections[index]);
             break;
@@ -148,6 +157,54 @@ QString HelpFormatter::formatUsageSection(const UsageSection& section) const
     return QString("%1: %2 %3").arg(QObject::tr("USAGE")).arg(m_executableFileName).arg(usageArgs);
 }
 
+QString HelpFormatter::formatCommandListSection(const CommandListSection& section) const
+{
+    const auto& title = section.first;
+    const auto& commands = section.second;
+
+    QStringList wrappedTextLines;
+
+    wrappedTextLines << formatTitle(title);
+
+    wrappedTextLines << formatCommands(commands);
+
+    return wrappedTextLines.join('\n');
+}
+
+QString HelpFormatter::formatCommands(const CommandList& commands) const
+{
+    auto namesColumn = formatCommandsNamesColumn(commands);
+    const int namesColumnWidth = Text::adjustToMaxLen(namesColumn);
+
+    const auto descriptionColumn = formatCommandsDescriptionColumn(commands);
+
+    auto textLines = Text::join(QList<QStringList>() << namesColumn << descriptionColumn, QString(DESCRIPTION_COLUMN_PADDING_SIZE, ' '));
+    const int indent = namesColumnWidth + DESCRIPTION_COLUMN_PADDING_SIZE;
+
+    QStringList wrappedTextLines;
+    foreach (const auto textLine, textLines)
+        wrappedTextLines << wrapLine(textLine, m_maxLineLength, indent);
+
+    Text::indent(wrappedTextLines, m_sectionIndent);
+    return wrappedTextLines.join('\n');
+}
+
+QStringList HelpFormatter::formatCommandsDescriptionColumn(const CommandList& commands) const
+{
+    QStringList column;
+    foreach (const auto pCmd, commands)
+        column << pCmd->description();
+    return column;
+}
+
+QStringList HelpFormatter::formatCommandsNamesColumn(const CommandList& commands) const
+{
+    QStringList column;
+    foreach (const auto pCmd, commands)
+        column << pCmd->names().join(", ");
+    return column;
+}
+
 QString HelpFormatter::formatOptionListSection(const OptionListSection& section) const
 {
     const auto& title = section.first;
@@ -155,11 +212,7 @@ QString HelpFormatter::formatOptionListSection(const OptionListSection& section)
 
     QStringList wrappedTextLines;
 
-    if (!title.isEmpty())
-    {
-        wrappedTextLines << wrapLine(title + ":", m_maxLineLength);
-        wrappedTextLines << QString();
-    }
+    wrappedTextLines << formatTitle(title);
 
     wrappedTextLines << formatOptions(options);
 
@@ -174,7 +227,7 @@ QString HelpFormatter::formatOptions(const OptionList& options) const
     auto longNamesColumn = formatLongOptionsColumn(options);
     const int longNamesColumnWidth = Text::adjustToMaxLen(longNamesColumn);
 
-    const auto descriptionsColumn = formatDescriptionColumn(options);
+    const auto descriptionsColumn = formatOptionsDescriptionColumn(options);
 
     auto textLines = Text::join(QList<QStringList>() << shortNamesColumn << longNamesColumn, QString(OPTION_COLUMN_PADDING_SIZE, ' '));
     textLines = Text::join(QList<QStringList>() << textLines << descriptionsColumn, QString(DESCRIPTION_COLUMN_PADDING_SIZE, ' '));
@@ -195,11 +248,7 @@ QString HelpFormatter::formatTextSection(const TextSection& section) const
 
     QStringList wrappedTextLines;
 
-    if (!title.isEmpty())
-    {
-        wrappedTextLines << wrapLine(title + ":", m_maxLineLength);
-        wrappedTextLines << QString();
-    }
+    wrappedTextLines << formatTitle(title);
 
     foreach (const auto& paragraph, paragraphs)
     {
@@ -211,6 +260,14 @@ QString HelpFormatter::formatTextSection(const TextSection& section) const
     }
 
     return wrappedTextLines.join('\n');
+}
+
+QStringList HelpFormatter::formatTitle(const QString& title) const
+{
+    if (title.isEmpty())
+        return QStringList();
+
+    return wrapLine(title + ":", m_maxLineLength) << QString();
 }
 
 QStringList HelpFormatter::formatShortOptionsColumn(const OptionList& options) const
@@ -261,7 +318,7 @@ QStringList HelpFormatter::formatLongOptionsColumn(const OptionList& options) co
     return longOptionsColumn;
 }
 
-QStringList HelpFormatter::formatDescriptionColumn(const OptionList& options) const
+QStringList HelpFormatter::formatOptionsDescriptionColumn(const OptionList& options) const
 {
     QStringList descriptionColumn;
     foreach (const auto pOption, options)

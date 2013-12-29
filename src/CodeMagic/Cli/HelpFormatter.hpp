@@ -29,6 +29,7 @@
 #define CODEMAGIC_CLI_HELPFORMATTER_HPP
 
 #include "../codemagic_global.hpp"
+#include "Command.hpp"
 #include "Option.hpp"
 
 #include <QList>
@@ -48,6 +49,8 @@ public:
 
     void setExecutableFileName(const QString& fileName);
 
+    void addCommandListSection(const QString& title, const CommandList& commands);
+
     void addOptionListSection(const QString& title, const OptionList& options);
 
     void addTextSection(const QString& title, const QString& paragraph);
@@ -60,29 +63,37 @@ public:
 protected:
     enum SectionType
     {
+        SectionCommandList,
         SectionOptionList,
         SectionUsage,
         SectionText
     };
 
     typedef QPair<SectionType, int> SectionItem;
+    typedef QPair<QString, CommandList> CommandListSection;
     typedef QPair<QString, OptionList> OptionListSection;
     typedef QPair<int, QString> TextSectionParagraph;
     typedef QPair<QString, QList<TextSectionParagraph>> TextSection;
     typedef QString UsageSection;
 
+    QString formatCommandListSection(const CommandListSection& section) const;
+    QString formatCommands(const CommandList& commands) const;
+    QStringList formatCommandsDescriptionColumn(const CommandList& commands) const;
+    QStringList formatCommandsNamesColumn(const CommandList& commands) const;
     QString formatOptionListSection(const OptionListSection& section) const;
     QString formatOptions(const OptionList& options) const;
     QString formatUsageSection(const UsageSection& section) const;
     QString formatTextSection(const TextSection& section) const;
+    QStringList formatTitle(const QString& title) const;
     QStringList formatShortOptionsColumn(const OptionList& options) const;
     QStringList formatLongOptionsColumn(const OptionList& options) const;
-    QStringList formatDescriptionColumn(const OptionList& options) const;
+    QStringList formatOptionsDescriptionColumn(const OptionList& options) const;
 
 private:
     QString m_executableFileName;
     int m_maxLineLength;
     int m_sectionIndent;
+    QList<CommandListSection> m_commandsListSections;
     QList<OptionListSection> m_optionsListSections;
     QList<SectionItem> m_sectionList;
     QList<TextSection> m_textSections;
