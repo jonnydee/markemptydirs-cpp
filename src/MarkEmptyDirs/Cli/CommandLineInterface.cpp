@@ -119,18 +119,6 @@ CommandLineInterface::CommandLineInterface()
     , versionCmd(
           QStringList() << "version",
           QObject::tr("Show version information.", "version"))
-    , dryRunOpt(
-          QStringList() << "n" << "dry-run",
-          QObject::tr("Simulate command execution without any side effects.", "dry-run"))
-    , shortOpt(
-          QStringList() << "short",
-          QObject::tr("Output short verbose messages.", "short"))
-    , verboseOpt(
-          QStringList() << "v" << "verbose",
-          QObject::tr("Output verbose messages.", "verbose"))
-    , helpOpt(
-          QStringList() << "h" << "help",
-          QObject::tr("Print help information.", "help"))
     , createHookOpt(
           QStringList() << "create-hook",
           QObject::tr("Invoke command after marker creation.", "create-hook"),
@@ -139,36 +127,48 @@ CommandLineInterface::CommandLineInterface()
           QStringList() << "delete-hook",
           QObject::tr("Invoke command before marker deletion.", "delete-hook"),
           QObject::tr("COMMAND", "delete-hook"))
+    , dryRunOpt(
+          QStringList() << "n" << "dry-run",
+          QObject::tr("Simulate command execution without any side effects.", "dry-run"))
     , excludeOpt(
           QStringList() << "x" << "exclude",
           QObject::tr("Skip excluded dirs.", "exclude"),
           QObject::tr("DIRS", "exclude"),
           DEFAULT_EXCLUDE_DIRS)
-    , markerOpt(
-          QStringList() << "m" << "marker-name",
-          QObject::tr("Use another name for marker files.", "marker-name"),
-          QObject::tr("NAME", "marker-name"))
-    , textOpt(
-          QStringList() << "text",
-          QObject::tr("Create marker files with the specified text as content.", "text"),
-          QObject::tr("CONTENT", "text"))
     , fileOpt(
           QStringList() << "F" << "file",
           QObject::tr("Create marker files using the specified template file as content.", "file"),
           QObject::tr("NAME", "file"),
           DEFAULT_MARKER_CONTENT_FILENAME)
-    , substOpt(
-          QStringList() << "subst",
-          QObject::tr("Use variable subsitution.", "subst"))
-    , noSubstOpt(
-          QStringList() << "no-subst",
-          QObject::tr("Do not use variable subsitution.", "subst"))
     , followSymLinksOpt(
           QStringList() << "L" << "dereference",
           QObject::tr("Follow symbolic links.", "dereference"))
+    , helpOpt(
+          QStringList() << "h" << "help",
+          QObject::tr("Print help information.", "help"))
+    , markerOpt(
+          QStringList() << "m" << "marker-name",
+          QObject::tr("Use another name for marker files.", "marker-name"),
+          QObject::tr("NAME", "marker-name"))
     , noFollowSymLinksOpt(
           QStringList() << "no-dereference",
           QObject::tr("Do not follow symbolic links.", "dereference"))
+    , noSubstOpt(
+          QStringList() << "no-subst",
+          QObject::tr("Do not use variable subsitution.", "subst"))
+    , shortOpt(
+          QStringList() << "short",
+          QObject::tr("Output short verbose messages.", "short"))
+    , substOpt(
+          QStringList() << "subst",
+          QObject::tr("Use variable subsitution.", "subst"))
+    , textOpt(
+          QStringList() << "text",
+          QObject::tr("Create marker files with the specified text as content.", "text"),
+          QObject::tr("CONTENT", "text"))
+    , verboseOpt(
+          QStringList() << "v" << "verbose",
+          QObject::tr("Output verbose messages.", "verbose"))
 {
     m_commands
         << &cleanCmd
@@ -180,20 +180,20 @@ CommandLineInterface::CommandLineInterface()
         << &versionCmd;
 
     m_options
-        << &dryRunOpt
-        << &helpOpt
-        << &shortOpt
-        << &verboseOpt
         << &createHookOpt
         << &deleteHookOpt
+        << &dryRunOpt
         << &excludeOpt
-        << &markerOpt
         << &fileOpt
-        << &substOpt
-        << &noSubstOpt
-        << &textOpt
         << &followSymLinksOpt
-        << &noFollowSymLinksOpt;
+        << &helpOpt
+        << &markerOpt
+        << &noFollowSymLinksOpt
+        << &noSubstOpt
+        << &shortOpt
+        << &substOpt
+        << &textOpt
+        << &verboseOpt;
 }
 
 std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& ctx, const QStringList& args, QStringList& errorMessages) const
@@ -270,10 +270,6 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
         {
             pConfig->setCommand(Config::Command::VERSION);
         }
-        else if (arg.isBasedOn(dryRunOpt))
-        {
-            pConfig->setDryRun(true);
-        }
         else if (arg.isBasedOn(createHookOpt))
         {
             pConfig->setCreateHookCommand(arg.value);
@@ -282,6 +278,10 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
         {
             pConfig->setDeleteHookCommand(arg.value);
         }
+        else if (arg.isBasedOn(dryRunOpt))
+        {
+            pConfig->setDryRun(true);
+        }
         else if (arg.isBasedOn(excludeOpt))
         {
             Config::DirList dirs;
@@ -289,9 +289,37 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
                 dirs.push_back(dir);
             pConfig->setExcludeDirs(dirs);
         }
+        else if (arg.isBasedOn(followSymLinksOpt))
+        {
+            pConfig->setDereferenceSymLinks(true);
+        }
+        else if (arg.isBasedOn(helpOpt))
+        {
+            pConfig->setCommand(Config::Command::HELP);
+        }
+        else if (arg.isBasedOn(markerOpt))
+        {
+            pConfig->setMarkerName(arg.value);
+        }
+        else if (arg.isBasedOn(noFollowSymLinksOpt))
+        {
+            pConfig->setDereferenceSymLinks(false);
+        }
+        else if (arg.isBasedOn(noSubstOpt))
+        {
+            pConfig->setSubstituteVariables(false);
+        }
         else if (arg.isBasedOn(shortOpt))
         {
             pConfig->setShortMessages(true);
+        }
+        else if (arg.isBasedOn(substOpt))
+        {
+            pConfig->setSubstituteVariables(true);
+        }
+        else if (arg.isBasedOn(textOpt))
+        {
+            pConfig->setMarkerText(arg.value);
         }
         else if (arg.isBasedOn(verboseOpt))
         {
@@ -304,34 +332,6 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
             default:
                 pConfig->setLogLevel(LogLevel::DEBUG);
             }
-        }
-        else if (arg.isBasedOn(markerOpt))
-        {
-            pConfig->setMarkerName(arg.value);
-        }
-        else if (arg.isBasedOn(textOpt))
-        {
-            pConfig->setMarkerText(arg.value);
-        }
-        else if (arg.isBasedOn(followSymLinksOpt))
-        {
-            pConfig->setDereferenceSymLinks(true);
-        }
-        else if (arg.isBasedOn(noFollowSymLinksOpt))
-        {
-            pConfig->setDereferenceSymLinks(false);
-        }
-        else if (arg.isBasedOn(substOpt))
-        {
-            pConfig->setSubstituteVariables(true);
-        }
-        else if (arg.isBasedOn(noSubstOpt))
-        {
-            pConfig->setSubstituteVariables(false);
-        }
-        else if (arg.isBasedOn(helpOpt))
-        {
-            pConfig->setCommand(Config::Command::HELP);
         }
         else
         {

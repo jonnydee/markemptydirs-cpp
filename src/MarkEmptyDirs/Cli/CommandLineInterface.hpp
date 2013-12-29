@@ -56,20 +56,20 @@ public:
     const CodeMagic::Cli::Command updateCmd;
     const CodeMagic::Cli::Command versionCmd;
 
-    const CodeMagic::Cli::Option dryRunOpt;
-    const CodeMagic::Cli::Option shortOpt;
-    const CodeMagic::Cli::Option verboseOpt;
-    const CodeMagic::Cli::Option helpOpt;
     const CodeMagic::Cli::Option createHookOpt;
     const CodeMagic::Cli::Option deleteHookOpt;
+    const CodeMagic::Cli::Option dryRunOpt;
     const CodeMagic::Cli::Option excludeOpt;
-    const CodeMagic::Cli::Option markerOpt;
-    const CodeMagic::Cli::Option textOpt;
     const CodeMagic::Cli::Option fileOpt;
-    const CodeMagic::Cli::Option substOpt;
-    const CodeMagic::Cli::Option noSubstOpt;
     const CodeMagic::Cli::Option followSymLinksOpt;
+    const CodeMagic::Cli::Option helpOpt;
+    const CodeMagic::Cli::Option markerOpt;
     const CodeMagic::Cli::Option noFollowSymLinksOpt;
+    const CodeMagic::Cli::Option noSubstOpt;
+    const CodeMagic::Cli::Option shortOpt;
+    const CodeMagic::Cli::Option substOpt;
+    const CodeMagic::Cli::Option textOpt;
+    const CodeMagic::Cli::Option verboseOpt;
 
     CommandLineInterface();
 
