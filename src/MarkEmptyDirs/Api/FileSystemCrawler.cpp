@@ -103,7 +103,10 @@ void FileSystemCrawler::run()
     {
         const auto dir = dirQueue.takeFirst();
         if (!dir.exists())
+        {
+            logger.log(QString("'%1': %2").arg(dir.absolutePath()).arg(QObject::tr("Not a directory, skipping it.")), LogLevel::WARNING);
             continue;
+        }
 
         const auto dirPath = dir.canonicalPath();
 
