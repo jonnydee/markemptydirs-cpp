@@ -54,6 +54,7 @@
 #define DEFAULT_MARKER_FILENAME         ".emptydir"
 
 
+using namespace CodeMagic;
 using namespace CodeMagic::Cli;
 using namespace CodeMagic::Text;
 using namespace MarkEmptyDirs::Api;
@@ -299,7 +300,11 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
         }
         else if (arg.isBasedOn(markerOpt))
         {
-            pConfig->setMarkerName(arg.value);
+            QString errorMessage;
+            if (!FileSystem::isValidFileName(arg.value, &errorMessage))
+                errorMessages << errorMessage;
+            else
+                pConfig->setMarkerName(arg.value);
         }
         else if (arg.isBasedOn(noFollowSymLinksOpt))
         {
