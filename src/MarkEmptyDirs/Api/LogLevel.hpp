@@ -39,6 +39,7 @@ namespace Api
 
 enum MARKEMPTYDIRSAPISHARED_EXPORT LogLevel
 {
+    WARNING = -2,
     ERROR = -1,
     NONE,
     INFO,

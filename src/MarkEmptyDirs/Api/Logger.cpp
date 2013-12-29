@@ -67,6 +67,9 @@ void Logger::log(const QString& msg, LogLevel logLevel)
 
     switch (logLevel)
     {
+    case LogLevel::WARNING:
+        sysErr() << LOG_TEMPLATE.arg("WARNING").arg(msg) << flush;
+        break;
     case LogLevel::ERROR:
         sysErr() << LOG_TEMPLATE.arg("ERROR").arg(msg) << flush;
         break;
