@@ -27,6 +27,7 @@ DEFINES += CODEMAGIC_LIBRARY
 SOURCES += \
     Cli/ArgumentParser.cpp \
     Cli/ArgumentScanner.cpp \
+    Cli/Command.cpp \
     Cli/HelpFormatter.cpp \
     Cli/Option.cpp \
     FileSystem/FileSystemTools.cpp \
@@ -39,6 +40,7 @@ SOURCES += \
 HEADERS += codemagic_global.hpp \
     Cli/ArgumentParser.hpp \
     Cli/ArgumentScanner.hpp \
+    Cli/Command.hpp \
     Cli/HelpFormatter.hpp \
     Cli/Option.hpp \
     FileSystem/FileSystemTools.hpp \

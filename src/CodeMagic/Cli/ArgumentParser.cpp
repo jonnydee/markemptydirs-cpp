@@ -24,11 +24,14 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
+#include "Command.hpp"
 #include "Option.hpp"
 #include "ArgumentParser.hpp"
 #include "ArgumentScanner.hpp"
 
 #include <QStringList>
+
+#define DEFAULT_MINIMUMCOMMANDLENGTH    2
 
 
 namespace CodeMagic
@@ -38,7 +41,23 @@ namespace Cli
 {
 
 ArgumentParser::ArgumentParser()
+    : m_minimumCommandLength(DEFAULT_MINIMUMCOMMANDLENGTH)
 {
+}
+
+void ArgumentParser::addCommand(const Command& command)
+{
+    m_commands.push_back(&command);
+}
+
+void ArgumentParser::addCommands(const CommandList& commands)
+{
+    m_commands << commands;
+}
+
+CommandList ArgumentParser::commands() const
+{
+    return m_commands;
 }
 
 void ArgumentParser::addOption(const Option& option)
@@ -90,6 +109,16 @@ ArgumentList ArgumentParser::findArguments(const Option& option) const
     return args;
 }
 
+void ArgumentParser::setMinimumCommandLength(int minLen)
+{
+    m_minimumCommandLength = minLen;
+}
+
+int ArgumentParser::minimumCommandLength() const
+{
+    return m_minimumCommandLength;
+}
+
 OptionList ArgumentParser::options() const
 {
     return m_options;
@@ -102,8 +131,14 @@ void ArgumentParser::parse(const QStringList& args)
     const auto tokens = scanner.tokens();
 
     int i = 0;
-    while (i < tokens.size())
+    do
     {
+        if (int tokensConsumed = parseCommand(tokens, i))
+        {
+            i += tokensConsumed;
+            continue;
+        }
+
         if (int tokensConsumed = parseLongOption(tokens, i))
         {
             i += tokensConsumed;
@@ -117,12 +152,49 @@ void ArgumentParser::parse(const QStringList& args)
         }
 
         i += parseOther(tokens, i);
+    } while (i < tokens.size());
+}
+
+int ArgumentParser::parseCommand(const TokenList& tokens, int startIndex)
+{
+    if (m_commands.isEmpty())
+        return 0;
+    if (0 != startIndex)
+        return 0;
+
+    Argument command(Argument::COMMAND);
+
+    if (tokens.isEmpty() || Token::OTHER != tokens[startIndex].type)
+    {
+        command.errorMessage = QObject::tr("Missing command.");
+        m_arguments.push_back(command);
+        return 0;
     }
+
+    command.name = tokens[startIndex].payload;
+    Q_ASSERT(!command.name.isEmpty());
+
+    foreach (const auto pCmd, m_commands)
+        foreach (const auto name, pCmd->names())
+            if (name.startsWith(command.name))
+                command.commands << pCmd;
+
+    if (command.name.length() < m_minimumCommandLength)
+        command.errorMessage = QString("%1: %2").arg(command.name).arg(QObject::tr("Command too short (must consist of at least %1 characters).").arg(m_minimumCommandLength));
+    else if (command.commands.isEmpty())
+        command.errorMessage = QString("%1: %2").arg(command.name).arg(QObject::tr("Unknown command."));
+    else if (command.commands.size() > 1)
+        command.errorMessage = QString("%1: %2").arg(command.name).arg(QObject::tr("Ambivalent command."));
+
+    m_arguments.push_back(command);
+
+    return 1;
 }
 
 int ArgumentParser::parseShortOption(const TokenList& tokens, int startIndex)
 {
-    Q_ASSERT(startIndex < tokens.size());
+    if (startIndex >= tokens.size())
+        return 0;
 
     if (tokens.isEmpty())
         return 0;
@@ -130,7 +202,7 @@ int ArgumentParser::parseShortOption(const TokenList& tokens, int startIndex)
     if (Token::SHORTNAME != tokens[startIndex].type)
         return 0;
 
-    Argument shortOption;
+    Argument shortOption(Argument::OPTION);
     shortOption.name = tokens[startIndex].payload;
 
     bool nextArgConsumed = false;
@@ -171,7 +243,8 @@ int ArgumentParser::parseShortOption(const TokenList& tokens, int startIndex)
 
 int ArgumentParser::parseLongOption(const TokenList& tokens, int startIndex)
 {
-    Q_ASSERT(startIndex < tokens.size());
+    if (startIndex >= tokens.size())
+        return 0;
 
     if (tokens.isEmpty())
         return 0;
@@ -179,7 +252,7 @@ int ArgumentParser::parseLongOption(const TokenList& tokens, int startIndex)
     if (Token::LONGNAME != tokens[startIndex].type)
         return 0;
 
-    Argument longOption;
+    Argument longOption(Argument::OPTION);
     longOption.name = tokens[startIndex].payload;
     int tokensConsumed = 1;
     if (startIndex < tokens.size() - 2 && Token::ASSIGN == tokens[startIndex + 1].type)
@@ -223,7 +296,8 @@ int ArgumentParser::parseLongOption(const TokenList& tokens, int startIndex)
 
 int ArgumentParser::parseOther(const TokenList& tokens, int startIndex)
 {
-    Q_ASSERT(startIndex < tokens.size());
+    if (startIndex >= tokens.size())
+        return 0;
 
     if (tokens.isEmpty())
         return 0;
@@ -231,7 +305,7 @@ int ArgumentParser::parseOther(const TokenList& tokens, int startIndex)
     if (Token::OTHER != tokens[startIndex].type)
         return 0;
 
-    Argument other;
+    Argument other(Argument::OTHER);
     other.value = tokens[startIndex].payload;
 
     m_arguments.push_back(other);

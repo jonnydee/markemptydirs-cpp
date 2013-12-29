@@ -42,6 +42,9 @@ namespace CodeMagic
 namespace Cli
 {
 
+class Command;
+typedef QList<const Command*> CommandList;
+
 struct Token;
 typedef QList<Token> TokenList;
 
@@ -51,15 +54,26 @@ typedef QList<const Option*> OptionList;
 
 struct CODEMAGICSHARED_EXPORT Argument
 {
+    enum Type
+    {
+        UNKNOWN,
+        COMMAND,
+        OPTION,
+        OTHER
+    };
+
+    Type type;
+    CommandList commands;
     const Option* option;
     QString name;
     QString value;
     QString errorMessage;
 
-    Argument() : option(nullptr) {}
+    Argument(Type _type = UNKNOWN) : type(_type), option(nullptr) {}
 
-    bool isKnown() const { return nullptr != option; }
-    bool isNull() const { return nullptr == option && name.isNull() && value.isNull(); }
+    bool isKnown() const { return !commands.isEmpty() || nullptr != option; }
+    bool isNull() const { return UNKNOWN == type; }
+    bool isBasedOn(const Command& cmd) const { return commands.contains(&cmd); }
     bool isBasedOn(const Option& opt) const { return &opt == option; }
 };
 typedef QList<Argument> ArgumentList;
@@ -70,6 +84,11 @@ class CODEMAGICSHARED_EXPORT ArgumentParser
 public:
     ArgumentParser();
 
+    void addCommand(const Command& command);
+    void addCommands(const CommandList& commands);
+
+    CommandList commands() const;
+
     void addOption(const Option& option);
     void addOptions(const OptionList& options);
 
@@ -79,18 +98,24 @@ public:
     ArgumentList findUnknownArguments() const;
     ArgumentList findArguments(const Option& option) const;
 
+    void setMinimumCommandLength(int minLen);
+    int minimumCommandLength() const;
+
     OptionList options() const;
 
     void parse(const QStringList& args);
 
 protected:
+    int parseCommand(const TokenList& tokens, int startIndex);
     int parseShortOption(const TokenList& tokens, int startIndex);
     int parseLongOption(const TokenList& tokens, int startIndex);
     int parseOther(const TokenList& tokens, int startIndex);
 
 private:
-    OptionList m_options;
     ArgumentList m_arguments;
+    CommandList m_commands;
+    int m_minimumCommandLength;
+    OptionList m_options;
 };
 
 }
