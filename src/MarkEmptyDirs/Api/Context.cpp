@@ -32,6 +32,8 @@
 #include <CodeMagic/Text/Template/Engine.hpp>
 #include <CodeMagic/Text/Template/Variable.hpp>
 
+#include <QCoreApplication>
+
 
 using namespace CodeMagic::Text;
 
@@ -105,6 +107,11 @@ void Context::setConfig(std::unique_ptr<const Config> pConfig)
 {
     m_pConfig = pConfig.release();
     Q_ASSERT(m_pConfig);
+
+    auto pApp = QCoreApplication::instance();
+    pApp->setApplicationName(m_pConfig->applicationInfo().name);
+    pApp->setApplicationVersion(m_pConfig->applicationInfo().version.toString());
+    pApp->setOrganizationName(m_pConfig->applicationInfo().vendorName);
 }
 
 const Config& Context::config() const

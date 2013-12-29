@@ -46,9 +46,6 @@ int main(int argc, char *argv[])
     Cli::CommandLineInterface cli;
     pCtx->setConfig(cli.createConfig(*pCtx, args));
 
-    app.setApplicationName(pCtx->config().applicationInfo().name);
-    app.setApplicationVersion(pCtx->config().applicationInfo().version.toString());
-    app.setOrganizationName(pCtx->config().applicationInfo().vendorName);
 
     Api::CommandFactory commandFactory;
     auto pCmd = commandFactory.createCommand(*pCtx);
