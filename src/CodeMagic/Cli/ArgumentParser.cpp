@@ -161,7 +161,7 @@ int ArgumentParser::parseShortOption(const TokenList& tokens, int startIndex)
 
     if (!shortOption.option)
     {
-        shortOption.errorMessage = QObject::tr("Unknown short option.");
+        shortOption.errorMessage = QString("-%1: %2").arg(shortOption.name).arg(QObject::tr("Unknown option."));
     }
 
     m_arguments.push_back(shortOption);
@@ -205,7 +205,7 @@ int ArgumentParser::parseLongOption(const TokenList& tokens, int startIndex)
         }
         else if (!longOption.value.isNull())
         {
-            longOption.errorMessage = QObject::tr("Long option does not support value assignment.");
+            longOption.errorMessage = QString("--%1: %2").arg(longOption.name).arg(QObject::tr("Option does not support value assignment."));
         }
 
         break;
@@ -213,7 +213,7 @@ int ArgumentParser::parseLongOption(const TokenList& tokens, int startIndex)
 
     if (!longOption.option)
     {
-        longOption.errorMessage = QObject::tr("Unknown long option.");
+        longOption.errorMessage = QString("--%1: %2").arg(longOption.name).arg(QObject::tr("Unknown option."));
     }
 
     m_arguments.push_back(longOption);
