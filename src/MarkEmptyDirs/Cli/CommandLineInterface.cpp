@@ -98,7 +98,28 @@ namespace
 }
 
 CommandLineInterface::CommandLineInterface()
-    : dryRunOpt(
+    : cleanCmd(
+          QStringList() << "clean",
+          QObject::tr("Delete all marker files.", "clean"))
+    , helpCmd(
+          QStringList() << "help",
+          QObject::tr("Print help information.", "help"))
+    , listCmd(
+          QStringList() << "list",
+          QObject::tr("List all marker files.", "list"))
+    , overviewCmd(
+          QStringList() << "overview",
+          QObject::tr("Scan directory and show some overview statistics.", "overview"))
+    , purgeCmd(
+          QStringList() << "purge",
+          QObject::tr("Delete everything within directories containing markers.", "purge"))
+    , updateCmd(
+          QStringList() << "update",
+          QObject::tr("Create and delete marker files where necessary.", "update"))
+    , versionCmd(
+          QStringList() << "version",
+          QObject::tr("Show version information.", "version"))
+    , dryRunOpt(
           QStringList() << "n" << "dry-run",
           QObject::tr("Simulate command execution without any side effects.", "dry-run"))
     , shortOpt(
@@ -107,9 +128,6 @@ CommandLineInterface::CommandLineInterface()
     , verboseOpt(
           QStringList() << "v" << "verbose",
           QObject::tr("Output verbose messages.", "verbose"))
-    , cleanOpt(
-          QStringList() << "c" << "clean",
-          QObject::tr("Delete all marker files.", "clean"))
     , helpOpt(
           QStringList() << "h" << "help",
           QObject::tr("Print help information.", "help"))
@@ -121,12 +139,6 @@ CommandLineInterface::CommandLineInterface()
           QStringList() << "delete-hook",
           QObject::tr("Invoke command before marker deletion.", "delete-hook"),
           QObject::tr("COMMAND", "delete-hook"))
-    , listOpt(
-          QStringList() << "l" << "list",
-          QObject::tr("List all marker files.", "list"))
-    , purgeOpt(
-          QStringList() << "purge",
-          QObject::tr("Delete everything within directories containing markers.", "purge"))
     , excludeOpt(
           QStringList() << "x" << "exclude",
           QObject::tr("Skip excluded dirs.", "exclude"),
@@ -157,27 +169,19 @@ CommandLineInterface::CommandLineInterface()
     , noFollowSymLinksOpt(
           QStringList() << "no-dereference",
           QObject::tr("Do not follow symbolic links.", "dereference"))
-    , overviewOpt(
-          QStringList() << "overview",
-          QObject::tr("Scan directory and show some overview statistics.", "overview"))
-    , updateOpt(
-          QStringList() << "u" << "update",
-          QObject::tr("Create and delete marker files where necessary.", "update"))
-    , versionOpt(
-          QStringList() << "version",
-          QObject::tr("Show version information.", "version"))
 {
-    m_commandOptions
-        << &cleanOpt
-        << &helpOpt
-        << &listOpt
-        << &purgeOpt
-        << &overviewOpt
-        << &updateOpt
-        << &versionOpt;
+    m_commands
+        << &cleanCmd
+        << &helpCmd
+        << &listCmd
+        << &overviewCmd
+        << &purgeCmd
+        << &updateCmd
+        << &versionCmd;
 
-    m_otherOptions
+    m_options
         << &dryRunOpt
+        << &helpOpt
         << &shortOpt
         << &verboseOpt
         << &createHookOpt
@@ -194,10 +198,6 @@ CommandLineInterface::CommandLineInterface()
 
 std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& ctx, const QStringList& args, QStringList& errorMessages) const
 {
-    ArgumentParser parser;
-    parser.addOptions(options());
-    parser.parse(args);
-
     ApplicationInfo appInfo;
     appInfo.copyright = APPLICATION_COPYRIGHT;
     appInfo.disclaimer = APPLICATION_DISCLAIMER;
@@ -215,15 +215,62 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
     pConfig->setApplicationInfo(appInfo);
     pConfig->setExecutableFile(args[0]);
 
+    auto argsOnly = args;
+    // Remove first argument, because it is the executable itself.
+    argsOnly.removeFirst();
+
+    ArgumentParser parser;
+    parser.addCommands(commands());
+    parser.addOptions(options());
+    parser.parse(argsOnly);
+
     const auto arguments = parser.arguments();
-    for (int i = 1; i < arguments.size(); i++)
+    for (int i = 0; i < arguments.size(); i++)
     {
         const auto& arg = arguments[i];
+
+        // If no command has been specified, but help option is present we configure HELP command.
+        if (Argument::COMMAND == arg.type && arg.name.isNull() && !parser.findArgument(helpOpt).isNull())
+        {
+            pConfig->setCommand(Config::Command::HELP);
+            continue;
+        }
 
         if (!arg.errorMessage.isNull())
             errorMessages << arg.errorMessage;
 
-        if (arg.isBasedOn(dryRunOpt))
+        if (arg.isBasedOn(cleanCmd))
+        {
+            pConfig->setCommand(Config::Command::CLEAN);
+        }
+        else if (arg.isBasedOn(helpCmd))
+        {
+            pConfig->setCommand(Config::Command::HELP);
+        }
+        else if (arg.isBasedOn(listCmd))
+        {
+            pConfig->setCommand(Config::Command::CLEAN);
+            pConfig->setDryRun(true);
+            pConfig->setShortMessages(true);
+            pConfig->setLogLevel(LogLevel::INFO);
+        }
+        else if (arg.isBasedOn(overviewCmd))
+        {
+            pConfig->setCommand(Config::Command::OVERVIEW);
+        }
+        else if (arg.isBasedOn(purgeCmd))
+        {
+            pConfig->setCommand(Config::Command::PURGE);
+        }
+        else if (arg.isBasedOn(updateCmd))
+        {
+            pConfig->setCommand(Config::Command::UPDATE);
+        }
+        else if (arg.isBasedOn(versionCmd))
+        {
+            pConfig->setCommand(Config::Command::VERSION);
+        }
+        else if (arg.isBasedOn(dryRunOpt))
         {
             pConfig->setDryRun(true);
         }
@@ -286,33 +333,6 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
         {
             pConfig->setCommand(Config::Command::HELP);
         }
-        else if (arg.isBasedOn(updateOpt))
-        {
-            pConfig->setCommand(Config::Command::UPDATE);
-        }
-        else if (arg.isBasedOn(listOpt))
-        {
-            pConfig->setCommand(Config::Command::CLEAN);
-            pConfig->setDryRun(true);
-            pConfig->setShortMessages(true);
-            pConfig->setLogLevel(LogLevel::INFO);
-        }
-        else if (arg.isBasedOn(cleanOpt))
-        {
-            pConfig->setCommand(Config::Command::CLEAN);
-        }
-        else if (arg.isBasedOn(overviewOpt))
-        {
-            pConfig->setCommand(Config::Command::OVERVIEW);
-        }
-        else if (arg.isBasedOn(purgeOpt))
-        {
-            pConfig->setCommand(Config::Command::PURGE);
-        }
-        else if (arg.isBasedOn(versionOpt))
-        {
-            pConfig->setCommand(Config::Command::VERSION);
-        }
         else
         {
             pConfig->addRootDir(QDir(arg.value));
@@ -325,15 +345,15 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
 
         formatter.setExecutableFileName(pConfig->executableFile().fileName());
 
-        formatter.addUsageSection("[COMMAND] [OPTION]... DIR...");
+        formatter.addUsageSection("COMMAND [OPTION]... DIR...");
+
+        formatter.addCommandListSection(
+                    QObject::tr("Commands"),
+                    commands());
 
         formatter.addOptionListSection(
-                    QObject::tr("Command options"),
-                    commandOptions());
-
-        formatter.addOptionListSection(
-                    QObject::tr("Other options"),
-                    otherOptions());
+                    QObject::tr("Options"),
+                    options());
 
         formatter.addTextSection(
                     QObject::tr("Template variables"),
@@ -347,19 +367,14 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
     return std::unique_ptr<const Config>(pConfig);
 }
 
+CommandList CommandLineInterface::commands() const
+{
+    return m_commands;
+}
+
 OptionList CommandLineInterface::options() const
 {
-    return OptionList() << commandOptions() << otherOptions();
-}
-
-OptionList CommandLineInterface::commandOptions() const
-{
-    return m_commandOptions;
-}
-
-OptionList CommandLineInterface::otherOptions() const
-{
-    return m_otherOptions;
+    return m_options;
 }
 
 }

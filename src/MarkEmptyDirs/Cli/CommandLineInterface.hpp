@@ -27,6 +27,7 @@
 #ifndef COMMANDLINEINTERFACE_HPP
 #define COMMANDLINEINTERFACE_HPP
 
+#include <CodeMagic/Cli/Command.hpp>
 #include <CodeMagic/Cli/Option.hpp>
 
 #include <memory>
@@ -47,15 +48,20 @@ namespace Cli
 class CommandLineInterface
 {
 public:
+    const CodeMagic::Cli::Command cleanCmd;
+    const CodeMagic::Cli::Command helpCmd;
+    const CodeMagic::Cli::Command listCmd;
+    const CodeMagic::Cli::Command overviewCmd;
+    const CodeMagic::Cli::Command purgeCmd;
+    const CodeMagic::Cli::Command updateCmd;
+    const CodeMagic::Cli::Command versionCmd;
+
     const CodeMagic::Cli::Option dryRunOpt;
     const CodeMagic::Cli::Option shortOpt;
     const CodeMagic::Cli::Option verboseOpt;
-    const CodeMagic::Cli::Option cleanOpt;
     const CodeMagic::Cli::Option helpOpt;
     const CodeMagic::Cli::Option createHookOpt;
     const CodeMagic::Cli::Option deleteHookOpt;
-    const CodeMagic::Cli::Option listOpt;
-    const CodeMagic::Cli::Option purgeOpt;
     const CodeMagic::Cli::Option excludeOpt;
     const CodeMagic::Cli::Option markerOpt;
     const CodeMagic::Cli::Option textOpt;
@@ -64,21 +70,17 @@ public:
     const CodeMagic::Cli::Option noSubstOpt;
     const CodeMagic::Cli::Option followSymLinksOpt;
     const CodeMagic::Cli::Option noFollowSymLinksOpt;
-    const CodeMagic::Cli::Option overviewOpt;
-    const CodeMagic::Cli::Option updateOpt;
-    const CodeMagic::Cli::Option versionOpt;
 
     CommandLineInterface();
 
+    CodeMagic::Cli::CommandList commands() const;
     CodeMagic::Cli::OptionList options() const;
-    CodeMagic::Cli::OptionList commandOptions() const;
-    CodeMagic::Cli::OptionList otherOptions() const;
 
     std::unique_ptr<const Api::Config> createConfig(const Api::Context& ctx, const QStringList& args, QStringList& errorMessages) const;
 
 private:
-    CodeMagic::Cli::OptionList m_commandOptions;
-    CodeMagic::Cli::OptionList m_otherOptions;
+    CodeMagic::Cli::CommandList m_commands;
+    CodeMagic::Cli::OptionList m_options;
 };
 
 }
