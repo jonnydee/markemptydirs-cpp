@@ -44,7 +44,7 @@ namespace Cli
 class CODEMAGICSHARED_EXPORT Option
 {
 public:
-    Option(const QStringList& names, const QString& description = QString::null, const QString& valueName = QString::null, const QString& defaultValue = QString::null);
+    Option(const QStringList& names, const QString& description = QString(), const QString& valueName = QString(), const QString& defaultValue = QString());
 
     QString defaultValue() const;
     QString description() const;
