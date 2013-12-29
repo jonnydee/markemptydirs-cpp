@@ -224,7 +224,10 @@ int ArgumentParser::parseShortOption(const TokenList& tokens, int startIndex)
             }
             else
             {
-                shortOption.value = option.defaultValue();
+                if (option.isValueMandatory())
+                    shortOption.errorMessage = QString("-%1: %2").arg(shortOption.name).arg(QObject::tr("Missing value."));
+                else
+                    shortOption.value = option.defaultValue();
             }
         }
 
@@ -274,7 +277,12 @@ int ArgumentParser::parseLongOption(const TokenList& tokens, int startIndex)
         if (option.hasValue())
         {
             if (longOption.value.isNull())
-                longOption.value = option.defaultValue();
+            {
+                if (option.isValueMandatory())
+                    longOption.errorMessage = QString("--%1: %2").arg(longOption.name).arg(QObject::tr("Missing value."));
+                else
+                    longOption.value = option.defaultValue();
+            }
         }
         else if (!longOption.value.isNull())
         {
