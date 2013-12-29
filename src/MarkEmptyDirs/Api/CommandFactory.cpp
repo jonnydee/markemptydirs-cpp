@@ -41,6 +41,14 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
+class NoopCommand : public ICommand
+{
+public:
+    void init(Context& ctx) { Q_UNUSED(ctx); }
+    void run() {}
+};
+
+
 CommandFactory::CommandFactory()
 {
 }
@@ -53,8 +61,8 @@ std::unique_ptr<ICommand> CommandFactory::createCommand(Context& ctx) const
     case Config::CLEAN:
         pCmd.reset(new CleanCommand);
         break;
-    case Config::UPDATE:
-        pCmd.reset(new UpdateCommand);
+    case Config::HELP:
+        pCmd.reset(new HelpCommand);
         break;
     case Config::OVERVIEW:
         pCmd.reset(new OverviewCommand);
@@ -62,13 +70,14 @@ std::unique_ptr<ICommand> CommandFactory::createCommand(Context& ctx) const
     case Config::PURGE:
         pCmd.reset(new PurgeCommand);
         break;
+    case Config::UPDATE:
+        pCmd.reset(new UpdateCommand);
+        break;
     case Config::VERSION:
         pCmd.reset(new VersionCommand);
         break;
-    case Config::HELP:
     default:
-        pCmd.reset(new HelpCommand);
-        break;
+        pCmd.reset(new NoopCommand);
     }
 
     pCmd->init(ctx);
