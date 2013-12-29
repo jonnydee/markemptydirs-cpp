@@ -72,6 +72,7 @@ class MARKEMPTYDIRSAPISHARED_EXPORT Config
 public:
     enum Command
     {
+        NONE,
         HELP,
         UPDATE,
         CLEAN,

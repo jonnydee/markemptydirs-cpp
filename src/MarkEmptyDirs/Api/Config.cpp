@@ -28,7 +28,6 @@
 
 #include <QDebug>
 
-#define DEFAULT_COMMAND             Config::UPDATE
 #define DEFAULT_MARKER_NAME         ".emptydir"
 #define DEFAULT_TEXT_CONTENT        ""
 
@@ -92,7 +91,7 @@ QString ApplicationInfo::toString() const
 
 
 Config::Config()
-    : m_command(DEFAULT_COMMAND)
+    : m_command(NONE)
     , m_dryRun(false)
     , m_excludeDirs()
     , m_logLevel(LogLevel::NONE)
