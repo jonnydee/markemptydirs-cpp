@@ -24,25 +24,59 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "test_CodeMagic_Text_Formatter.hpp"
-#include "test_CodeMagic_Text_NumberTools.hpp"
-#include "test_CodeMagic_Text_Template.hpp"
+#pragma once
+#ifndef CODEMAGIC_TEXT_NUMBERTOOLS_H
+#define CODEMAGIC_TEXT_NUMBERTOOLS_H
+
+#include "../codemagic_global.hpp"
 
 
-int main(int argc, char *argv[])
+class QString;
+
+namespace CodeMagic
 {
-    {
-        CodeMagic_Text_Formatter_Test tc;
-        QTest::qExec(&tc, argc, argv);
-    }
 
-    {
-        CodeMagic_Text_NumberTools_Test tc;
-        QTest::qExec(&tc, argc, argv);
-    }
+namespace Text
+{
 
-    {
-        CodeMagic_Text_Template_Test tc;
-        QTest::qExec(&tc, argc, argv);
-    }
+template <typename T>
+T parse(const QString& str, bool* pOk = nullptr, int base = 10);
+
+template <> CODEMAGICSHARED_EXPORT
+bool parse<bool>(const QString& str, bool* pOk, int);
+
+template <> CODEMAGICSHARED_EXPORT
+float parse<float>(const QString& str, bool* pOk, int);
+
+template <> CODEMAGICSHARED_EXPORT
+double parse<double>(const QString& str, bool* pOk, int);
+
+template <> CODEMAGICSHARED_EXPORT
+qint8 parse<qint8>(const QString& str, bool* pOk, int base);
+
+template <> CODEMAGICSHARED_EXPORT
+quint8 parse<quint8>(const QString& str, bool* pOk, int base);
+
+template <> CODEMAGICSHARED_EXPORT
+qint16 parse<qint16>(const QString& str, bool* pOk, int base);
+
+template <> CODEMAGICSHARED_EXPORT
+quint16 parse<quint16>(const QString& str, bool* pOk, int base);
+
+template <> CODEMAGICSHARED_EXPORT
+qint32 parse<qint32>(const QString& str, bool* pOk, int base);
+
+template <> CODEMAGICSHARED_EXPORT
+quint32 parse<quint32>(const QString& str, bool* pOk, int base);
+
+template <> CODEMAGICSHARED_EXPORT
+qint64 parse<qint64>(const QString& str, bool* pOk, int base);
+
+template <> CODEMAGICSHARED_EXPORT
+quint64 parse<quint64>(const QString& str, bool* pOk, int base);
+
 }
+
+}
+
+#endif // CODEMAGIC_TEXT_NUMBERTOOLS_H

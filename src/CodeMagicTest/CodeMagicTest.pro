@@ -25,8 +25,9 @@ CONFIG(debug, debug|release) {
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 HEADERS += \
-    test_CodeMagic_Text_Template.hpp \
-    test_CodeMagic_Text_Formatter.hpp
+    test_CodeMagic_Text_Formatter.hpp \
+    test_CodeMagic_Text_NumberTools.hpp \
+    test_CodeMagic_Text_Template.hpp
 
 SOURCES += \
     main.cpp

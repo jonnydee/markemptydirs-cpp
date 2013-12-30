@@ -32,6 +32,7 @@ SOURCES += \
     Cli/Option.cpp \
     FileSystem/FileSystemTools.cpp \
     Text/Formatter.cpp \
+    Text/NumberTools.cpp \
     Text/Template/Engine.cpp \
     Text/Template/Variable.cpp \
     Text/Template/VariableFactory.cpp \
@@ -45,6 +46,7 @@ HEADERS += codemagic_global.hpp \
     Cli/Option.hpp \
     FileSystem/FileSystemTools.hpp \
     Text/Formatter.hpp \
+    Text/NumberTools.hpp \
     Text/Template/Engine.hpp \
     Text/Template/Variable.hpp \
     Text/Template/VariableFactory.hpp \
