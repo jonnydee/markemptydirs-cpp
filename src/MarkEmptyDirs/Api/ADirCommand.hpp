@@ -63,7 +63,7 @@ protected:
 
     bool createMarker(const QDir& dir);
     bool deleteMarker(const QDir& dir);
-    bool executeCommand(const QString& cmd, QString* pError);
+    bool executeCommand(const QString& cmd, QString& errorMessage);
 };
 
 }

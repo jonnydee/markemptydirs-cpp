@@ -36,6 +36,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QObject>
+#include <QProcess>
 #include <QTextStream>
 
 
@@ -120,17 +121,21 @@ bool ADirCommand::createMarker(const QDir& dir)
     // Execute create hook (if any).
     if (!config.createHookCommand().isNull())
     {
+        QString program = config.createHookCommand();
+        if (context().config().substituteVariables())
+            context().templateEngine().process(program);
+
         QString errorString;
-        if (!config.dryRun() && !executeCommand(config.createHookCommand(), &errorString))
+        if (!config.dryRun() && !executeCommand(program, errorString))
         {
-            logger.log(QObject::tr("Could not execute create hook: '%1' (%2)").arg(config.createHookCommand()).arg(errorString),
+            logger.log(QObject::tr("Could not execute create hook: '%1' (%2)").arg(program).arg(errorString),
                          LogLevel::ERROR);
         }
         else
         {
             const auto logMsg = config.shortMessages()
-                    ? config.createHookCommand()
-                    : QObject::tr("Executed create hook: '%1'").arg(config.createHookCommand());
+                    ? program
+                    : QObject::tr("Executed create hook: '%1'").arg(program);
             logger.log(logMsg, LogLevel::INFO);
         }
     }
@@ -150,17 +155,21 @@ bool ADirCommand::deleteMarker(const QDir& dir)
     // Execute delete hook (if any).
     if (!config.deleteHookCommand().isNull())
     {
+        QString program = config.deleteHookCommand();
+        if (context().config().substituteVariables())
+            context().templateEngine().process(program);
+
         QString errorString;
-        if (!config.dryRun() && !executeCommand(config.deleteHookCommand(), &errorString))
+        if (!config.dryRun() && !executeCommand(program, errorString))
         {
-            logger.log(QObject::tr("Could not execute delete hook: '%1' (%2)").arg(config.deleteHookCommand()).arg(errorString),
+            logger.log(QObject::tr("Could not execute delete hook: '%1' (%2)").arg(program).arg(errorString),
                          LogLevel::ERROR);
         }
         else
         {
             const auto logMsg = config.shortMessages()
-                    ? config.createHookCommand()
-                    : QObject::tr("Executed delete hook: '%1'").arg(config.createHookCommand());
+                    ? program
+                    : QObject::tr("Executed delete hook: '%1'").arg(program);
             logger.log(logMsg, LogLevel::INFO);
         }
     }
@@ -189,10 +198,24 @@ bool ADirCommand::deleteMarker(const QDir& dir)
     return true;
 }
 
-bool ADirCommand::executeCommand(const QString& cmd, QString* pError)
+bool ADirCommand::executeCommand(const QString& cmd, QString& errorMessage)
 {
-    const auto& config = context().config();
-    auto& logger = context().logger();
+    QString program = cmd;
+    if (context().config().substituteVariables())
+        context().templateEngine().process(program);
+
+    const int result = QProcess::execute(program);
+    switch (result)
+    {
+    case -2:
+        errorMessage = QObject::tr("Process could not be started.");
+        return false;
+    case -1:
+        errorMessage = QObject::tr("Process crashed.");
+        return false;
+    default:
+        break;
+    }
 
     return true;
 }
