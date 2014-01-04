@@ -19,10 +19,9 @@ DESTDIR = $$_PRO_FILE_PWD_/../../../bin
 
 TEMPLATE = app
 CONFIG   += console
-CONFIG   -= app_bundle
 CONFIG   += static
 
-QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++ -mmacosx-version-min=10.7
+QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
 CONFIG += c++11
 
 SOURCES += \
@@ -54,3 +53,7 @@ CONFIG(release, debug|release) {
 
 HEADERS += \
     CommandLineInterface.hpp
+
+macx {
+    include(osx/osx.pri)
+}
