@@ -26,14 +26,21 @@
 
 #include "Program.hpp"
 
+#include <MarkEmptyDirs/Api/CommandFactory.hpp>
 #include <MarkEmptyDirs/Api/Config.hpp>
 #include <MarkEmptyDirs/Api/Context.hpp>
+#include <MarkEmptyDirs/Api/ICommand.hpp>
+#include <MarkEmptyDirs/Api/Logger.hpp>
+#include <MarkEmptyDirs/Api/LogLevel.hpp>
 
 #include <CodeMagic/Cli/HelpFormatter.hpp>
 #include <CodeMagic/Cli/ArgumentParser.hpp>
 #include <CodeMagic/FileSystem/FileSystemTools.hpp>
 #include <CodeMagic/Text/Template/Engine.hpp>
 #include <CodeMagic/Text/Template/Variable.hpp>
+
+#include <QStringList>
+
 
 #define APPLICATION_DISCLAIMER          "This is free software; see the source for copying conditions. There is NO" "\n" \
                                         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
@@ -172,6 +179,7 @@ Program::Program()
     , verboseOpt(
           QStringList() << "v" << "verbose",
           QObject::tr("Output verbose messages.", "verbose"))
+    , m_pContext(nullptr)
 {
     m_commands
         << &cleanCmd
@@ -197,6 +205,11 @@ Program::Program()
         << &substOpt
         << &textOpt
         << &verboseOpt;
+}
+
+Program::~Program()
+{
+    delete m_pContext;
 }
 
 std::unique_ptr<const Config> Program::createConfig(const Context& ctx, const QStringList& args, QStringList& errorMessages) const
@@ -344,25 +357,7 @@ std::unique_ptr<const Config> Program::createConfig(const Context& ctx, const QS
 
     // Set help text.
     {
-        HelpFormatter formatter;
-
-        formatter.setExecutableFileName(pConfig->executableFile().fileName());
-
-        formatter.addUsageSection("COMMAND [OPTION]... DIR...");
-
-        formatter.addCommandListSection(
-                    QObject::tr("Commands"),
-                    commands());
-
-        formatter.addOptionListSection(
-                    QObject::tr("Options"),
-                    options());
-
-        formatter.addTextSection(
-                    QObject::tr("Template variables"),
-                    formatVariableParagraphs(ctx.templateEngine().variables()));
-
-        auto helpText = formatter.formatHelpText();
+        auto helpText = createHelpText(pConfig->executableFile().fileName(), commands(), options(), ctx.templateEngine().variables());
 
         pConfig->setHelpText(helpText);
     }
@@ -375,9 +370,58 @@ CommandList Program::commands() const
     return m_commands;
 }
 
+QString Program::createHelpText(const QString& execFileName,
+                                const CommandList& cmds,
+                                const OptionList& opts,
+                                const Template::VariableList& templVars) const
+{
+    HelpFormatter formatter;
+
+    formatter.setExecutableFileName(execFileName);
+
+    formatter.addUsageSection("COMMAND [OPTION]... DIR...");
+
+    formatter.addCommandListSection(
+                QObject::tr("Commands"),
+                cmds);
+
+    formatter.addOptionListSection(
+                QObject::tr("Options"),
+                opts);
+
+    formatter.addTextSection(
+                QObject::tr("Template variables"),
+                formatVariableParagraphs(templVars));
+
+    return formatter.formatHelpText();
+}
+
+bool Program::init(const QStringList& args)
+{
+    auto pContext = Api::Context::create();
+
+    QStringList errorMessages;
+    pContext->setConfig(createConfig(*pContext, args, errorMessages));
+    foreach (const auto& errorMessage, errorMessages)
+        pContext->logger().log(errorMessage, Api::LogLevel::ERROR);
+    if (!errorMessages.isEmpty())
+        return false;
+
+    m_pContext = pContext.release();
+    return true;
+}
+
 OptionList Program::options() const
 {
     return m_options;
+}
+
+void Program::run()
+{
+    Q_ASSERT(m_pContext);
+    Api::CommandFactory commandFactory;
+    auto pCmd = commandFactory.createCommand(*m_pContext);
+    pCmd->run();
 }
 
 }

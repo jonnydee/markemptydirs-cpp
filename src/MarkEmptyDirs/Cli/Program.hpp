@@ -30,9 +30,14 @@
 
 #include <CodeMagic/Cli/Command.hpp>
 #include <CodeMagic/Cli/Option.hpp>
+#include <CodeMagic/Text/Template/Variable.hpp>
+
+#include <QList>
 
 #include <memory>
 
+
+class QStringList;
 
 namespace MarkEmptyDirs
 {
@@ -73,14 +78,27 @@ public:
     const CodeMagic::Cli::Option verboseOpt;
 
     Program();
+    ~Program();
 
     CodeMagic::Cli::CommandList commands() const;
+
+    bool init(const QStringList& args);
+
     CodeMagic::Cli::OptionList options() const;
 
+    void run();
+
+protected:
     std::unique_ptr<const Api::Config> createConfig(const Api::Context& ctx, const QStringList& args, QStringList& errorMessages) const;
+
+    QString createHelpText(const QString& execFileName,
+                           const CodeMagic::Cli::CommandList& cmds,
+                           const CodeMagic::Cli::OptionList& opts,
+                           const CodeMagic::Text::Template::VariableList& templVars) const;
 
 private:
     CodeMagic::Cli::CommandList m_commands;
+    Api::Context* m_pContext;
     CodeMagic::Cli::OptionList m_options;
 };
 

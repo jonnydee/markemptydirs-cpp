@@ -26,37 +26,18 @@
 
 #include "Program.hpp"
 
-#include <MarkEmptyDirs/Api/CommandFactory.hpp>
-#include <MarkEmptyDirs/Api/Config.hpp>
-#include <MarkEmptyDirs/Api/Context.hpp>
-#include <MarkEmptyDirs/Api/ICommand.hpp>
-#include <MarkEmptyDirs/Api/Logger.hpp>
-#include <MarkEmptyDirs/Api/LogLevel.hpp>
-
 #include <QCoreApplication>
 #include <QDebug>
-
-using namespace MarkEmptyDirs;
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-    auto args = app.arguments();
 
-    auto pCtx = Api::Context::create();
-
-    Cli::Program cli;
-    QStringList errorMessages;
-    pCtx->setConfig(cli.createConfig(*pCtx, args, errorMessages));
-
-    foreach (const auto& errorMessage, errorMessages)
-        pCtx->logger().log(errorMessage, Api::LogLevel::ERROR);
-    if (!errorMessages.isEmpty())
+    MarkEmptyDirs::Cli::Program program;
+    if (!program.init(app.arguments()))
         return -1;
 
-    Api::CommandFactory commandFactory;
-    auto pCmd = commandFactory.createCommand(*pCtx);
-    pCmd->run();
+    program.run();
 
     return 0;
 //    return app.exec();
