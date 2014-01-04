@@ -301,7 +301,7 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
         else if (arg.isBasedOn(markerOpt))
         {
             QString errorMessage;
-            if (!FileSystem::isValidFileName(arg.value, &errorMessage))
+            if (!FileSystem::validateFileName(arg.value, &errorMessage))
                 errorMessages << errorMessage;
             else
                 pConfig->setMarkerName(arg.value);

@@ -45,10 +45,10 @@ CODEMAGICSHARED_EXPORT
 QChar dirSeparator();
 
 CODEMAGICSHARED_EXPORT
-bool isValidFileName(const QString& fileName, QString* pErrorMsg = nullptr);
+QChar pathSeparator();
 
 CODEMAGICSHARED_EXPORT
-QChar pathSeparator();
+bool validateFileName(const QString& fileName, QString* pErrorMsg = nullptr);
 
 CODEMAGICSHARED_EXPORT
 QChar volumeSeparator();

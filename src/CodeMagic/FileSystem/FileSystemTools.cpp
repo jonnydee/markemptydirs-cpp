@@ -44,7 +44,7 @@ QChar dirSeparator()
     return separator;
 }
 
-bool isValidFileName(const QString& fileName, QString* pErrorMsg)
+bool validateFileName(const QString& fileName, QString* pErrorMsg)
 {
     static QString devNull;
     auto& errorMsg = pErrorMsg ? *pErrorMsg : devNull;
