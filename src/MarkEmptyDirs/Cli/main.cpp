@@ -24,7 +24,7 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "CommandLineInterface.hpp"
+#include "Program.hpp"
 
 #include <MarkEmptyDirs/Api/CommandFactory.hpp>
 #include <MarkEmptyDirs/Api/Config.hpp>
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
     auto pCtx = Api::Context::create();
 
-    Cli::CommandLineInterface cli;
+    Cli::Program cli;
     QStringList errorMessages;
     pCtx->setConfig(cli.createConfig(*pCtx, args, errorMessages));
 

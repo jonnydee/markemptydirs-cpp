@@ -25,8 +25,8 @@ QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
 CONFIG += c++11
 
 SOURCES += \
-    CommandLineInterface.cpp \
-    main.cpp
+    main.cpp \
+    Program.cpp
 
 INCLUDEPATH += \
     ../..
@@ -52,7 +52,7 @@ CONFIG(release, debug|release) {
 }
 
 HEADERS += \
-    CommandLineInterface.hpp
+    Program.hpp
 
 macx {
     include(osx/osx.pri)

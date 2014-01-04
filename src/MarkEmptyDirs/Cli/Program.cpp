@@ -24,7 +24,7 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "CommandLineInterface.hpp"
+#include "Program.hpp"
 
 #include <MarkEmptyDirs/Api/Config.hpp>
 #include <MarkEmptyDirs/Api/Context.hpp>
@@ -98,7 +98,7 @@ namespace
     }
 }
 
-CommandLineInterface::CommandLineInterface()
+Program::Program()
     : cleanCmd(
           QStringList() << "clean",
           QObject::tr("Delete all marker files.", "clean"))
@@ -199,7 +199,7 @@ CommandLineInterface::CommandLineInterface()
         << &verboseOpt;
 }
 
-std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& ctx, const QStringList& args, QStringList& errorMessages) const
+std::unique_ptr<const Config> Program::createConfig(const Context& ctx, const QStringList& args, QStringList& errorMessages) const
 {
     ApplicationInfo appInfo;
     appInfo.copyright = APPLICATION_COPYRIGHT;
@@ -370,12 +370,12 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
     return std::unique_ptr<const Config>(pConfig);
 }
 
-CommandList CommandLineInterface::commands() const
+CommandList Program::commands() const
 {
     return m_commands;
 }
 
-OptionList CommandLineInterface::options() const
+OptionList Program::options() const
 {
     return m_options;
 }

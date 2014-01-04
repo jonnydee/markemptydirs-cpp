@@ -24,8 +24,9 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#ifndef COMMANDLINEINTERFACE_HPP
-#define COMMANDLINEINTERFACE_HPP
+#pragma once
+#ifndef MARKEMPTYDIRS_CLI_PROGRAM_HPP
+#define MARKEMPTYDIRS_CLI_PROGRAM_HPP
 
 #include <CodeMagic/Cli/Command.hpp>
 #include <CodeMagic/Cli/Option.hpp>
@@ -45,7 +46,7 @@ namespace Api
 namespace Cli
 {
 
-class CommandLineInterface
+class Program
 {
 public:
     const CodeMagic::Cli::Command cleanCmd;
@@ -71,7 +72,7 @@ public:
     const CodeMagic::Cli::Option textOpt;
     const CodeMagic::Cli::Option verboseOpt;
 
-    CommandLineInterface();
+    Program();
 
     CodeMagic::Cli::CommandList commands() const;
     CodeMagic::Cli::OptionList options() const;
@@ -87,4 +88,4 @@ private:
 
 }
 
-#endif // COMMANDLINEINTERFACE_HPP
+#endif // MARKEMPTYDIRS_CLI_PROGRAM_HPP
