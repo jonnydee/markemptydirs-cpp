@@ -88,6 +88,9 @@ private:
     QString m_description;
 };
 
+typedef QList<const Variable*> VariableList;
+
+
 struct CODEMAGICSHARED_EXPORT Variable::ArgumentDescription
 {
     ArgumentDescription(const QString& argument_, const QString& description_)
