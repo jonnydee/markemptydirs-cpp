@@ -150,7 +150,9 @@ CommandLineInterface::CommandLineInterface()
     , markerOpt(
           QStringList() << "m" << "marker-name",
           QObject::tr("Use another name for marker files.", "marker-name"),
-          QObject::tr("NAME", "marker-name"))
+          QObject::tr("NAME", "marker-name"),
+          QString(),
+          &FileSystem::validateFileName)
     , noFollowSymLinksOpt(
           QStringList() << "no-dereference",
           QObject::tr("Do not follow symbolic links.", "dereference"))
@@ -300,11 +302,7 @@ std::unique_ptr<const Config> CommandLineInterface::createConfig(const Context& 
         }
         else if (arg.isBasedOn(markerOpt))
         {
-            QString errorMessage;
-            if (!FileSystem::validateFileName(arg.value, &errorMessage))
-                errorMessages << errorMessage;
-            else
-                pConfig->setMarkerName(arg.value);
+            pConfig->setMarkerName(arg.value);
         }
         else if (arg.isBasedOn(noFollowSymLinksOpt))
         {
