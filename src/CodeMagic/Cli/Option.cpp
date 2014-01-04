@@ -33,11 +33,12 @@ namespace CodeMagic
 namespace Cli
 {
 
-Option::Option(const QStringList& names, const QString& description, const QString& valueName, const QString& defaultValue)
+Option::Option(const QStringList& names, const QString& description, const QString& valueName, const QString& defaultValue, const ValueValidator& valueValidator)
     : m_names(names)
     , m_description(description)
     , m_valueName(valueName)
     , m_defaultValue(defaultValue)
+    , m_valueValidator(valueValidator)
 {
 }
 
@@ -56,6 +57,11 @@ bool Option::hasValue() const
     return !m_valueName.isNull();
 }
 
+bool Option::hasValueValidator() const
+{
+    return nullptr != m_valueValidator;
+}
+
 bool Option::isValueMandatory() const
 {
     return hasValue() && m_defaultValue.isNull();
@@ -69,6 +75,11 @@ QString Option::description() const
 QString Option::valueName() const
 {
     return m_valueName;
+}
+
+Option::ValueValidator Option::valueValidator() const
+{
+    return m_valueValidator;
 }
 
 QList<QChar> Option::shortNames() const

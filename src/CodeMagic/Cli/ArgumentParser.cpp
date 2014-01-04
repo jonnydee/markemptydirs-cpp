@@ -229,6 +229,14 @@ int ArgumentParser::parseShortOption(const TokenList& tokens, int startIndex)
                 else
                     shortOption.value = option.defaultValue();
             }
+            if (option.hasValueValidator())
+            {
+                QString errorMessage;
+                if (!option.valueValidator()(shortOption.value, &errorMessage))
+                    shortOption.errorMessage = QString("-%1: %2")
+                            .arg(shortOption.name)
+                            .arg(!errorMessage.isEmpty() ? errorMessage : QObject::tr("Value has wrong format."));
+            }
         }
 
         break;
@@ -282,6 +290,14 @@ int ArgumentParser::parseLongOption(const TokenList& tokens, int startIndex)
                     longOption.errorMessage = QString("--%1: %2").arg(longOption.name).arg(QObject::tr("Missing value."));
                 else
                     longOption.value = option.defaultValue();
+            }
+            if (option.hasValueValidator())
+            {
+                QString errorMessage;
+                if (!option.valueValidator()(longOption.value, &errorMessage))
+                    longOption.errorMessage = QString("--%1: %2")
+                            .arg(longOption.name)
+                            .arg(!errorMessage.isEmpty() ? errorMessage : QObject::tr("Value has wrong format."));
             }
         }
         else if (!longOption.value.isNull())

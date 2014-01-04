@@ -34,6 +34,8 @@
 #include <QString>
 #include <QStringList>
 
+#include <functional>
+
 
 namespace CodeMagic
 {
@@ -44,15 +46,20 @@ namespace Cli
 class CODEMAGICSHARED_EXPORT Option
 {
 public:
-    Option(const QStringList& names, const QString& description = QString(), const QString& valueName = QString(), const QString& defaultValue = QString());
+    typedef std::function<bool(const QString& value, QString* pErrorMsg)> ValueValidator;
+
+    Option(const QStringList& names, const QString& description = QString(),
+           const QString& valueName = QString(), const QString& defaultValue = QString(), const ValueValidator& valueValidator = ValueValidator());
 
     QString defaultValue() const;
     QString description() const;
     bool hasValue() const;
+    bool hasValueValidator() const;
     bool isValueMandatory() const;
     QStringList longNames() const;
     QStringList names() const;
     QString valueName() const;
+    ValueValidator valueValidator() const;
     QList<QChar> shortNames() const;
 
 private:
@@ -60,6 +67,7 @@ private:
     QString m_description;
     QString m_valueName;
     QString m_defaultValue;
+    ValueValidator m_valueValidator;
 };
 
 typedef QList<const Option*> OptionList;
