@@ -42,6 +42,8 @@
 #include <QFile>
 #include <QStringList>
 
+#include <functional>
+
 
 #define APPLICATION_DISCLAIMER          "This is free software; see the source for copying conditions. There is NO" "\n" \
                                         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
@@ -104,96 +106,106 @@ namespace
             paragraphs.removeLast();
         return paragraphs;
     }
-
-    bool checkFileExists(const QString& fileName, QString* pErrorMsg)
-    {
-        Q_ASSERT(pErrorMsg);
-        QFile file(fileName);
-        if (!file.exists())
-        {
-            *pErrorMsg = QObject::tr("File does not exist: '%1'").arg(file.fileName());
-            return false;
-        }
-        return true;
-    }
 }
 
 Program::Program()
     : cleanCmd(
           QStringList() << "clean",
-          QObject::tr("Delete all marker files.", "clean"))
+          QObject::tr("Delete all marker files.", "clean"),
+          [this](const Argument&, QString&){ m_pConfig->setCommand(Config::Command::CLEAN); return true; })
     , helpCmd(
           QStringList() << "help",
-          QObject::tr("Print help information.", "help"))
+          QObject::tr("Print help information.", "help"),
+          [this](const Argument&, QString&){ m_pConfig->setCommand(Config::Command::HELP); return true; })
     , listCmd(
           QStringList() << "list",
-          QObject::tr("List all marker files.", "list"))
+          QObject::tr("List all marker files.", "list"),
+          [this](const Argument&, QString&)
+            {
+                m_pConfig->setCommand(Config::Command::CLEAN);
+                m_pConfig->setDryRun(true);
+                m_pConfig->setShortMessages(true);
+                m_pConfig->setLogLevel(LogLevel::INFO);
+                return true;
+            })
     , overviewCmd(
           QStringList() << "overview",
-          QObject::tr("Scan directory and show some overview statistics.", "overview"))
+          QObject::tr("Scan directory and show some overview statistics.", "overview"),
+          [this](const Argument&, QString&){ m_pConfig->setCommand(Config::Command::OVERVIEW); return true; })
     , purgeCmd(
           QStringList() << "purge",
-          QObject::tr("Delete everything within directories containing markers.", "purge"))
+          QObject::tr("Delete everything within directories containing markers.", "purge"),
+          [this](const Argument&, QString&){ m_pConfig->setCommand(Config::Command::PURGE); return true; })
     , updateCmd(
           QStringList() << "update",
-          QObject::tr("Create and delete marker files where necessary.", "update"))
+          QObject::tr("Create and delete marker files where necessary.", "update"),
+          [this](const Argument&, QString&){ m_pConfig->setCommand(Config::Command::UPDATE); return true; })
     , versionCmd(
           QStringList() << "version",
-          QObject::tr("Show version information.", "version"))
+          QObject::tr("Show version information.", "version"),
+          [this](const Argument&, QString&){ m_pConfig->setCommand(Config::Command::VERSION); return true; })
     , createHookOpt(
           QStringList() << "create-hook",
           QObject::tr("Invoke command after marker creation.", "create-hook"),
-          QObject::tr("COMMAND", "create-hook"))
+          QObject::tr("COMMAND", "create-hook"), QString(),
+          [this](const Argument& hookCmd, QString&){ m_pConfig->setCreateHookCommand(hookCmd.value); return true; })
     , deleteHookOpt(
           QStringList() << "delete-hook",
           QObject::tr("Invoke command before marker deletion.", "delete-hook"),
-          QObject::tr("COMMAND", "delete-hook"))
+          QObject::tr("COMMAND", "delete-hook"), QString(),
+          [this](const Argument& hookCmd, QString&){ m_pConfig->setDeleteHookCommand(hookCmd.value); return true; })
     , dryRunOpt(
           QStringList() << "n" << "dry-run",
-          QObject::tr("Simulate command execution without any side effects.", "dry-run"))
+          QObject::tr("Simulate command execution without any side effects.", "dry-run"),
+          [this](const Argument&, QString&){ m_pConfig->setDryRun(true); return true; })
     , excludeOpt(
           QStringList() << "x" << "exclude",
           QObject::tr("Skip excluded dirs.", "exclude"),
-          QObject::tr("DIRS", "exclude"),
-          DEFAULT_EXCLUDE_DIRS)
+          QObject::tr("DIRS", "exclude"), DEFAULT_EXCLUDE_DIRS,
+          std::bind(&Program::acceptExcludeOpt, this, std::placeholders::_1, std::placeholders::_2))
     , fileOpt(
           QStringList() << "F" << "file",
           QObject::tr("Create marker files using the specified template file as content.", "file"),
-          QObject::tr("NAME", "file"),
-          DEFAULT_MARKER_CONTENT_FILENAME,
-          &checkFileExists)
+          QObject::tr("NAME", "file"), DEFAULT_MARKER_CONTENT_FILENAME,
+          std::bind(&Program::acceptMarkerFileOpt, this, std::placeholders::_1, std::placeholders::_2))
     , followSymLinksOpt(
           QStringList() << "L" << "dereference",
-          QObject::tr("Follow symbolic links.", "dereference"))
+          QObject::tr("Follow symbolic links.", "dereference"),
+          [this](const Argument&, QString&){ m_pConfig->setDereferenceSymLinks(true); return true; })
     , helpOpt(
           QStringList() << "h" << "help",
-          QObject::tr("Print help information.", "help"))
+          QObject::tr("Print help information.", "help"),
+          [this](const Argument&, QString&){ m_pConfig->setCommand(Config::Command::HELP); return true; })
     , markerOpt(
           QStringList() << "m" << "marker-name",
           QObject::tr("Use another name for marker files.", "marker-name"),
-          QObject::tr("NAME", "marker-name"),
-          QString(),
-          &FileSystem::validateFileName)
+          QObject::tr("NAME", "marker-name"), QString(),
+          std::bind(&Program::acceptMarkerNameOpt, this, std::placeholders::_1, std::placeholders::_2))
     , noFollowSymLinksOpt(
           QStringList() << "no-dereference",
-          QObject::tr("Do not follow symbolic links.", "dereference"))
+          QObject::tr("Do not follow symbolic links.", "dereference"),
+          [this](const Argument&, QString&){ m_pConfig->setDereferenceSymLinks(false); return true; })
     , noSubstOpt(
           QStringList() << "no-subst",
-          QObject::tr("Do not use variable subsitution.", "subst"))
+          QObject::tr("Do not use variable subsitution.", "subst"),
+          [this](const Argument&, QString&){ m_pConfig->setSubstituteVariables(false); return true; })
     , shortOpt(
           QStringList() << "short",
-          QObject::tr("Output short verbose messages.", "short"))
+          QObject::tr("Output short verbose messages.", "short"),
+          [this](const Argument&, QString&){ m_pConfig->setShortMessages(true); return true; })
     , substOpt(
           QStringList() << "subst",
-          QObject::tr("Use variable subsitution.", "subst"))
+          QObject::tr("Use variable subsitution.", "subst"),
+          [this](const Argument&, QString&){ m_pConfig->setSubstituteVariables(true); return true; })
     , textOpt(
           QStringList() << "text",
           QObject::tr("Create marker files with the specified text as content.", "text"),
-          QObject::tr("CONTENT", "text"))
+          QObject::tr("CONTENT", "text"), QString(),
+          [this](const Argument& markerText, QString&){ m_pConfig->setMarkerText(markerText.value); return true; })
     , verboseOpt(
           QStringList() << "v" << "verbose",
-          QObject::tr("Output verbose messages.", "verbose"))
-    , m_pContext(nullptr)
+          QObject::tr("Output verbose messages.", "verbose"),
+          std::bind(&Program::acceptVerboseOpt, this, std::placeholders::_1, std::placeholders::_2))
 {
     m_commands
         << &cleanCmd
@@ -223,10 +235,62 @@ Program::Program()
 
 Program::~Program()
 {
-    delete m_pContext;
 }
 
-std::unique_ptr<const Config> Program::createConfig(const Context& ctx, const QStringList& args, QStringList& errorMessages) const
+bool Program::acceptExcludeOpt(const Argument& excludeDirs, QString& errorMessage)
+{
+    Q_UNUSED(errorMessage);
+
+    Config::DirList dirs;
+    foreach (auto dir, excludeDirs.value.split(FileSystem::pathSeparator(), QString::SkipEmptyParts))
+        dirs.push_back(dir);
+    m_pConfig->setExcludeDirs(dirs);
+    return true;
+}
+
+bool Program::acceptMarkerFileOpt(const Argument& markerFileName, QString& errorMessage)
+{
+    QFile file(markerFileName.value);
+    if (!file.exists())
+    {
+        errorMessage = QObject::tr("File does not exist: '%1'").arg(file.fileName());
+        return false;
+    }
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        errorMessage = QObject::tr("Cannot open file: '%1'").arg(file.fileName());
+        return false;
+    }
+    m_pConfig->setMarkerText(QString::fromUtf8(file.readAll()));
+    return true;
+}
+
+bool Program::acceptMarkerNameOpt(const Argument& markerName, QString& errorMessage)
+{
+    if (!FileSystem::validateFileName(markerName.value, &errorMessage))
+        return false;
+    m_pConfig->setMarkerName(markerName.value);
+    return true;
+}
+
+bool Program::acceptVerboseOpt(const CodeMagic::Cli::Argument& verbose, QString& errorMessage)
+{
+    Q_UNUSED(verbose);
+    Q_UNUSED(errorMessage);
+
+    switch (m_pConfig->logLevel())
+    {
+    case LogLevel::NONE:
+        m_pConfig->setLogLevel(LogLevel::INFO);
+        break;
+    case LogLevel::INFO:
+    default:
+        m_pConfig->setLogLevel(LogLevel::DEBUG);
+    }
+    return true;
+}
+
+std::unique_ptr<const Config> Program::createConfig(const QStringList& args, QStringList& errorMessages)
 {
     ApplicationInfo appInfo;
     appInfo.copyright = APPLICATION_COPYRIGHT;
@@ -241,9 +305,9 @@ std::unique_ptr<const Config> Program::createConfig(const Context& ctx, const QS
     appInfo.version.bugfix = APPLICATION_VERSION_BUGFIX;
     appInfo.version.suffix = APPLICATION_VERSION_SUFFIX;
 
-    auto pConfig = new Config;
-    pConfig->setApplicationInfo(appInfo);
-    pConfig->setExecutableFile(args[0]);
+    m_pConfig.reset(new Config);
+    m_pConfig->setApplicationInfo(appInfo);
+    m_pConfig->setExecutableFile(args[0]);
 
     auto argsOnly = args;
     // Remove first argument, because it is the executable itself.
@@ -260,132 +324,29 @@ std::unique_ptr<const Config> Program::createConfig(const Context& ctx, const QS
         const auto& arg = arguments[i];
 
         // If no command has been specified, but help option is present we configure HELP command.
-        if (Argument::COMMAND == arg.type && arg.name.isNull() && !parser.findArgument(helpOpt).isNull())
+        if (Argument::COMMAND == arg.type && !arg.isKnown() && !parser.findArgument(helpOpt).isNull())
         {
-            pConfig->setCommand(Config::Command::HELP);
+            m_pConfig->setCommand(Config::Command::HELP);
             continue;
         }
 
         if (!arg.errorMessage.isNull())
             errorMessages << arg.errorMessage;
 
-        if (arg.isBasedOn(cleanCmd))
+        if (Argument::OTHER == arg.type)
         {
-            pConfig->setCommand(Config::Command::CLEAN);
-        }
-        else if (arg.isBasedOn(helpCmd))
-        {
-            pConfig->setCommand(Config::Command::HELP);
-        }
-        else if (arg.isBasedOn(listCmd))
-        {
-            pConfig->setCommand(Config::Command::CLEAN);
-            pConfig->setDryRun(true);
-            pConfig->setShortMessages(true);
-            pConfig->setLogLevel(LogLevel::INFO);
-        }
-        else if (arg.isBasedOn(overviewCmd))
-        {
-            pConfig->setCommand(Config::Command::OVERVIEW);
-        }
-        else if (arg.isBasedOn(purgeCmd))
-        {
-            pConfig->setCommand(Config::Command::PURGE);
-        }
-        else if (arg.isBasedOn(updateCmd))
-        {
-            pConfig->setCommand(Config::Command::UPDATE);
-        }
-        else if (arg.isBasedOn(versionCmd))
-        {
-            pConfig->setCommand(Config::Command::VERSION);
-        }
-        else if (arg.isBasedOn(createHookOpt))
-        {
-            pConfig->setCreateHookCommand(arg.value);
-        }
-        else if (arg.isBasedOn(deleteHookOpt))
-        {
-            pConfig->setDeleteHookCommand(arg.value);
-        }
-        else if (arg.isBasedOn(dryRunOpt))
-        {
-            pConfig->setDryRun(true);
-        }
-        else if (arg.isBasedOn(excludeOpt))
-        {
-            Config::DirList dirs;
-            foreach (auto dir, arg.value.split(CodeMagic::FileSystem::pathSeparator(), QString::SkipEmptyParts))
-                dirs.push_back(dir);
-            pConfig->setExcludeDirs(dirs);
-        }
-        else if (arg.isBasedOn(fileOpt))
-        {
-            QString errorMessage;
-            const auto content = loadFile(arg.value, errorMessage);
-            if (!errorMessage.isNull())
-                errorMessages << errorMessage;
-            else
-                pConfig->setMarkerText(content);
-        }
-        else if (arg.isBasedOn(followSymLinksOpt))
-        {
-            pConfig->setDereferenceSymLinks(true);
-        }
-        else if (arg.isBasedOn(helpOpt))
-        {
-            pConfig->setCommand(Config::Command::HELP);
-        }
-        else if (arg.isBasedOn(markerOpt))
-        {
-            pConfig->setMarkerName(arg.value);
-        }
-        else if (arg.isBasedOn(noFollowSymLinksOpt))
-        {
-            pConfig->setDereferenceSymLinks(false);
-        }
-        else if (arg.isBasedOn(noSubstOpt))
-        {
-            pConfig->setSubstituteVariables(false);
-        }
-        else if (arg.isBasedOn(shortOpt))
-        {
-            pConfig->setShortMessages(true);
-        }
-        else if (arg.isBasedOn(substOpt))
-        {
-            pConfig->setSubstituteVariables(true);
-        }
-        else if (arg.isBasedOn(textOpt))
-        {
-            pConfig->setMarkerText(arg.value);
-        }
-        else if (arg.isBasedOn(verboseOpt))
-        {
-            switch (pConfig->logLevel())
-            {
-            case LogLevel::NONE:
-                pConfig->setLogLevel(LogLevel::INFO);
-                break;
-            case LogLevel::INFO:
-            default:
-                pConfig->setLogLevel(LogLevel::DEBUG);
-            }
-        }
-        else
-        {
-            pConfig->addRootDir(QDir(arg.value));
+            m_pConfig->addRootDir(QDir(arg.value));
         }
     }
 
     // Set help text.
     {
-        auto helpText = createHelpText(pConfig->executableFile().fileName(), commands(), options(), ctx.templateEngine().variables());
+        auto helpText = createHelpText(m_pConfig->executableFile().fileName(), commands(), options(), m_pContext->templateEngine().variables());
 
-        pConfig->setHelpText(helpText);
+        m_pConfig->setHelpText(helpText);
     }
 
-    return std::unique_ptr<const Config>(pConfig);
+    return std::move(m_pConfig);
 }
 
 CommandList Program::commands() const
@@ -421,28 +382,16 @@ QString Program::createHelpText(const QString& execFileName,
 
 bool Program::init(const QStringList& args)
 {
-    auto pContext = Api::Context::create();
+    m_pContext = Api::Context::create();
 
     QStringList errorMessages;
-    pContext->setConfig(createConfig(*pContext, args, errorMessages));
+    m_pContext->setConfig(createConfig(args, errorMessages));
     foreach (const auto& errorMessage, errorMessages)
-        pContext->logger().log(errorMessage, Api::LogLevel::ERROR);
+        m_pContext->logger().log(errorMessage, Api::LogLevel::ERROR);
     if (!errorMessages.isEmpty())
         return false;
 
-    m_pContext = pContext.release();
     return true;
-}
-
-QString Program::loadFile(const QString& fileName, QString& errorMessage) const
-{
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        errorMessage = QObject::tr("Cannot open file: '%1'").arg(file.fileName());
-        return QString();
-    }
-    return QString::fromUtf8(file.readAll());
 }
 
 OptionList Program::options() const

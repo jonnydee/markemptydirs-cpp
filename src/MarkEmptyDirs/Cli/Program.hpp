@@ -89,18 +89,25 @@ public:
     void run();
 
 protected:
-    std::unique_ptr<const Api::Config> createConfig(const Api::Context& ctx, const QStringList& args, QStringList& errorMessages) const;
+    std::unique_ptr<const Api::Config> createConfig(const QStringList& args, QStringList& errorMessages);
 
     QString createHelpText(const QString& execFileName,
                            const CodeMagic::Cli::CommandList& cmds,
                            const CodeMagic::Cli::OptionList& opts,
                            const CodeMagic::Text::Template::VariableList& templVars) const;
 
-    QString loadFile(const QString& file, QString& errorMessage) const;
+    bool acceptExcludeOpt(const CodeMagic::Cli::Argument& markerName, QString& errorMessage);
+
+    bool acceptMarkerFileOpt(const CodeMagic::Cli::Argument& markerFileName, QString& errorMessage);
+
+    bool acceptMarkerNameOpt(const CodeMagic::Cli::Argument& markerName, QString& errorMessage);
+
+    bool acceptVerboseOpt(const CodeMagic::Cli::Argument& verbose, QString& errorMessage);
 
 private:
     CodeMagic::Cli::CommandList m_commands;
-    Api::Context* m_pContext;
+    std::unique_ptr<Api::Config> m_pConfig;
+    std::unique_ptr<Api::Context> m_pContext;
     CodeMagic::Cli::OptionList m_options;
 };
 
