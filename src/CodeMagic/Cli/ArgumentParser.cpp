@@ -185,6 +185,14 @@ int ArgumentParser::parseCommand(const TokenList& tokens, int startIndex)
         command.errorMessage = QString("%1: %2").arg(command.name).arg(QObject::tr("Unknown command."));
     else if (command.commands.size() > 1)
         command.errorMessage = QString("%1: %2").arg(command.name).arg(QObject::tr("Ambivalent command."));
+    else if (command.commands.first()->hasHandler())
+    {
+        QString errorMessage;
+        if (!command.commands.first()->handler()(command, errorMessage))
+            command.errorMessage = QString("%1: %2")
+                    .arg(command.name)
+                    .arg(!errorMessage.isEmpty() ? errorMessage : QObject::tr("Command not accepted."));
+    }
 
     m_arguments.push_back(command);
 

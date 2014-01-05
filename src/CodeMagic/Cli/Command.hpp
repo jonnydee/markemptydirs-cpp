@@ -41,17 +41,24 @@ namespace CodeMagic
 namespace Cli
 {
 
+struct Argument;
+
 class CODEMAGICSHARED_EXPORT Command
 {
 public:
-    Command(const QStringList& names, const QString& description = QString());
+    typedef std::function<bool(const Argument& optionArgument, QString& errorMessage)> Handler;
+
+    Command(const QStringList& names, const QString& description = QString(), const Handler& handler = Handler());
 
     QString description() const;
+    Handler handler() const;
+    bool hasHandler() const;
     QStringList names() const;
 
 private:
     QString m_description;
     QStringList m_names;
+    Handler m_handler;
 };
 
 typedef QList<const Command*> CommandList;

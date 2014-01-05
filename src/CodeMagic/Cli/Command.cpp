@@ -33,9 +33,10 @@ namespace CodeMagic
 namespace Cli
 {
 
-Command::Command(const QStringList& names, const QString& description)
+Command::Command(const QStringList& names, const QString& description, const Handler& handler)
     : m_description(description)
     , m_names(names)
+    , m_handler(handler)
 {
 }
 
@@ -47,6 +48,16 @@ QStringList Command::names() const
 QString Command::description() const
 {
     return m_description;
+}
+
+bool Command::hasHandler() const
+{
+    return nullptr != m_handler;
+}
+
+Command::Handler Command::handler() const
+{
+    return m_handler;
 }
 
 }
