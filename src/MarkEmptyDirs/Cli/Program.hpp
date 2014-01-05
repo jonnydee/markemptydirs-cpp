@@ -96,6 +96,8 @@ protected:
                            const CodeMagic::Cli::OptionList& opts,
                            const CodeMagic::Text::Template::VariableList& templVars) const;
 
+    QString loadFile(const QString& file, QString& errorMessage) const;
+
 private:
     CodeMagic::Cli::CommandList m_commands;
     Api::Context* m_pContext;

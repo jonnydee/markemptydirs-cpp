@@ -39,6 +39,7 @@
 #include <CodeMagic/Text/Template/Engine.hpp>
 #include <CodeMagic/Text/Template/Variable.hpp>
 
+#include <QFile>
 #include <QStringList>
 
 
@@ -103,6 +104,18 @@ namespace
             paragraphs.removeLast();
         return paragraphs;
     }
+
+    bool checkFileExists(const QString& fileName, QString* pErrorMsg)
+    {
+        Q_ASSERT(pErrorMsg);
+        QFile file(fileName);
+        if (!file.exists())
+        {
+            *pErrorMsg = QObject::tr("File does not exist: '%1'").arg(file.fileName());
+            return false;
+        }
+        return true;
+    }
 }
 
 Program::Program()
@@ -147,7 +160,8 @@ Program::Program()
           QStringList() << "F" << "file",
           QObject::tr("Create marker files using the specified template file as content.", "file"),
           QObject::tr("NAME", "file"),
-          DEFAULT_MARKER_CONTENT_FILENAME)
+          DEFAULT_MARKER_CONTENT_FILENAME,
+          &checkFileExists)
     , followSymLinksOpt(
           QStringList() << "L" << "dereference",
           QObject::tr("Follow symbolic links.", "dereference"))
@@ -305,6 +319,15 @@ std::unique_ptr<const Config> Program::createConfig(const Context& ctx, const QS
                 dirs.push_back(dir);
             pConfig->setExcludeDirs(dirs);
         }
+        else if (arg.isBasedOn(fileOpt))
+        {
+            QString errorMessage;
+            const auto content = loadFile(arg.value, errorMessage);
+            if (!errorMessage.isNull())
+                errorMessages << errorMessage;
+            else
+                pConfig->setMarkerText(content);
+        }
         else if (arg.isBasedOn(followSymLinksOpt))
         {
             pConfig->setDereferenceSymLinks(true);
@@ -409,6 +432,17 @@ bool Program::init(const QStringList& args)
 
     m_pContext = pContext.release();
     return true;
+}
+
+QString Program::loadFile(const QString& fileName, QString& errorMessage) const
+{
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        errorMessage = QObject::tr("Cannot open file: '%1'").arg(file.fileName());
+        return QString();
+    }
+    return QString::fromUtf8(file.readAll());
 }
 
 OptionList Program::options() const
