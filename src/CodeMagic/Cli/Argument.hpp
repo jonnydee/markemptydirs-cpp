@@ -25,17 +25,14 @@
 // or implied, of Johann Duscher.
 
 #pragma once
-#ifndef CODEMAGIC_CLI_ARGUMENTPARSER_HPP
-#define CODEMAGIC_CLI_ARGUMENTPARSER_HPP
+#ifndef CODEMAGIC_CLI_ARGUMENT_HPP
+#define CODEMAGIC_CLI_ARGUMENT_HPP
 
 #include "../codemagic_global.hpp"
-#include "Argument.hpp"
 
 #include <QList>
 #include <QString>
 
-
-class QStringList;
 
 namespace CodeMagic
 {
@@ -43,54 +40,40 @@ namespace CodeMagic
 namespace Cli
 {
 
-struct Token;
-typedef QList<Token> TokenList;
+class Command;
+typedef QList<const Command*> CommandList;
 
 class Option;
-typedef QList<const Option*> OptionList;
 
-
-class CODEMAGICSHARED_EXPORT ArgumentParser
+struct CODEMAGICSHARED_EXPORT Argument
 {
-public:
-    ArgumentParser();
+    enum Type
+    {
+        UNKNOWN,
+        COMMAND,
+        OPTION,
+        OTHER
+    };
 
-    void addCommand(const Command& command);
-    void addCommands(const CommandList& commands);
+    Type type;
+    CommandList commands;
+    const Option* option;
+    QString name;
+    QString value;
+    QString errorMessage;
 
-    CommandList commands() const;
+    Argument(Type _type = UNKNOWN) : type(_type), option(nullptr) {}
 
-    void addOption(const Option& option);
-    void addOptions(const OptionList& options);
-
-    ArgumentList arguments() const;
-    Argument findUnknownArgument() const;
-    Argument findArgument(const Option& option) const;
-    ArgumentList findUnknownArguments() const;
-    ArgumentList findArguments(const Option& option) const;
-
-    void setMinimumCommandLength(int minLen);
-    int minimumCommandLength() const;
-
-    OptionList options() const;
-
-    void parse(const QStringList& args);
-
-protected:
-    int parseCommand(const TokenList& tokens, int startIndex);
-    int parseShortOption(const TokenList& tokens, int startIndex);
-    int parseLongOption(const TokenList& tokens, int startIndex);
-    int parseOther(const TokenList& tokens, int startIndex);
-
-private:
-    ArgumentList m_arguments;
-    CommandList m_commands;
-    int m_minimumCommandLength;
-    OptionList m_options;
+    bool isKnown() const { return !commands.isEmpty() || nullptr != option; }
+    bool isNull() const { return UNKNOWN == type; }
+    bool isBasedOn(const Command& cmd) const { return commands.contains(&cmd); }
+    bool isBasedOn(const Option& opt) const { return &opt == option; }
 };
 
-}
+typedef QList<Argument> ArgumentList;
 
 }
 
-#endif // CODEMAGIC_CLI_ARGUMENTPARSER_HPP
+}
+
+#endif // CODEMAGIC_CLI_ARGUMENT_HPP

@@ -39,6 +39,7 @@ SOURCES += \
     Text/TextTools.cpp
 
 HEADERS += codemagic_global.hpp \
+    Cli/Argument.hpp \
     Cli/ArgumentParser.hpp \
     Cli/ArgumentScanner.hpp \
     Cli/Command.hpp \
