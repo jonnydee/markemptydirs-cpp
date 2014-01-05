@@ -95,7 +95,8 @@ protected:
     QString createHelpText(const QString& execFileName,
                            const CodeMagic::Cli::CommandList& cmds,
                            const CodeMagic::Cli::OptionList& opts,
-                           const CodeMagic::Text::Template::VariableList& templVars) const;
+                           const CodeMagic::Text::Template::VariableList& templVars,
+                           bool shortHelp) const;
 
     bool acceptExcludeOpt(const CodeMagic::Cli::Argument& markerName, QString& errorMessage);
 

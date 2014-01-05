@@ -355,7 +355,11 @@ std::unique_ptr<const Config> Program::createConfig(const QStringList& args, QSt
 
     // Set help text.
     {
-        auto helpText = createHelpText(m_pConfig->executableFile().fileName(), commands(), options(), m_pContext->templateEngine().variables());
+        auto helpText = createHelpText(m_pConfig->executableFile().fileName(),
+                                       commands(),
+                                       options(),
+                                       m_pContext->templateEngine().variables(),
+                                       m_pConfig->shortMessages());
 
         m_pConfig->setHelpText(helpText);
     }
@@ -371,7 +375,8 @@ CommandList Program::commands() const
 QString Program::createHelpText(const QString& execFileName,
                                 const CommandList& cmds,
                                 const OptionList& opts,
-                                const Template::VariableList& templVars) const
+                                const Template::VariableList& templVars,
+                                bool shortHelp) const
 {
     HelpFormatter formatter;
 
@@ -379,17 +384,20 @@ QString Program::createHelpText(const QString& execFileName,
 
     formatter.addUsageSection("COMMAND [OPTION]... DIR...");
 
-    formatter.addCommandListSection(
-                QObject::tr("Commands"),
-                cmds);
+    if (!shortHelp)
+    {
+        formatter.addCommandListSection(
+                    QObject::tr("Commands"),
+                    cmds);
 
-    formatter.addOptionListSection(
-                QObject::tr("Options"),
-                opts);
+        formatter.addOptionListSection(
+                    QObject::tr("Options"),
+                    opts);
 
-    formatter.addTextSection(
-                QObject::tr("Template variables"),
-                formatVariableParagraphs(templVars));
+        formatter.addTextSection(
+                    QObject::tr("Template variables"),
+                    formatVariableParagraphs(templVars));
+    }
 
     return formatter.formatHelpText();
 }
