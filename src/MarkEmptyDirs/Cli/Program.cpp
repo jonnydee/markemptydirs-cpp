@@ -154,6 +154,10 @@ Program::Program()
           QObject::tr("Invoke command before marker deletion.", "delete-hook"),
           QObject::tr("COMMAND", "delete-hook"), QString(),
           [this](const Argument& hookCmd, QString&){ m_pConfig->setDeleteHookCommand(hookCmd.value); return true; })
+    , dereferenceOpt(
+          QStringList() << "L" << "dereference",
+          QObject::tr("Follow symbolic links.", "dereference"),
+          [this](const Argument&, QString&){ m_pConfig->setDereferenceSymLinks(true); return true; })
     , dryRunOpt(
           QStringList() << "n" << "dry-run",
           QObject::tr("Simulate command execution without any side effects.", "dry-run"),
@@ -168,10 +172,6 @@ Program::Program()
           QObject::tr("Create marker files using the specified template file as content.", "file"),
           QObject::tr("NAME", "file"), DEFAULT_MARKER_CONTENT_FILENAME,
           std::bind(&Program::acceptMarkerFileOpt, this, std::placeholders::_1, std::placeholders::_2))
-    , followSymLinksOpt(
-          QStringList() << "L" << "dereference",
-          QObject::tr("Follow symbolic links.", "dereference"),
-          [this](const Argument&, QString&){ m_pConfig->setDereferenceSymLinks(true); return true; })
     , helpOpt(
           QStringList() << "h" << "help",
           QObject::tr("Print help information.", "help"),
@@ -181,7 +181,7 @@ Program::Program()
           QObject::tr("Use another name for marker files.", "marker-name"),
           QObject::tr("NAME", "marker-name"), QString(),
           std::bind(&Program::acceptMarkerNameOpt, this, std::placeholders::_1, std::placeholders::_2))
-    , noFollowSymLinksOpt(
+    , noDereferenceOpt(
           QStringList() << "no-dereference",
           QObject::tr("Do not follow symbolic links.", "dereference"),
           [this](const Argument&, QString&){ m_pConfig->setDereferenceSymLinks(false); return true; })
@@ -223,13 +223,13 @@ Program::Program()
     m_options
         << &createHookOpt
         << &deleteHookOpt
+        << &dereferenceOpt
         << &dryRunOpt
         << &excludeOpt
         << &fileOpt
-        << &followSymLinksOpt
         << &helpOpt
         << &markerOpt
-        << &noFollowSymLinksOpt
+        << &noDereferenceOpt
         << &noSubstOpt
         << &shortOpt
         << &substOpt
