@@ -76,6 +76,7 @@ public:
     const CodeMagic::Cli::Option substOpt;
     const CodeMagic::Cli::Option textOpt;
     const CodeMagic::Cli::Option verboseOpt;
+    const CodeMagic::Cli::Option versionOpt;
 
     Program();
     ~Program();

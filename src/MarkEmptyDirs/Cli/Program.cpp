@@ -206,6 +206,10 @@ Program::Program()
           QStringList() << "v" << "verbose",
           QObject::tr("Output verbose messages.", "verbose"),
           std::bind(&Program::acceptVerboseOpt, this, std::placeholders::_1, std::placeholders::_2))
+    , versionOpt(
+          QStringList() << "version",
+          QObject::tr("Show version information.", "version"),
+          [this](const Argument&, QString&){ m_pConfig->setCommand(Config::Command::VERSION); return true; })
 {
     m_commands
         << &cleanCmd
@@ -230,7 +234,8 @@ Program::Program()
         << &shortOpt
         << &substOpt
         << &textOpt
-        << &verboseOpt;
+        << &verboseOpt
+        << &versionOpt;
 }
 
 Program::~Program()
@@ -323,11 +328,20 @@ std::unique_ptr<const Config> Program::createConfig(const QStringList& args, QSt
     {
         const auto& arg = arguments[i];
 
-        // If no command has been specified, but help option is present we configure HELP command.
-        if (Argument::COMMAND == arg.type && !arg.isKnown() && !parser.findArgument(helpOpt).isNull())
+        // If no command has been specified, but help or version option is present we configure corresponding command.
+        if (Argument::COMMAND == arg.type && !arg.isKnown())
         {
-            m_pConfig->setCommand(Config::Command::HELP);
-            continue;
+            if (!parser.findArgument(versionOpt).isNull())
+            {
+                m_pConfig->setCommand(Config::Command::VERSION);
+                continue;
+            }
+
+            if (!parser.findArgument(helpOpt).isNull())
+            {
+                m_pConfig->setCommand(Config::Command::HELP);
+                continue;
+            }
         }
 
         if (!arg.errorMessage.isNull())
