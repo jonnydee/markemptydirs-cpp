@@ -43,23 +43,29 @@ namespace CodeMagic
 namespace Cli
 {
 
+struct Argument;
+
 class CODEMAGICSHARED_EXPORT Option
 {
 public:
-    typedef std::function<bool(const QString& value, QString* pErrorMsg)> ValueValidator;
+    typedef std::function<bool(const Argument& optionArgument, QString& errorMessage)> Handler;
 
-    Option(const QStringList& names, const QString& description = QString(),
-           const QString& valueName = QString(), const QString& defaultValue = QString(), const ValueValidator& valueValidator = ValueValidator());
+    Option(const QStringList& names, const QString& description,
+           const Handler& handler = Handler());
+
+    Option(const QStringList& names, const QString& description,
+           const QString& valueName, const QString& defaultValue = QString(),
+           const Handler& handler = Handler());
 
     QString defaultValue() const;
     QString description() const;
+    bool hasHandler() const;
     bool hasValue() const;
-    bool hasValueValidator() const;
     bool isValueMandatory() const;
     QStringList longNames() const;
     QStringList names() const;
     QString valueName() const;
-    ValueValidator valueValidator() const;
+    Handler handler() const;
     QList<QChar> shortNames() const;
 
 private:
@@ -67,7 +73,7 @@ private:
     QString m_description;
     QString m_valueName;
     QString m_defaultValue;
-    ValueValidator m_valueValidator;
+    Handler m_handler;
 };
 
 typedef QList<const Option*> OptionList;
