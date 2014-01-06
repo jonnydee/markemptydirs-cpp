@@ -2,20 +2,42 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>NSPrincipalClass</key>
-    <string>NSApplication</string>
-    <key>CFBundleIconFile</key>
-    <string></string>
-    <key>CFBundlePackageType</key>
-    <string>APPL</string>
-    <key>CFBundleGetInfoString</key>
-    <string>Created by Qt/QMake</string>
-    <key>CFBundleSignature</key>
-    <string>????</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>German</string>
+
     <key>CFBundleExecutable</key>
-    <string>markemptydirs</string>
+    <string>@EXECUTABLE@</string>
+
+    <key>CFBundleIconFile</key>
+    <string>@ICON@</string>
+
     <key>CFBundleIdentifier</key>
     <string>name.jonnydee.MarkEmptyDirs</string>
+
+    <key>CFBundleName</key>
+    <string>markemptydirs</string>
+
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string></string>
+
+    <key>ForAppStore</key>
+    <string>yes</string>
+
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.utilities</string>
+
+    <key>LSMinimumSystemVersion</key>
+    <string>10.7</string>
+
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright (C) 2013-2014 Johann Duscher (a.k.a. Jonny Dee)</string>
+
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+
     <key>GIT_COMMIT_HASH</key>
     <string></string>
 </dict>
