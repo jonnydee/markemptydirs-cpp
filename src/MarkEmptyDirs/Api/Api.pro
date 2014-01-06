@@ -13,15 +13,18 @@ DESTDIR = $$_PRO_FILE_PWD_/../../../bin
 TEMPLATE = lib
 CONFIG += staticlib
 CONFIG += static
-
-QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++ -mmacosx-version-min=10.7
 CONFIG += c++11
+
+macx {
+    QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++ -mmacosx-version-min=10.7
+}
 
 CONFIG   += debug_and_release
 CONFIG(debug, debug|release) {
      TARGET = $$join(TARGET,,,_debug)
 }
 
+DEFINES += CODEMAGICSTATIC
 DEFINES += MARKEMPTYDIRSAPI_LIBRARY
 
 SOURCES += \

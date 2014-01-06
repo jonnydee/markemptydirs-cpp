@@ -14,6 +14,7 @@ INSTALLERCERT = "jonny.dee@gmx.net"
 BUNDLEID = name.jonnydee.MarkEmptyDirs
 
 QMAKE_CFLAGS += -gdwarf-2
+QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
 QMAKE_CXXFLAGS += -gdwarf-2
 QMAKE_CXXFLAGS += -mmacosx-version-min=10.7
 QMAKE_CFLAGS_RELEASE = $$QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO

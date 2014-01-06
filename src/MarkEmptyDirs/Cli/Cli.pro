@@ -20,9 +20,10 @@ DESTDIR = $$_PRO_FILE_PWD_/../../../bin
 TEMPLATE = app
 CONFIG   += console
 CONFIG   += static
-
-QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
 CONFIG += c++11
+
+DEFINES += CODEMAGICSTATIC
+DEFINES += MARKEMPTYDIRSAPISTATIC
 
 SOURCES += \
     main.cpp \
@@ -34,21 +35,40 @@ INCLUDEPATH += \
 QMAKE_LIBDIR += \
     $$_PRO_FILE_PWD_/../../../bin
 
-CONFIG(debug, debug|release) {
-    LIBS += \
-        -lMarkEmptyDirsApi_debug \
-        -lCodeMagic_debug
-    PRE_TARGETDEPS += \
-        $$QMAKE_LIBDIR/libMarkEmptyDirsApi_debug.a \
-        $$QMAKE_LIBDIR/libCodeMagic_debug.a
-}
-CONFIG(release, debug|release) {
-    LIBS += \
-        -lMarkEmptyDirsApi \
-        -lCodeMagic
-    PRE_TARGETDEPS += \
-        $$QMAKE_LIBDIR/libMarkEmptyDirsApi.a \
-        $$QMAKE_LIBDIR/libCodeMagic.a
+win32 {
+    CONFIG(debug, debug|release) {
+        LIBS += \
+            -lMarkEmptyDirsApi_debug \
+            -lCodeMagic_debug
+        PRE_TARGETDEPS += \
+            $$QMAKE_LIBDIR/MarkEmptyDirsApi_debug.lib \
+            $$QMAKE_LIBDIR/CodeMagic_debug.lib
+    }
+    CONFIG(release, debug|release) {
+        LIBS += \
+            -lMarkEmptyDirsApi \
+            -lCodeMagic
+        PRE_TARGETDEPS += \
+            $$QMAKE_LIBDIR/MarkEmptyDirsApi.lib \
+            $$QMAKE_LIBDIR/CodeMagic.lib
+    }
+} else {
+    CONFIG(debug, debug|release) {
+        LIBS += \
+            -lMarkEmptyDirsApi_debug \
+            -lCodeMagic_debug
+        PRE_TARGETDEPS += \
+            $$QMAKE_LIBDIR/libMarkEmptyDirsApi_debug.a \
+            $$QMAKE_LIBDIR/libCodeMagic_debug.a
+    }
+    CONFIG(release, debug|release) {
+        LIBS += \
+            -lMarkEmptyDirsApi \
+            -lCodeMagic
+        PRE_TARGETDEPS += \
+            $$QMAKE_LIBDIR/libMarkEmptyDirsApi.a \
+            $$QMAKE_LIBDIR/libCodeMagic.a
+    }
 }
 
 HEADERS += \

@@ -30,10 +30,14 @@
 
 #include <QtCore/qglobal.h>
 
-#if defined(CODEMAGIC_LIBRARY)
-#  define CODEMAGICSHARED_EXPORT Q_DECL_EXPORT
+#if !defined(CODEMAGICSTATIC)
+#   if defined(CODEMAGIC_LIBRARY)
+#       define CODEMAGICSHARED_EXPORT Q_DECL_EXPORT
+#   else
+#       define CODEMAGICSHARED_EXPORT Q_DECL_IMPORT
+#   endif
 #else
-#  define CODEMAGICSHARED_EXPORT Q_DECL_IMPORT
+#   define CODEMAGICSHARED_EXPORT
 #endif
 
 #endif // CODEMAGIC_GLOBAL_HPP
