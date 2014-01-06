@@ -27,11 +27,17 @@
 #include "Program.hpp"
 
 #include <QCoreApplication>
-#include <QDebug>
+#include <QTextCodec>
+
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
+
+#ifdef Q_OS_WIN32
+    // Workaround for Windows Console which shows wrong symbol for '§' character.
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("IBM 850"));
+#endif
 
     MarkEmptyDirs::Cli::Program program;
     if (!program.init(app.arguments()))
