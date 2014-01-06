@@ -26,7 +26,7 @@
 
 #include "Config.hpp"
 
-#include <QDebug>
+#include <functional>
 
 #define DEFAULT_MARKER_NAME         ".emptydir"
 #define DEFAULT_TEXT_CONTENT        ""

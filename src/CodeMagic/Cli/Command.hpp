@@ -34,6 +34,8 @@
 #include <QString>
 #include <QStringList>
 
+#include <functional>
+
 
 namespace CodeMagic
 {
