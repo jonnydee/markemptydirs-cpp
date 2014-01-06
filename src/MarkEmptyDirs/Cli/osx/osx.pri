@@ -1,3 +1,6 @@
+# Only Intel binaries are accepted so force this
+CONFIG += x86
+
 # Icon is mandatory for submission
 ICON = osx/MarkEmptyDirs.icns
 
@@ -10,6 +13,8 @@ INSTALLERCERT = "jonny.dee@gmx.net"
 # Bundle identifier for your application
 BUNDLEID = name.jonnydee.MarkEmptyDirs
 
+QMAKE_CFLAGS += -gdwarf-2
+QMAKE_CXXFLAGS += -gdwarf-2
 QMAKE_CXXFLAGS += -mmacosx-version-min=10.7
 QMAKE_CFLAGS_RELEASE = $$QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO
 QMAKE_CXXFLAGS_RELEASE = $$QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO
