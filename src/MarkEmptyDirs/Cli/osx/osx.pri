@@ -17,6 +17,8 @@ QMAKE_INFO_PLIST = osx/MarkEmptyDirs.plist
 OTHER_FILES += \
     osx/MarkEmptyDirs.plist
 
+# Write some info in the Info.plist
+QMAKE_POST_LINK += /usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $${GIT_COMMIT_HASH}\" $$DESTDIR/$${TARGET}.app/Contents/Info.plist;
 codesign.depends  += all
 codesign.commands += macdeployqt $$DESTDIR/$${TARGET}.app -no-plugins;
 

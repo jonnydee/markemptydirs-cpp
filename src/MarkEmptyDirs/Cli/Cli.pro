@@ -54,6 +54,9 @@ CONFIG(release, debug|release) {
 HEADERS += \
     Program.hpp
 
+# Get git commit hash
+GIT_COMMIT_HASH = $$system(git rev-parse HEAD)
+
 macx {
     include(osx/osx.pri)
 }

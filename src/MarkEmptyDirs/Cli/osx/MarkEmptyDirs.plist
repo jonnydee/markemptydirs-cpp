@@ -16,5 +16,7 @@
     <string>markemptydirs</string>
     <key>CFBundleIdentifier</key>
     <string>name.jonnydee.MarkEmptyDirs</string>
+    <key>GIT_COMMIT_HASH</key>
+    <string></string>
 </dict>
 </plist>
