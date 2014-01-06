@@ -1,4 +1,4 @@
-// Copyright 2013 Johann Duscher (a.k.a. Jonny Dee). All rights reserved.
+// Copyright 2013-2014 Johann Duscher (a.k.a. Jonny Dee). All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
@@ -56,7 +56,7 @@
 #define APPLICATION_VERSION_SUFFIX      "beta1"
 #define APPLICATION_VENDOR_NAME         "Johann Duscher (a.k.a. Jonny Dee)"
 #define APPLICATION_VENDOR_EMAIL        "jonny.dee@gmx.net"
-#define APPLICATION_COPYRIGHT           "Copyright (C) 2013 " APPLICATION_VENDOR_NAME
+#define APPLICATION_COPYRIGHT           "Copyright (C) 2013-2014 " APPLICATION_VENDOR_NAME
 
 #define DEFAULT_COMMAND                 Config::UPDATE
 #define DEFAULT_EXCLUDE_DIRS            ((QStringList() << ".bzr" << "CVS" << ".git" << ".hg" << ".svn").join(CodeMagic::FileSystem::pathSeparator()))
