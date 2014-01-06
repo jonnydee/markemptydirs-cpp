@@ -28,6 +28,8 @@ OTHER_FILES += \
 
 # Write some info in the Info.plist
 QMAKE_POST_LINK += /usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $${GIT_COMMIT_HASH}\" $$DESTDIR/$${TARGET}.app/Contents/Info.plist;
+QMAKE_POST_LINK += /usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString $${VERSION}\" $$DESTDIR/$${TARGET}.app/Contents/Info.plist;
+
 codesign.depends  += all
 codesign.commands += macdeployqt $$DESTDIR/$${TARGET}.app -no-plugins;
 
