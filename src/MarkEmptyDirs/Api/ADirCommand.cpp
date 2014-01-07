@@ -205,7 +205,7 @@ bool ADirCommand::deleteMarker(const QDir& dir)
 
 bool ADirCommand::executeCommand(const QString& cmd, QString& errorMessage)
 {
-    QString program = cmd;
+    auto program = cmd;
     if (context().config().substituteVariables())
         context().templateEngine().process(program);
 
