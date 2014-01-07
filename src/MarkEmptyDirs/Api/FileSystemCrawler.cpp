@@ -30,7 +30,6 @@
 #include "FileSystemCrawler.hpp"
 #include "Logger.hpp"
 
-#include <QDebug>
 #include <QLinkedList>
 #include <QFileInfo>
 #include <QObject>

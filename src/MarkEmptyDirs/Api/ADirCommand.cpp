@@ -88,8 +88,8 @@ bool ADirCommand::createMarker(const QDir& dir)
 
     // Create marker.
     {
-        QFileInfo markerFileInfo(dir, config.markerName());
-        auto filePath = markerFileInfo.absoluteFilePath();
+        const QFileInfo markerFileInfo(dir, config.markerName());
+        const auto filePath = markerFileInfo.absoluteFilePath();
         QFile markerFile(filePath);
 
         if (!config.dryRun() && !markerFile.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -121,7 +121,7 @@ bool ADirCommand::createMarker(const QDir& dir)
     // Execute create hook (if any).
     if (!config.createHookCommand().isNull())
     {
-        QString program = config.createHookCommand();
+        auto program = config.createHookCommand();
         if (context().config().substituteVariables())
             context().templateEngine().process(program);
 
@@ -155,7 +155,7 @@ bool ADirCommand::deleteMarker(const QDir& dir)
     // Execute delete hook (if any).
     if (!config.deleteHookCommand().isNull())
     {
-        QString program = config.deleteHookCommand();
+        auto program = config.deleteHookCommand();
         if (context().config().substituteVariables())
             context().templateEngine().process(program);
 
@@ -176,8 +176,8 @@ bool ADirCommand::deleteMarker(const QDir& dir)
 
     // Delete marker.
     {
-        QFileInfo markerFileInfo(dir, config.markerName());
-        auto filePath = markerFileInfo.canonicalFilePath();
+        const QFileInfo markerFileInfo(dir, config.markerName());
+        const auto filePath = markerFileInfo.canonicalFilePath();
         QFile markerFile(filePath);
 
         if (!config.dryRun() && !markerFile.remove())
