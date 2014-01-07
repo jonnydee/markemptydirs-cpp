@@ -35,6 +35,11 @@ namespace MarkEmptyDirs
 namespace Api
 {
 
+std::unique_ptr<Logger> Logger::create()
+{
+    return std::unique_ptr<Logger>(new Logger);
+}
+
 Logger::Logger()
     : m_pContext(nullptr)
     , m_sysOut(stdout)

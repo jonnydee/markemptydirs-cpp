@@ -47,7 +47,7 @@ std::unique_ptr<Context> Context::create(std::unique_ptr<Logger> pLogger,
                                          std::unique_ptr<Template::Engine> pTemplateEngine)
 {
     if (!pLogger)
-        pLogger.reset(new Logger);
+        pLogger = Logger::create();
     if (!pTemplateEngine)
         pTemplateEngine.reset(new Template::Engine);
 

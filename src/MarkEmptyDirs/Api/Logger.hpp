@@ -33,6 +33,8 @@
 
 #include <QTextStream>
 
+#include <memory>
+
 
 namespace MarkEmptyDirs
 {
@@ -45,7 +47,7 @@ class Context;
 class MARKEMPTYDIRSAPISHARED_EXPORT Logger
 {
 public:
-    Logger();
+    static std::unique_ptr<Logger> create();
 
     void setContext(Context& ctx);
     Context& context();
@@ -55,6 +57,9 @@ public:
 
     QTextStream& sysOut();
     QTextStream& sysErr();
+
+protected:
+    Logger();
 
 private:
     Context* m_pContext;
