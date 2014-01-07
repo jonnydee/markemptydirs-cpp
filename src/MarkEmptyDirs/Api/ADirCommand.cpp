@@ -31,6 +31,7 @@
 #include "FileSystemCrawler.hpp"
 #include "Logger.hpp"
 
+#include <CodeMagic/FileSystem/FileSystemTools.hpp>
 #include <CodeMagic/Text/Template/Engine.hpp>
 
 #include <QFile>
@@ -39,6 +40,8 @@
 #include <QProcess>
 #include <QTextStream>
 
+
+using namespace CodeMagic;
 
 namespace MarkEmptyDirs
 {
@@ -92,9 +95,10 @@ bool ADirCommand::createMarker(const QDir& dir)
         const auto filePath = markerFileInfo.absoluteFilePath();
         QFile markerFile(filePath);
 
+        const auto nativeFilePath = FileSystem::toQuotedNativePath(filePath);
         if (!config.dryRun() && !markerFile.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            logger.log(QObject::tr("Could not create marker: '%1' (%2)").arg(filePath).arg(markerFile.errorString()),
+            logger.log(QObject::tr("Could not create marker: %1 (%2)").arg(nativeFilePath).arg(markerFile.errorString()),
                          LogLevel::ERROR);
             return false;
         }
@@ -112,8 +116,8 @@ bool ADirCommand::createMarker(const QDir& dir)
             }
 
             const auto logMsg = config.shortMessages()
-                    ? filePath
-                    : QObject::tr("Created marker: '%1'").arg(filePath);
+                    ? nativeFilePath
+                    : QObject::tr("Created marker: %1").arg(nativeFilePath);
             logger.log(logMsg, LogLevel::INFO);
         }
     }
@@ -180,17 +184,18 @@ bool ADirCommand::deleteMarker(const QDir& dir)
         const auto filePath = markerFileInfo.canonicalFilePath();
         QFile markerFile(filePath);
 
+        const auto nativeFilePath = FileSystem::toQuotedNativePath(filePath);
         if (!config.dryRun() && !markerFile.remove())
         {
-            logger.log(QObject::tr("Could not delete marker: '%1' (%2)").arg(filePath).arg(markerFile.errorString()),
+            logger.log(QObject::tr("Could not delete marker: %1 (%2)").arg(nativeFilePath).arg(markerFile.errorString()),
                          LogLevel::ERROR);
             return false;
         }
         else
         {
             const auto logMsg = config.shortMessages()
-                    ? filePath
-                    : QObject::tr("Deleted marker: '%1'").arg(filePath);
+                    ? nativeFilePath
+                    : QObject::tr("Deleted marker: %1").arg(nativeFilePath);
             logger.log(logMsg, LogLevel::INFO);
         }
     }

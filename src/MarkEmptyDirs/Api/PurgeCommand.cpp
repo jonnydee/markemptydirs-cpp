@@ -30,8 +30,12 @@
 #include "Logger.hpp"
 #include "PurgeCommand.hpp"
 
+#include <CodeMagic/FileSystem/FileSystemTools.hpp>
+
 #include <cerrno>
 
+
+using namespace CodeMagic;
 
 namespace MarkEmptyDirs
 {
@@ -64,7 +68,8 @@ void PurgeCommand::run(const PathMap& pathMap)
         if (pathsToPurge.isEmpty() || !path.startsWith(pathsToPurge.last()))
         {
             pathsToPurge << path;
-            logger.log(QObject::tr("Found directory to purge: '%1'").arg(path), LogLevel::INFO);
+            const auto nativePath = FileSystem::toQuotedNativePath(path);
+            logger.log(QObject::tr("Found directory to purge: %1").arg(nativePath), LogLevel::INFO);
         }
     }
 
@@ -73,19 +78,20 @@ void PurgeCommand::run(const PathMap& pathMap)
         foreach (const auto& child, pathMap[path].children())
         {
             const auto childPath = child.canonicalFilePath();
+            const auto nativeChildPath = FileSystem::toQuotedNativePath(childPath);
             if (child.isDir())
             {
                 QDir childDir(childPath);
                 if (config.dryRun() || childDir.removeRecursively())
                 {
                     const auto logMsg = config.shortMessages()
-                            ? childPath
-                            : QObject::tr("Deleted directory: '%1'").arg(childPath);
+                            ? nativeChildPath
+                            : QObject::tr("Deleted directory: %1").arg(nativeChildPath);
                     logger.log(logMsg, LogLevel::INFO);
                 }
                 else
                 {
-                    logger.log(QObject::tr("Could not delete directory: '%1' (%2)").arg(childPath).arg(QLatin1String(strerror(errno))),
+                    logger.log(QObject::tr("Could not delete directory: %1 (%2)").arg(nativeChildPath).arg(QLatin1String(strerror(errno))),
                                  LogLevel::ERROR);
                 }
             }
@@ -95,13 +101,13 @@ void PurgeCommand::run(const PathMap& pathMap)
                 if (config.dryRun() || childFile.remove())
                 {
                     const auto logMsg = config.shortMessages()
-                            ? childPath
-                            : QObject::tr("Deleted file: '%1'").arg(childPath);
+                            ? nativeChildPath
+                            : QObject::tr("Deleted file: %1").arg(nativeChildPath);
                     logger.log(logMsg, LogLevel::INFO);
                 }
                 else
                 {
-                    logger.log(QObject::tr("Could not delete file: '%1' (%2)").arg(childPath).arg(childFile.errorString()),
+                    logger.log(QObject::tr("Could not delete file: %1 (%2)").arg(nativeChildPath).arg(childFile.errorString()),
                                  LogLevel::ERROR);
                 }
             }

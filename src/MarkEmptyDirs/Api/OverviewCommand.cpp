@@ -29,6 +29,13 @@
 #include "Logger.hpp"
 #include "OverviewCommand.hpp"
 
+#include <CodeMagic/FileSystem/FileSystemTools.hpp>
+#include <CodeMagic/Text/TextTools.hpp>
+
+#include <QStringList>
+
+
+using namespace CodeMagic;
 
 namespace MarkEmptyDirs
 {
@@ -42,19 +49,29 @@ OverviewCommand::OverviewCommand()
 
 void OverviewCommand::run(const PathMap& pathMap)
 {
-    auto paths = pathMap.keys();
-    qSort(paths);
-    foreach (auto path, paths)
-    {
-        const auto& dirDescr = pathMap[path];
+    QStringList paths(pathMap.keys());
+    QStringList infos;
+    infos.reserve(paths.size());
 
-        context().logger().log(QObject::tr("'%1' [children: %2, marker: %3, subDirs: %4]")
-                     .arg(path)
-                     .arg(dirDescr.childCount())
-                     .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"))
-                     .arg(dirDescr.subDirCount()),
-                     LogLevel::NONE);
+    qSort(paths);
+    for (int i = 0; i < paths.length(); i++)
+    {
+        const auto& dirDescr = pathMap[paths[i]];
+
+        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
+        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
+                .arg(dirDescr.childCount(), 2)
+                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
+                .arg(dirDescr.subDirCount(), 2);
+
+        paths[i] = nativeDescrDirPath;
+        infos << statistics;
     }
+
+    Text::adjustToMaxLen(paths);
+    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
+    foreach (const auto& line, lines)
+        context().logger().log(line, LogLevel::NONE);
 }
 
 }

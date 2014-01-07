@@ -30,10 +30,14 @@
 #include "FileSystemCrawler.hpp"
 #include "Logger.hpp"
 
+#include <CodeMagic/FileSystem/FileSystemTools.hpp>
+
 #include <QLinkedList>
 #include <QFileInfo>
 #include <QObject>
 
+
+using namespace CodeMagic;
 
 namespace MarkEmptyDirs
 {
@@ -103,7 +107,8 @@ void FileSystemCrawler::run()
         const auto dir = dirQueue.takeFirst();
         if (!dir.exists())
         {
-            logger.log(QString("'%1': %2").arg(dir.absolutePath()).arg(QObject::tr("Not a directory, skipping it.")), LogLevel::WARNING);
+            const auto nativeDirPath = FileSystem::toQuotedNativePath(dir.absolutePath());
+            logger.log(QString("%1: %2").arg(nativeDirPath).arg(QObject::tr("Not a directory, skipping it.")), LogLevel::WARNING);
             continue;
         }
 
@@ -138,16 +143,17 @@ void FileSystemCrawler::run()
 
         m_pathMap[dirPath] = dirDescr;
 
+        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(dirDescr.dir().canonicalPath());
         if (config.shortMessages())
         {
-            logger.log(QObject::tr("Visited directory: '%1'")
-                         .arg(dirDescr.dir().canonicalPath()),
+            logger.log(QObject::tr("Visited directory: %1")
+                         .arg(nativeDescrDirPath),
                          LogLevel::DEBUG);
         }
         else
         {
-            logger.log(QObject::tr("Visited directory: '%1' [children: %2, marker: %3]")
-                         .arg(dirDescr.dir().canonicalPath())
+            logger.log(QObject::tr("Visited directory: %1 [children: %2, marker: %3]")
+                         .arg(nativeDescrDirPath)
                          .arg(dirDescr.childCount())
                          .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no")),
                          LogLevel::DEBUG);
