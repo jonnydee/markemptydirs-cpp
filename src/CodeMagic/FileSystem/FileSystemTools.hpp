@@ -48,6 +48,9 @@ CODEMAGICSHARED_EXPORT
 QChar pathSeparator();
 
 CODEMAGICSHARED_EXPORT
+QString toQuotedNativePath(const QString& path);
+
+CODEMAGICSHARED_EXPORT
 bool validateFileName(const QString& fileName, QString* pErrorMsg = nullptr);
 
 CODEMAGICSHARED_EXPORT

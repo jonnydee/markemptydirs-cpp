@@ -78,6 +78,18 @@ QChar pathSeparator()
 #endif
 }
 
+QString toQuotedNativePath(const QString& path)
+{
+    QString quoted;
+    quoted.reserve(path.length() + 2);
+    if (!path.startsWith('"'))
+        quoted.append('"');
+    quoted.append(QDir::toNativeSeparators(path));
+    if (!quoted.endsWith('"'))
+        quoted.append('"');
+    return quoted;
+}
+
 QChar volumeSeparator()
 {
 #ifdef Q_OS_WIN32
