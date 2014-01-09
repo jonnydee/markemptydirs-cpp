@@ -14,7 +14,9 @@ CONFIG(release, debug|release) {
     TARGET = markemptydirs
 }
 
-VERSION = 2.0.0
+VERSION         = 2.0.0
+VERSION_FULL    = $$VERSION-beta1
+
 DESTDIR = $$_PRO_FILE_PWD_/../../../bin
 
 TEMPLATE = app
@@ -79,4 +81,7 @@ GIT_COMMIT_HASH = $$system(git rev-parse HEAD)
 
 macx {
     include(osx/osx.pri)
+}
+win32 {
+    include(win32/win32.pri)
 }
