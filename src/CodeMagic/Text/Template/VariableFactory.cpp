@@ -73,10 +73,10 @@ VariableFactory::VariablePtr VariableFactory::createDateTimeVariable() const
             const auto currentDateTime = QDateTime::currentDateTimeUtc();
             return currentDateTime.toString(ctx.argument);
         });
-    pVariable->setDescription(QObject::tr("get UTC time"));
+    pVariable->setDescription(QObject::tr("get current UTC time"));
     pVariable->setArgumentSpec("FORMAT");
     pVariable->setDefaultArgument("yyyy-MM-ddThh:mm:ssZ");
-    pVariable->addArgumentDescription("FORMAT", QObject::tr("custom format string (see documentation for details)"));
+    pVariable->addArgumentDescription("FORMAT", QObject::tr("expression determining the format of the result string (see documentation for details)"));
     return VariablePtr(pVariable);
 }
 
