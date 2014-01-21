@@ -36,31 +36,31 @@ This expressions may be used for the date:
 
 EXPRESSION | OUTPUT
 :--------- | :-----
-d    | the day as number without a leading zero (1 to 31)
-dd   | the day as number with a leading zero (01 to 31)
-ddd  | the abbreviated localized day name (e.g. 'Mon' to 'Sun')
-dddd | the long localized day name (e.g. 'Monday' to 'Qt::Sunday')
-M    | the month as number without a leading zero (1-12)
-MM   | the month as number with a leading zero (01-12)
-MMM  | the abbreviated localized month name (e.g. 'Jan' to 'Dec')
-MMMM | the long localized month name (e.g. 'January' to 'December')
-yy   | the year as two digit number (00-99)
-yyyy | the year as four digit number
+`d`    | the day as number without a leading zero (1 to 31)
+`dd`   | the day as number with a leading zero (01 to 31)
+`ddd`  | the abbreviated localized day name (e.g. 'Mon' to 'Sun')
+`dddd` | the long localized day name (e.g. 'Monday' to 'Qt::Sunday')
+`M`    | the month as number without a leading zero (1-12)
+`MM`   | the month as number with a leading zero (01-12)
+`MMM`  | the abbreviated localized month name (e.g. 'Jan' to 'Dec')
+`MMMM` | the long localized month name (e.g. 'January' to 'December')
+`yy`   | the year as two digit number (00-99)
+`yyyy` | the year as four digit number
 
 This expressions may be used for the time:
 
 EXPRESSION | OUTPUT
 :--------- | :-----
-h   | the hour without a leading zero (0 to 23 or 1 to 12 if AM/PM display)
-hh  | the hour with a leading zero (00 to 23 or 01 to 12 if AM/PM display)
-m   | the minute without a leading zero (0 to 59)
-mm  | the minute with a leading zero (00 to 59)
-s   | the second without a leading zero (0 to 59)
-ss  | the second with a leading zero (00 to 59)
-z   | the milliseconds without leading zeroes (0 to 999)
-zzz | the milliseconds with leading zeroes (000 to 999)
-AP  | use AM/PM display and replace by either "AM" or "PM"
-ap  | use am/pm display and replace by either "am" or "pm"
+`h`   | the hour without a leading zero (0 to 23 or 1 to 12 if AM/PM display)
+`hh`  | the hour with a leading zero (00 to 23 or 01 to 12 if AM/PM display)
+`m`   | the minute without a leading zero (0 to 59)
+`mm`  | the minute with a leading zero (00 to 59)
+`s`   | the second without a leading zero (0 to 59)
+`ss`  | the second with a leading zero (00 to 59)
+`z`   | the milliseconds without leading zeroes (0 to 999)
+`zzz` | the milliseconds with leading zeroes (000 to 999)
+`AP`  | use AM/PM display and replace by either "AM" or "PM"
+`ap`  | use am/pm display and replace by either "am" or "pm"
 
 ## dir
 
@@ -70,12 +70,12 @@ ap  | use am/pm display and replace by either "am" or "pm"
 
 ARGUMENT | DESCRIPTION
 :------- | :----------
-base     | name of base directory
-base.abs | absolute path of base directory
-base.rel | path of base directory relative to current directory
-cur      | name of current directory
-cur.abs  | absolute path of current directory
-cur.rel  | path of current directory relative to base directory
+`base`     | name of base directory
+`base.abs` | absolute path of base directory
+`base.rel` | path of base directory relative to current directory
+`cur`      | name of current directory
+`cur.abs`  | absolute path of current directory
+`cur.rel`  | path of current directory relative to base directory
 
 ## env
 
