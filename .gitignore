@@ -1,5 +1,9 @@
 bin
 build*
+debug
+Makefile*
+release
+.qmake*
 *.user
 *.bak
 *.icns

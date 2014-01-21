@@ -27,15 +27,19 @@ CONFIG += c++11
 DEFINES += QODEMAGICSTATIC
 DEFINES += MARKEMPTYDIRSAPISTATIC
 
+QODEMAGIC_DIR = $$_PRO_FILE_PWD_/../../../externals-src/QodeMagic
+
 SOURCES += \
     main.cpp \
     Program.cpp
 
 INCLUDEPATH += \
-    ../..
+    ../.. \
+    $$QODEMAGIC_DIR/src
 
 QMAKE_LIBDIR += \
-    $$_PRO_FILE_PWD_/../../../bin
+    $$_PRO_FILE_PWD_/../../../bin \
+    $$QODEMAGIC_DIR/bin
 
 win32 {
     CONFIG(debug, debug|release) {
@@ -43,16 +47,16 @@ win32 {
             -lMarkEmptyDirsApi_debug \
             -lQodeMagic_debug
         PRE_TARGETDEPS += \
-            $$QMAKE_LIBDIR/MarkEmptyDirsApi_debug.lib \
-            $$QMAKE_LIBDIR/QodeMagic_debug.lib
+            $$DESTDIR/MarkEmptyDirsApi_debug.lib \
+            $$QODEMAGIC_DIR/bin/QodeMagic_debug.lib
     }
     CONFIG(release, debug|release) {
         LIBS += \
             -lMarkEmptyDirsApi \
             -lQodeMagic
         PRE_TARGETDEPS += \
-            $$QMAKE_LIBDIR/MarkEmptyDirsApi.lib \
-            $$QMAKE_LIBDIR/QodeMagic.lib
+            $$DESTDIR/MarkEmptyDirsApi.lib \
+            $$QODEMAGIC_DIR/bin/QodeMagic.lib
     }
 } else {
     CONFIG(debug, debug|release) {
@@ -60,16 +64,16 @@ win32 {
             -lMarkEmptyDirsApi_debug \
             -lQodeMagic_debug
         PRE_TARGETDEPS += \
-            $$QMAKE_LIBDIR/libMarkEmptyDirsApi_debug.a \
-            $$QMAKE_LIBDIR/libQodeMagic_debug.a
+            $$DESTDIR/libMarkEmptyDirsApi_debug.a \
+            $$QODEMAGIC_DIR/bin/libQodeMagic_debug.a
     }
     CONFIG(release, debug|release) {
         LIBS += \
             -lMarkEmptyDirsApi \
             -lQodeMagic
         PRE_TARGETDEPS += \
-            $$QMAKE_LIBDIR/libMarkEmptyDirsApi.a \
-            $$QMAKE_LIBDIR/libQodeMagic.a
+            $$DESTDIR/libMarkEmptyDirsApi.a \
+            $$QODEMAGIC_DIR/bin/libQodeMagic.a
     }
 }
 

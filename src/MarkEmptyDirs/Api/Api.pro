@@ -64,10 +64,10 @@ HEADERS += \
     VariableFactory.hpp
 
 INCLUDEPATH += \
-    ../..
+    $$_PRO_FILE_PWD_/../../../externals-src/QodeMagic/src
 
 QMAKE_LIBDIR += \
-    $$_PRO_FILE_PWD_/../../../bin
+    $$_PRO_FILE_PWD_/../../../externals-src/QodeMagic/bin
 
 CONFIG(debug, debug|release) {
     LIBS += \
