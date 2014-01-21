@@ -24,56 +24,48 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
+#pragma once
+#ifndef QODEMAGIC_TEXT_TEXTTOOLS_H
+#define QODEMAGIC_TEXT_TEXTTOOLS_H
 
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
+#include "../qodemagic_global.hpp"
 
+#include <QString>
 #include <QStringList>
 
 
-using namespace QodeMagic;
-
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace Text
 {
 
-OverviewCommand::OverviewCommand()
-{
-}
+QODEMAGICSHARED_EXPORT
+int adjustToMaxLen(QStringList& strings, QChar paddingChar = ' ');
 
-void OverviewCommand::run(const PathMap& pathMap)
-{
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
+QODEMAGICSHARED_EXPORT
+void indent(QStringList& strings, int count, QChar paddingChar = ' ');
 
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
-    {
-        const auto& dirDescr = pathMap[paths[i]];
+QODEMAGICSHARED_EXPORT
+QStringList join(const QList<QStringList>& columns, const QString& separator = QString());
 
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
+QODEMAGICSHARED_EXPORT
+void prepend(QStringList& strings, const QString& prefix);
 
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
-    }
+QODEMAGICSHARED_EXPORT
+void trimLeft(QString& str);
 
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
+QODEMAGICSHARED_EXPORT
+void trimLeft(QStringList& strings);
+
+QODEMAGICSHARED_EXPORT
+void trimRight(QString& str);
+
+QODEMAGICSHARED_EXPORT
+void trimRight(QStringList& strings);
+
 }
 
 }
 
-}
+#endif // QODEMAGIC_TEXT_TEXTTOOLS_H

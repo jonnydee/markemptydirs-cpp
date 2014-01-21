@@ -30,12 +30,12 @@
 #include "Logger.hpp"
 #include "PurgeCommand.hpp"
 
-#include <CodeMagic/FileSystem/FileSystemTools.hpp>
+#include <QodeMagic/FileSystem/FileSystemTools.hpp>
 
 #include <cerrno>
 
 
-using namespace CodeMagic;
+using namespace QodeMagic;
 
 namespace MarkEmptyDirs
 {

@@ -24,56 +24,61 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
+#pragma once
+#ifndef QODEMAGIC_CLI_ARGUMENTSCANNER_HPP
+#define QODEMAGIC_CLI_ARGUMENTSCANNER_HPP
 
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
-
-#include <QStringList>
+#include <QList>
+#include <QString>
 
 
-using namespace QodeMagic;
+class QStringList;
 
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace Cli
 {
 
-OverviewCommand::OverviewCommand()
+struct Token
 {
-}
-
-void OverviewCommand::run(const PathMap& pathMap)
-{
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
-
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
+    enum Type
     {
-        const auto& dirDescr = pathMap[paths[i]];
+        LONGNAME,
+        SHORTNAME,
+        ASSIGN,
+        OTHER
+    };
 
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
+    Type type;
+    QString payload;
 
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
-    }
+    Token(Type aType, const QString& aPayload = QString())
+        : type(aType), payload(aPayload)
+    {}
+};
+typedef QList<Token> TokenList;
 
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
+class ArgumentScanner
+{
+public:
+    ArgumentScanner();
+
+    void scan(const QStringList& args);
+
+    TokenList tokens() const;
+
+protected:
+    int scanShortOptions(const QStringList& args, int startIndex);
+    int scanLongOption(const QStringList& args, int startIndex);
+    int scanOther(const QStringList& args, int startIndex);
+
+private:
+    TokenList m_tokens;
+};
+
 }
 
 }
 
-}
+#endif // QODEMAGIC_CLI_ARGUMENTSCANNER_HPP

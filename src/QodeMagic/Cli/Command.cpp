@@ -24,54 +24,40 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
-
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
-
-#include <QStringList>
+#include "Command.hpp"
 
 
-using namespace QodeMagic;
-
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace Cli
 {
 
-OverviewCommand::OverviewCommand()
+Command::Command(const QStringList& names, const QString& description, const Handler& handler)
+    : m_description(description)
+    , m_names(names)
+    , m_handler(handler)
 {
 }
 
-void OverviewCommand::run(const PathMap& pathMap)
+QStringList Command::names() const
 {
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
+    return m_names;
+}
 
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
-    {
-        const auto& dirDescr = pathMap[paths[i]];
+QString Command::description() const
+{
+    return m_description;
+}
 
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
+bool Command::hasHandler() const
+{
+    return nullptr != m_handler;
+}
 
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
-    }
-
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
+Command::Handler Command::handler() const
+{
+    return m_handler;
 }
 
 }

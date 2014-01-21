@@ -24,56 +24,40 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
+#pragma once
+#ifndef QODEMAGIC_FILESYSTEM_TOOLS_HPP
+#define QODEMAGIC_FILESYSTEM_TOOLS_HPP
 
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
+#include "../qodemagic_global.hpp"
 
-#include <QStringList>
+#include <QChar>
 
 
-using namespace QodeMagic;
+class QString;
 
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace FileSystem
 {
 
-OverviewCommand::OverviewCommand()
-{
-}
+QODEMAGICSHARED_EXPORT
+QChar dirSeparator();
 
-void OverviewCommand::run(const PathMap& pathMap)
-{
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
+QODEMAGICSHARED_EXPORT
+QChar pathSeparator();
 
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
-    {
-        const auto& dirDescr = pathMap[paths[i]];
+QODEMAGICSHARED_EXPORT
+QString toQuotedNativePath(const QString& path);
 
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
+QODEMAGICSHARED_EXPORT
+bool validateFileName(const QString& fileName, QString* pErrorMsg = nullptr);
 
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
-    }
+QODEMAGICSHARED_EXPORT
+QChar volumeSeparator();
 
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
 }
 
 }
 
-}
+#endif // QODEMAGIC_FILESYSTEM_TOOLS_HPP

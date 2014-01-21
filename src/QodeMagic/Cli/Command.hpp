@@ -24,56 +24,49 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
+#pragma once
+#ifndef QODEMAGIC_CLI_COMMAND_HPP
+#define QODEMAGIC_CLI_COMMAND_HPP
 
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
+#include "../qodemagic_global.hpp"
 
+#include <QList>
+#include <QString>
 #include <QStringList>
 
+#include <functional>
 
-using namespace QodeMagic;
 
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace Cli
 {
 
-OverviewCommand::OverviewCommand()
+struct Argument;
+
+class QODEMAGICSHARED_EXPORT Command
 {
-}
+public:
+    typedef std::function<bool(const Argument& optionArgument, QString& errorMessage)> Handler;
 
-void OverviewCommand::run(const PathMap& pathMap)
-{
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
+    Command(const QStringList& names, const QString& description = QString(), const Handler& handler = Handler());
 
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
-    {
-        const auto& dirDescr = pathMap[paths[i]];
+    QString description() const;
+    Handler handler() const;
+    bool hasHandler() const;
+    QStringList names() const;
 
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
+private:
+    QString m_description;
+    QStringList m_names;
+    Handler m_handler;
+};
 
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
-    }
+typedef QList<const Command*> CommandList;
 
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
 }
 
 }
 
-}
+#endif // QODEMAGIC_CLI_COMMAND_HPP

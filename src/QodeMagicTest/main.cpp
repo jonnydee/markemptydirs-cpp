@@ -24,56 +24,25 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
-
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
-
-#include <QStringList>
+#include "test_QodeMagic_Text_Formatter.hpp"
+#include "test_QodeMagic_Text_NumberTools.hpp"
+#include "test_QodeMagic_Text_Template.hpp"
 
 
-using namespace QodeMagic;
-
-namespace MarkEmptyDirs
+int main(int argc, char *argv[])
 {
-
-namespace Api
-{
-
-OverviewCommand::OverviewCommand()
-{
-}
-
-void OverviewCommand::run(const PathMap& pathMap)
-{
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
-
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
     {
-        const auto& dirDescr = pathMap[paths[i]];
-
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
-
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
+        QodeMagic_Text_Formatter_Test tc;
+        QTest::qExec(&tc, argc, argv);
     }
 
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
-}
+    {
+        QodeMagic_Text_NumberTools_Test tc;
+        QTest::qExec(&tc, argc, argv);
+    }
 
-}
-
+    {
+        QodeMagic_Text_Template_Test tc;
+        QTest::qExec(&tc, argc, argv);
+    }
 }

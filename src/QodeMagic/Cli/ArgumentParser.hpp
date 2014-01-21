@@ -24,56 +24,73 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
+#pragma once
+#ifndef QODEMAGIC_CLI_ARGUMENTPARSER_HPP
+#define QODEMAGIC_CLI_ARGUMENTPARSER_HPP
 
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
+#include "../qodemagic_global.hpp"
+#include "Argument.hpp"
 
-#include <QStringList>
+#include <QList>
+#include <QString>
 
 
-using namespace QodeMagic;
+class QStringList;
 
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace Cli
 {
 
-OverviewCommand::OverviewCommand()
+struct Token;
+typedef QList<Token> TokenList;
+
+class Option;
+typedef QList<const Option*> OptionList;
+
+
+class QODEMAGICSHARED_EXPORT ArgumentParser
 {
+public:
+    ArgumentParser();
+
+    void addCommand(const Command& command);
+    void addCommands(const CommandList& commands);
+
+    CommandList commands() const;
+
+    void addOption(const Option& option);
+    void addOptions(const OptionList& options);
+
+    ArgumentList arguments() const;
+    Argument findUnknownArgument() const;
+    Argument findArgument(const Option& option) const;
+    ArgumentList findUnknownArguments() const;
+    ArgumentList findArguments(const Option& option) const;
+
+    void setMinimumCommandLength(int minLen);
+    int minimumCommandLength() const;
+
+    OptionList options() const;
+
+    void parse(const QStringList& args);
+
+protected:
+    int parseCommand(const TokenList& tokens, int startIndex);
+    int parseShortOption(const TokenList& tokens, int startIndex);
+    int parseLongOption(const TokenList& tokens, int startIndex);
+    int parseOther(const TokenList& tokens, int startIndex);
+
+private:
+    ArgumentList m_arguments;
+    CommandList m_commands;
+    int m_minimumCommandLength;
+    OptionList m_options;
+};
+
 }
 
-void OverviewCommand::run(const PathMap& pathMap)
-{
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
-
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
-    {
-        const auto& dirDescr = pathMap[paths[i]];
-
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
-
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
-    }
-
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
 }
 
-}
-
-}
+#endif // QODEMAGIC_CLI_ARGUMENTPARSER_HPP

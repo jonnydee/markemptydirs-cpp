@@ -24,56 +24,56 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
+#pragma once
+#ifndef QODEMAGIC_CLI_ARGUMENT_HPP
+#define QODEMAGIC_CLI_ARGUMENT_HPP
 
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
+#include "../qodemagic_global.hpp"
 
-#include <QStringList>
+#include <QList>
+#include <QString>
 
 
-using namespace QodeMagic;
-
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace Cli
 {
 
-OverviewCommand::OverviewCommand()
-{
-}
+class Command;
+typedef QList<const Command*> CommandList;
 
-void OverviewCommand::run(const PathMap& pathMap)
-{
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
+class Option;
 
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
+struct QODEMAGICSHARED_EXPORT Argument
+{
+    enum Type
     {
-        const auto& dirDescr = pathMap[paths[i]];
+        UNKNOWN,
+        COMMAND,
+        OPTION,
+        OTHER
+    };
 
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
+    Type type;
+    CommandList commands;
+    const Option* option;
+    QString name;
+    QString value;
+    QString errorMessage;
 
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
-    }
+    Argument(Type _type = UNKNOWN) : type(_type), option(nullptr) {}
 
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
+    bool isKnown() const { return !commands.isEmpty() || nullptr != option; }
+    bool isNull() const { return UNKNOWN == type; }
+    bool isBasedOn(const Command& cmd) const { return commands.contains(&cmd); }
+    bool isBasedOn(const Option& opt) const { return &opt == option; }
+};
+
+typedef QList<Argument> ArgumentList;
+
 }
 
 }
 
-}
+#endif // QODEMAGIC_CLI_ARGUMENT_HPP

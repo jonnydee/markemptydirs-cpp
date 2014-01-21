@@ -24,56 +24,50 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
+#pragma once
+#ifndef QODEMAGIC_TEXT_TEMPLATE_ENGINE_HPP
+#define QODEMAGIC_TEXT_TEMPLATE_ENGINE_HPP
 
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
+#include "../../qodemagic_global.hpp"
 
-#include <QStringList>
+#include <QList>
+#include <QString>
+
+#include <memory>
 
 
-using namespace QodeMagic;
-
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace Text
 {
 
-OverviewCommand::OverviewCommand()
+namespace Template
 {
-}
 
-void OverviewCommand::run(const PathMap& pathMap)
+class Variable;
+typedef QList<const Variable*> VariableList;
+
+class QODEMAGICSHARED_EXPORT Engine
 {
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
+public:
+    Engine();
+    ~Engine();
 
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
-    {
-        const auto& dirDescr = pathMap[paths[i]];
+    void addVariable(std::unique_ptr<const Variable> pVariable);
 
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
+    const VariableList& variables() const;
 
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
-    }
+    int process(QString& str) const;
 
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
+private:
+    VariableList m_variables;
+};
+
 }
 
 }
 
 }
+
+#endif // QODEMAGIC_TEXT_TEMPLATE_ENGINE_HPP

@@ -30,14 +30,14 @@
 #include "FileSystemCrawler.hpp"
 #include "Logger.hpp"
 
-#include <CodeMagic/FileSystem/FileSystemTools.hpp>
+#include <QodeMagic/FileSystem/FileSystemTools.hpp>
 
 #include <QLinkedList>
 #include <QFileInfo>
 #include <QObject>
 
 
-using namespace CodeMagic;
+using namespace QodeMagic;
 
 namespace MarkEmptyDirs
 {

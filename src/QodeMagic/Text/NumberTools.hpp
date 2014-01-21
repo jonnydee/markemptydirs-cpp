@@ -24,56 +24,59 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
+#pragma once
+#ifndef QODEMAGIC_TEXT_NUMBERTOOLS_H
+#define QODEMAGIC_TEXT_NUMBERTOOLS_H
 
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
-
-#include <QStringList>
+#include "../qodemagic_global.hpp"
 
 
-using namespace QodeMagic;
+class QString;
 
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace Text
 {
 
-OverviewCommand::OverviewCommand()
-{
+template <typename T>
+T parse(const QString& str, bool* pOk = nullptr, int base = 10);
+
+template <> QODEMAGICSHARED_EXPORT
+bool parse<bool>(const QString& str, bool* pOk, int);
+
+template <> QODEMAGICSHARED_EXPORT
+float parse<float>(const QString& str, bool* pOk, int);
+
+template <> QODEMAGICSHARED_EXPORT
+double parse<double>(const QString& str, bool* pOk, int);
+
+template <> QODEMAGICSHARED_EXPORT
+qint8 parse<qint8>(const QString& str, bool* pOk, int base);
+
+template <> QODEMAGICSHARED_EXPORT
+quint8 parse<quint8>(const QString& str, bool* pOk, int base);
+
+template <> QODEMAGICSHARED_EXPORT
+qint16 parse<qint16>(const QString& str, bool* pOk, int base);
+
+template <> QODEMAGICSHARED_EXPORT
+quint16 parse<quint16>(const QString& str, bool* pOk, int base);
+
+template <> QODEMAGICSHARED_EXPORT
+qint32 parse<qint32>(const QString& str, bool* pOk, int base);
+
+template <> QODEMAGICSHARED_EXPORT
+quint32 parse<quint32>(const QString& str, bool* pOk, int base);
+
+template <> QODEMAGICSHARED_EXPORT
+qint64 parse<qint64>(const QString& str, bool* pOk, int base);
+
+template <> QODEMAGICSHARED_EXPORT
+quint64 parse<quint64>(const QString& str, bool* pOk, int base);
+
 }
 
-void OverviewCommand::run(const PathMap& pathMap)
-{
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
-
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
-    {
-        const auto& dirDescr = pathMap[paths[i]];
-
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
-
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
-    }
-
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
 }
 
-}
-
-}
+#endif // QODEMAGIC_TEXT_NUMBERTOOLS_H

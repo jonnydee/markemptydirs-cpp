@@ -24,56 +24,57 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
+#include <QDebug>
+#include <QRegExp>
+#include <QString>
+#include <QtTest>
 
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
-
-#include <QStringList>
+#include <QodeMagic/Text/Formatter.hpp>
 
 
-using namespace QodeMagic;
+using namespace QodeMagic::Text;
 
-namespace MarkEmptyDirs
+class QodeMagic_Text_Formatter_Test : public QObject
 {
+    Q_OBJECT
 
-namespace Api
-{
+public:
+    QodeMagic_Text_Formatter_Test();
 
-OverviewCommand::OverviewCommand()
+private slots:
+    void initTestCase();
+    void cleanupTestCase();
+
+    void test_format_1();
+};
+
+inline QodeMagic_Text_Formatter_Test::QodeMagic_Text_Formatter_Test()
 {
 }
 
-void OverviewCommand::run(const PathMap& pathMap)
+inline void QodeMagic_Text_Formatter_Test::initTestCase()
 {
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
-
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
-    {
-        const auto& dirDescr = pathMap[paths[i]];
-
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
-
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
-    }
-
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
 }
 
+inline void QodeMagic_Text_Formatter_Test::cleanupTestCase()
+{
 }
 
+inline void QodeMagic_Text_Formatter_Test::test_format_1()
+{
+    Formatter sut;
+    sut.setFirstLineLeftIndent(2);
+    sut.setFirstLineRightIndent(5);
+    sut.setParagraphLeftIndent(4);
+    sut.setParagraphRightIndent(10);
+    sut.setMaxLineLength(30);
+
+    QString text("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                 "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                 "sdfl skgjskjfghkd f djkfshgkdfskg kdfh kdf kdjfgh dk jfsdkfgh dkjfgh kdjfhgksjdh "
+                 "kdsjfghk jhdfgjsdhfkgj hsdkfjgh ksjdhgksdjhg kjdhsgkj ksjd dkfgd,fmgldkfmgl kdmfg"
+                 " dlfkgl kdfjlgk jdflgkjdl kfgdslkfg sdfgsdlökjfgl sdlkfgjl sdkfjgl sdkfgjldskfgj "
+                 "lfkgjdl kjdflgkdjlgk jdlkfgjld jlfgj fwe.");
+
+    qDebug() << QString("RESULT:\n%1").arg(sut.format(text).join('\n'));
 }

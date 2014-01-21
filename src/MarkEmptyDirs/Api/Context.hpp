@@ -35,7 +35,7 @@
 #include <memory>
 
 
-namespace CodeMagic
+namespace QodeMagic
 {
 namespace Text
 {
@@ -60,7 +60,7 @@ class MARKEMPTYDIRSAPISHARED_EXPORT Context
 {
 public:
     static std::unique_ptr<Context> create(std::unique_ptr<Logger> pLogger,
-                                           std::unique_ptr<CodeMagic::Text::Template::Engine> pTemplateEngine);
+                                           std::unique_ptr<QodeMagic::Text::Template::Engine> pTemplateEngine);
 
     static std::unique_ptr<Context> create();
 
@@ -80,19 +80,19 @@ public:
 
     Logger& logger();
 
-    CodeMagic::Text::Template::Engine& templateEngine();
+    QodeMagic::Text::Template::Engine& templateEngine();
 
-    const CodeMagic::Text::Template::Engine& templateEngine() const;
+    const QodeMagic::Text::Template::Engine& templateEngine() const;
 
 protected:
-    Context(std::unique_ptr<Logger> pLogger, std::unique_ptr<CodeMagic::Text::Template::Engine> pTemplateEngine);
+    Context(std::unique_ptr<Logger> pLogger, std::unique_ptr<QodeMagic::Text::Template::Engine> pTemplateEngine);
 
 private:
     QDir m_baseDir;
     const Config* m_pConfig;
     QDir m_currentDir;
     Logger* m_pLogger;
-    CodeMagic::Text::Template::Engine* m_pTemplateEngine;
+    QodeMagic::Text::Template::Engine* m_pTemplateEngine;
 };
 
 }

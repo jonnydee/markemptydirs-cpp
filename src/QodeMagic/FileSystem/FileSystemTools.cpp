@@ -24,54 +24,79 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
+#include "FileSystemTools.hpp"
 
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
-
-#include <QStringList>
+#include <QChar>
+#include <QDir>
+#include <QRegExp>
+#include <QString>
 
 
-using namespace QodeMagic;
-
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace FileSystem
 {
 
-OverviewCommand::OverviewCommand()
+QChar dirSeparator()
 {
+    static const auto separator = QDir::separator();
+    return separator;
 }
 
-void OverviewCommand::run(const PathMap& pathMap)
+bool validateFileName(const QString& fileName, QString* pErrorMsg)
 {
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
+    static QString devNull;
+    auto& errorMsg = pErrorMsg ? *pErrorMsg : devNull;
 
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
+    if (fileName.isEmpty())
     {
-        const auto& dirDescr = pathMap[paths[i]];
-
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
-
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
+        errorMsg = QObject::tr("File name must not be empty.");
+        return false;
     }
 
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
+#ifdef Q_OS_WIN32
+    static const QRegExp invalidPattern("[<>:\"/\\|?*]");
+#else
+    static const QRegExp invalidPattern("[<>:\"/\\|?*]");
+#endif
+    if (fileName.contains(invalidPattern))
+    {
+        errorMsg = QObject::tr("File name contains invalid characters.");
+        return false;
+    }
+
+    return true;
+}
+
+QChar pathSeparator()
+{
+#ifdef Q_OS_WIN32
+    return ';';
+#else
+    return ':';
+#endif
+}
+
+QString toQuotedNativePath(const QString& path)
+{
+    QString quoted;
+    quoted.reserve(path.length() + 2);
+    if (!path.startsWith('"'))
+        quoted.append('"');
+    quoted.append(QDir::toNativeSeparators(path));
+    if (!quoted.endsWith('"'))
+        quoted.append('"');
+    return quoted;
+}
+
+QChar volumeSeparator()
+{
+#ifdef Q_OS_WIN32
+    return ':';
+#else
+    return '/';
+#endif
 }
 
 }

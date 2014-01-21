@@ -28,9 +28,9 @@
 #ifndef MARKEMPTYDIRS_CLI_PROGRAM_HPP
 #define MARKEMPTYDIRS_CLI_PROGRAM_HPP
 
-#include <CodeMagic/Cli/Command.hpp>
-#include <CodeMagic/Cli/Option.hpp>
-#include <CodeMagic/Text/Template/Variable.hpp>
+#include <QodeMagic/Cli/Command.hpp>
+#include <QodeMagic/Cli/Option.hpp>
+#include <QodeMagic/Text/Template/Variable.hpp>
 
 #include <QList>
 
@@ -54,38 +54,38 @@ namespace Cli
 class Program
 {
 public:
-    const CodeMagic::Cli::Command cleanCmd;
-    const CodeMagic::Cli::Command helpCmd;
-    const CodeMagic::Cli::Command listCmd;
-    const CodeMagic::Cli::Command overviewCmd;
-    const CodeMagic::Cli::Command purgeCmd;
-    const CodeMagic::Cli::Command updateCmd;
-    const CodeMagic::Cli::Command versionCmd;
+    const QodeMagic::Cli::Command cleanCmd;
+    const QodeMagic::Cli::Command helpCmd;
+    const QodeMagic::Cli::Command listCmd;
+    const QodeMagic::Cli::Command overviewCmd;
+    const QodeMagic::Cli::Command purgeCmd;
+    const QodeMagic::Cli::Command updateCmd;
+    const QodeMagic::Cli::Command versionCmd;
 
-    const CodeMagic::Cli::Option createHookOpt;
-    const CodeMagic::Cli::Option deleteHookOpt;
-    const CodeMagic::Cli::Option dereferenceOpt;
-    const CodeMagic::Cli::Option dryRunOpt;
-    const CodeMagic::Cli::Option excludeOpt;
-    const CodeMagic::Cli::Option fileOpt;
-    const CodeMagic::Cli::Option helpOpt;
-    const CodeMagic::Cli::Option markerOpt;
-    const CodeMagic::Cli::Option noDereferenceOpt;
-    const CodeMagic::Cli::Option noSubstOpt;
-    const CodeMagic::Cli::Option shortOpt;
-    const CodeMagic::Cli::Option substOpt;
-    const CodeMagic::Cli::Option textOpt;
-    const CodeMagic::Cli::Option verboseOpt;
-    const CodeMagic::Cli::Option versionOpt;
+    const QodeMagic::Cli::Option createHookOpt;
+    const QodeMagic::Cli::Option deleteHookOpt;
+    const QodeMagic::Cli::Option dereferenceOpt;
+    const QodeMagic::Cli::Option dryRunOpt;
+    const QodeMagic::Cli::Option excludeOpt;
+    const QodeMagic::Cli::Option fileOpt;
+    const QodeMagic::Cli::Option helpOpt;
+    const QodeMagic::Cli::Option markerOpt;
+    const QodeMagic::Cli::Option noDereferenceOpt;
+    const QodeMagic::Cli::Option noSubstOpt;
+    const QodeMagic::Cli::Option shortOpt;
+    const QodeMagic::Cli::Option substOpt;
+    const QodeMagic::Cli::Option textOpt;
+    const QodeMagic::Cli::Option verboseOpt;
+    const QodeMagic::Cli::Option versionOpt;
 
     Program();
     ~Program();
 
-    CodeMagic::Cli::CommandList commands() const;
+    QodeMagic::Cli::CommandList commands() const;
 
     bool init(const QStringList& args);
 
-    CodeMagic::Cli::OptionList options() const;
+    QodeMagic::Cli::OptionList options() const;
 
     void run();
 
@@ -93,24 +93,24 @@ protected:
     std::unique_ptr<const Api::Config> createConfig(const QStringList& args, QStringList& errorMessages);
 
     QString createHelpText(const QString& execFileName,
-                           const CodeMagic::Cli::CommandList& cmds,
-                           const CodeMagic::Cli::OptionList& opts,
-                           const CodeMagic::Text::Template::VariableList& templVars,
+                           const QodeMagic::Cli::CommandList& cmds,
+                           const QodeMagic::Cli::OptionList& opts,
+                           const QodeMagic::Text::Template::VariableList& templVars,
                            bool shortHelp) const;
 
-    bool acceptExcludeOpt(const CodeMagic::Cli::Argument& markerName, QString& errorMessage);
+    bool acceptExcludeOpt(const QodeMagic::Cli::Argument& markerName, QString& errorMessage);
 
-    bool acceptMarkerFileOpt(const CodeMagic::Cli::Argument& markerFileName, QString& errorMessage);
+    bool acceptMarkerFileOpt(const QodeMagic::Cli::Argument& markerFileName, QString& errorMessage);
 
-    bool acceptMarkerNameOpt(const CodeMagic::Cli::Argument& markerName, QString& errorMessage);
+    bool acceptMarkerNameOpt(const QodeMagic::Cli::Argument& markerName, QString& errorMessage);
 
-    bool acceptVerboseOpt(const CodeMagic::Cli::Argument& verbose, QString& errorMessage);
+    bool acceptVerboseOpt(const QodeMagic::Cli::Argument& verbose, QString& errorMessage);
 
 private:
-    CodeMagic::Cli::CommandList m_commands;
+    QodeMagic::Cli::CommandList m_commands;
     std::unique_ptr<Api::Config> m_pConfig;
     std::unique_ptr<Api::Context> m_pContext;
-    CodeMagic::Cli::OptionList m_options;
+    QodeMagic::Cli::OptionList m_options;
 };
 
 }

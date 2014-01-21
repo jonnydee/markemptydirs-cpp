@@ -28,7 +28,7 @@
 #ifndef MARKEMPTYDIRS_API_VARIABLEFACTORY_HPP
 #define MARKEMPTYDIRS_API_VARIABLEFACTORY_HPP
 
-#include <CodeMagic/Text/Template/VariableFactory.hpp>
+#include <QodeMagic/Text/Template/VariableFactory.hpp>
 
 
 namespace MarkEmptyDirs
@@ -39,7 +39,7 @@ namespace Api
 
 class Context;
 
-class VariableFactory : public CodeMagic::Text::Template::VariableFactory
+class VariableFactory : public QodeMagic::Text::Template::VariableFactory
 {
 public:
     VariableFactory();

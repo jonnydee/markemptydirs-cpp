@@ -24,7 +24,7 @@ CONFIG   += console
 CONFIG   += static
 CONFIG += c++11
 
-DEFINES += CODEMAGICSTATIC
+DEFINES += QODEMAGICSTATIC
 DEFINES += MARKEMPTYDIRSAPISTATIC
 
 SOURCES += \
@@ -41,35 +41,35 @@ win32 {
     CONFIG(debug, debug|release) {
         LIBS += \
             -lMarkEmptyDirsApi_debug \
-            -lCodeMagic_debug
+            -lQodeMagic_debug
         PRE_TARGETDEPS += \
             $$QMAKE_LIBDIR/MarkEmptyDirsApi_debug.lib \
-            $$QMAKE_LIBDIR/CodeMagic_debug.lib
+            $$QMAKE_LIBDIR/QodeMagic_debug.lib
     }
     CONFIG(release, debug|release) {
         LIBS += \
             -lMarkEmptyDirsApi \
-            -lCodeMagic
+            -lQodeMagic
         PRE_TARGETDEPS += \
             $$QMAKE_LIBDIR/MarkEmptyDirsApi.lib \
-            $$QMAKE_LIBDIR/CodeMagic.lib
+            $$QMAKE_LIBDIR/QodeMagic.lib
     }
 } else {
     CONFIG(debug, debug|release) {
         LIBS += \
             -lMarkEmptyDirsApi_debug \
-            -lCodeMagic_debug
+            -lQodeMagic_debug
         PRE_TARGETDEPS += \
             $$QMAKE_LIBDIR/libMarkEmptyDirsApi_debug.a \
-            $$QMAKE_LIBDIR/libCodeMagic_debug.a
+            $$QMAKE_LIBDIR/libQodeMagic_debug.a
     }
     CONFIG(release, debug|release) {
         LIBS += \
             -lMarkEmptyDirsApi \
-            -lCodeMagic
+            -lQodeMagic
         PRE_TARGETDEPS += \
             $$QMAKE_LIBDIR/libMarkEmptyDirsApi.a \
-            $$QMAKE_LIBDIR/libCodeMagic.a
+            $$QMAKE_LIBDIR/libQodeMagic.a
     }
 }
 

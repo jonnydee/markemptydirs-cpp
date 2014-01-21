@@ -33,11 +33,11 @@
 #include <MarkEmptyDirs/Api/Logger.hpp>
 #include <MarkEmptyDirs/Api/LogLevel.hpp>
 
-#include <CodeMagic/Cli/HelpFormatter.hpp>
-#include <CodeMagic/Cli/ArgumentParser.hpp>
-#include <CodeMagic/FileSystem/FileSystemTools.hpp>
-#include <CodeMagic/Text/Template/Engine.hpp>
-#include <CodeMagic/Text/Template/Variable.hpp>
+#include <QodeMagic/Cli/HelpFormatter.hpp>
+#include <QodeMagic/Cli/ArgumentParser.hpp>
+#include <QodeMagic/FileSystem/FileSystemTools.hpp>
+#include <QodeMagic/Text/Template/Engine.hpp>
+#include <QodeMagic/Text/Template/Variable.hpp>
 
 #include <QFile>
 #include <QStringList>
@@ -59,14 +59,14 @@
 #define APPLICATION_COPYRIGHT           "Copyright (C) 2013-2014 " APPLICATION_VENDOR_NAME
 
 #define DEFAULT_COMMAND                 Config::UPDATE
-#define DEFAULT_EXCLUDE_DIRS            ((QStringList() << ".bzr" << "CVS" << ".git" << ".hg" << ".svn").join(CodeMagic::FileSystem::pathSeparator()))
+#define DEFAULT_EXCLUDE_DIRS            ((QStringList() << ".bzr" << "CVS" << ".git" << ".hg" << ".svn").join(QodeMagic::FileSystem::pathSeparator()))
 #define DEFAULT_MARKER_CONTENT_FILENAME "marker.txt"
 #define DEFAULT_MARKER_FILENAME         ".emptydir"
 
 
-using namespace CodeMagic;
-using namespace CodeMagic::Cli;
-using namespace CodeMagic::Text;
+using namespace QodeMagic;
+using namespace QodeMagic::Cli;
+using namespace QodeMagic::Text;
 using namespace MarkEmptyDirs::Api;
 
 namespace MarkEmptyDirs
@@ -278,7 +278,7 @@ bool Program::acceptMarkerNameOpt(const Argument& markerName, QString& errorMess
     return true;
 }
 
-bool Program::acceptVerboseOpt(const CodeMagic::Cli::Argument& verbose, QString& errorMessage)
+bool Program::acceptVerboseOpt(const QodeMagic::Cli::Argument& verbose, QString& errorMessage)
 {
     Q_UNUSED(verbose);
     Q_UNUSED(errorMessage);

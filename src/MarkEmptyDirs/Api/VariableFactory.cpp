@@ -28,10 +28,10 @@
 #include "Context.hpp"
 #include "VariableFactory.hpp"
 
-#include <CodeMagic/Text/Template/Variable.hpp>
+#include <QodeMagic/Text/Template/Variable.hpp>
 
 
-using namespace CodeMagic::Text::Template;
+using namespace QodeMagic::Text::Template;
 
 namespace MarkEmptyDirs
 {

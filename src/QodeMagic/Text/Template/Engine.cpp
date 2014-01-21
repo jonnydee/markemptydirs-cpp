@@ -24,54 +24,56 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
-
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
-
-#include <QStringList>
+#include "Engine.hpp"
+#include "Variable.hpp"
 
 
-using namespace QodeMagic;
-
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace Text
 {
 
-OverviewCommand::OverviewCommand()
+namespace Template
+{
+
+Engine::Engine()
 {
 }
 
-void OverviewCommand::run(const PathMap& pathMap)
+Engine::~Engine()
 {
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
+    qDeleteAll(m_variables);
+}
 
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
+void Engine::addVariable(std::unique_ptr<const Variable> pVariable)
+{
+    Q_ASSERT(pVariable);
+    Q_ASSERT(!m_variables.contains(pVariable.get()));
+    if (!pVariable || m_variables.contains(pVariable.get()))
+        return;
+
+    m_variables << pVariable.release();
+}
+
+int Engine::process(QString& str) const
+{
+    int expansionCount = 0;
+
+    foreach (const auto pVariable, variables())
     {
-        const auto& dirDescr = pathMap[paths[i]];
-
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
-
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
+        Q_ASSERT(pVariable);
+        expansionCount += pVariable->expand(str);
     }
 
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
+    return expansionCount;
+}
+
+const VariableList& Engine::variables() const
+{
+    return m_variables;
+}
+
 }
 
 }

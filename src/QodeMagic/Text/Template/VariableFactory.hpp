@@ -24,56 +24,50 @@
 // authors and should not be interpreted as representing official policies, either expressed
 // or implied, of Johann Duscher.
 
-#include "Context.hpp"
-#include "DirDescriptor.hpp"
-#include "Logger.hpp"
-#include "OverviewCommand.hpp"
+#pragma once
+#ifndef QODEMAGIC_TEXT_TEMPLATE_VARIABLEFACTORY_HPP
+#define QODEMAGIC_TEXT_TEMPLATE_VARIABLEFACTORY_HPP
 
-#include <QodeMagic/FileSystem/FileSystemTools.hpp>
-#include <QodeMagic/Text/TextTools.hpp>
+#include "../../qodemagic_global.hpp"
 
-#include <QStringList>
+#include <memory>
 
 
-using namespace QodeMagic;
+class QChar;
 
-namespace MarkEmptyDirs
+namespace QodeMagic
 {
 
-namespace Api
+namespace Text
 {
 
-OverviewCommand::OverviewCommand()
+namespace Template
 {
-}
 
-void OverviewCommand::run(const PathMap& pathMap)
+class Variable;
+
+class QODEMAGICSHARED_EXPORT VariableFactory
 {
-    QStringList paths(pathMap.keys());
-    QStringList infos;
-    infos.reserve(paths.size());
+public:
+    typedef std::unique_ptr<const Variable> VariablePtr;
 
-    qSort(paths);
-    for (int i = 0; i < paths.length(); i++)
-    {
-        const auto& dirDescr = pathMap[paths[i]];
+    VariableFactory();
 
-        const auto nativeDescrDirPath = FileSystem::toQuotedNativePath(paths[i]);
-        const auto statistics = QObject::tr("[children: %1, marker: %2, subDirs: %3]")
-                .arg(dirDescr.childCount(), 2)
-                .arg(dirDescr.hasMarker() ? QObject::tr("yes") : QObject::tr("no"), 3)
-                .arg(dirDescr.subDirCount(), 2);
+    VariablePtr createDateTimeVariable() const;
+    VariablePtr createEnvironmentVariable() const;
+    VariablePtr createGuidVariable() const;
+    VariablePtr createLinefeedVariable() const;
+    VariablePtr createSeparatorVariable() const;
+    VariablePtr createSpaceVariable() const;
 
-        paths[i] = nativeDescrDirPath;
-        infos << statistics;
-    }
+protected:
+    VariablePtr createCharRepeaterVariable(const QString& name, const QChar& ch, const QString& description) const;
+};
 
-    Text::adjustToMaxLen(paths);
-    const auto lines = Text::join(QList<QStringList>() << paths << infos, "  ");
-    foreach (const auto& line, lines)
-        context().logger().log(line, LogLevel::NONE);
 }
 
 }
 
 }
+
+#endif // QODEMAGIC_TEXT_TEMPLATE_VARIABLEFACTORY_HPP

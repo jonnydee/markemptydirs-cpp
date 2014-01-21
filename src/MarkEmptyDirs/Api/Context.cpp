@@ -29,13 +29,13 @@
 #include "Logger.hpp"
 #include "VariableFactory.hpp"
 
-#include <CodeMagic/Text/Template/Engine.hpp>
-#include <CodeMagic/Text/Template/Variable.hpp>
+#include <QodeMagic/Text/Template/Engine.hpp>
+#include <QodeMagic/Text/Template/Variable.hpp>
 
 #include <QCoreApplication>
 
 
-using namespace CodeMagic::Text;
+using namespace QodeMagic::Text;
 
 namespace MarkEmptyDirs
 {

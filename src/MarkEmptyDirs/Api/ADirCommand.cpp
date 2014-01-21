@@ -31,8 +31,8 @@
 #include "FileSystemCrawler.hpp"
 #include "Logger.hpp"
 
-#include <CodeMagic/FileSystem/FileSystemTools.hpp>
-#include <CodeMagic/Text/Template/Engine.hpp>
+#include <QodeMagic/FileSystem/FileSystemTools.hpp>
+#include <QodeMagic/Text/Template/Engine.hpp>
 
 #include <QFile>
 #include <QFileInfo>
@@ -41,7 +41,7 @@
 #include <QTextStream>
 
 
-using namespace CodeMagic;
+using namespace QodeMagic;
 
 namespace MarkEmptyDirs
 {

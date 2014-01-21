@@ -24,7 +24,7 @@ CONFIG(debug, debug|release) {
      TARGET = $$join(TARGET,,,_debug)
 }
 
-DEFINES += CODEMAGICSTATIC
+DEFINES += QODEMAGICSTATIC
 DEFINES += MARKEMPTYDIRSAPI_LIBRARY
 
 SOURCES += \
@@ -71,11 +71,11 @@ QMAKE_LIBDIR += \
 
 CONFIG(debug, debug|release) {
     LIBS += \
-        -lCodeMagic_debug
+        -lQodeMagic_debug
 }
 CONFIG(release, debug|release) {
     LIBS += \
-        -lCodeMagic
+        -lQodeMagic
 }
 
 unix:!symbian {
