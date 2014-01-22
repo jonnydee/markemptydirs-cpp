@@ -6,4 +6,6 @@ release
 .qmake*
 *.user
 *.bak
+*.exp
 *.icns
+*.o
