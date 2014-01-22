@@ -8,10 +8,10 @@ QT       += core
 QT       -= gui
 
 CONFIG(debug, debug|release) {
-    TARGET = markemptydirs_debug
+    TARGET = MarkEmptyDirs_debug
 }
 CONFIG(release, debug|release) {
-    TARGET = markemptydirs
+    TARGET = MarkEmptyDirs
 }
 
 VERSION         = 2.0.0
@@ -22,12 +22,16 @@ DESTDIR = $$_PRO_FILE_PWD_/../../../bin
 TEMPLATE = app
 CONFIG   += console
 CONFIG   += static
-CONFIG += c++11
+CONFIG   += c++11
+CONFIG   += debug_and_release
 
 DEFINES += QODEMAGICSTATIC
 DEFINES += MARKEMPTYDIRSAPISTATIC
 
 QODEMAGIC_DIR = $$_PRO_FILE_PWD_/../../../externals-src/QodeMagic
+
+HEADERS += \
+    Program.hpp
 
 SOURCES += \
     main.cpp \
@@ -76,9 +80,6 @@ win32 {
             $$QODEMAGIC_DIR/bin/libQodeMagic.a
     }
 }
-
-HEADERS += \
-    Program.hpp
 
 # Get git commit hash
 GIT_COMMIT_HASH = $$system(git rev-parse HEAD)
