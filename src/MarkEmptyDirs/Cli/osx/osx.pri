@@ -46,11 +46,10 @@ codesign.commands += codesign --force --verify --verbose --timestamp --sign "$${
 # Sign the application bundle
 codesign.commands += codesign --force --verify --verbose --timestamp --sign $${APPCERT} -i $${BUNDLEID} $$DESTDIR/$${TARGET}.app;
 
-dmg.depends += all
-dmg.commands += macdeployqt $$DESTDIR/$${TARGET}.app -no-plugins -dmg;
+# Build dmg product.
+product.commands += macdeployqt $$DESTDIR/$${TARGET}.app -no-plugins -dmg;
 
 # Build the product package
-product.depends += all
-product.commands += productbuild –component $$DESTDIR/$${TARGET}.app /Applications –sign $${INSTALLERCERT} $$DESTDIR/$${TARGET}.pkg;
+package.commands += productbuild –component $$DESTDIR/$${TARGET}.app /Applications –sign $${INSTALLERCERT} $$DESTDIR/$${TARGET}.pkg;
 
-QMAKE_EXTRA_TARGETS += codesign dmg iconset product
+QMAKE_EXTRA_TARGETS += codesign iconset package product
