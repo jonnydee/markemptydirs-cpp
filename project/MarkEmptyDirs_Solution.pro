@@ -4,5 +4,4 @@ CONFIG += ordered
 
 SUBDIRS = \
     ../externals-src/QodeMagic/src/QodeMagic \
-    ../src/MarkEmptyDirs \
-    ../doc
+    ../src/MarkEmptyDirs
