@@ -13,11 +13,15 @@ This tool is licensed under the [BSD License][license].
 
 # Operating Systems
 
-MarkEmptyDirs is written in C++ / Qt and is designed to be platform independent.
+MarkEmptyDirs is written in C++ / Qt and is designed to be platform independent. Currently, build scripts for the following operating systems are included in this project:
+
+1. Linux
+2. MacOS X
+3. Windows
 
 # Further Reading
 
- * [getting started][]: Describes what you need to do in order to run MarkEmptyDirs.
+ * [getting started][]: Describes what you need to do in order to install, run, or build MarkEmptyDirs.
  * [use cases][]: Describes typical use cases for this tool and how to use it.
  * [changelog][]: Describes what has changed in the different releases.
 
